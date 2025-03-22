@@ -1,4 +1,4 @@
-
+import json
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -33,12 +33,28 @@ def parse_vk_video(hashtag: str)-> tuple[bool, list[str]]:
     print(elem)
 
     for i in range(10):
-        index_href: int | None | str = elem.find("href")
-        if index_href == None:
+        index_href: int | None | str = elem.find("/video-")
+        if index_href == -1:
             break
         else:
             elem = elem[index_href:]
-            href_list.append(elem[:elem[6:].find('"')])
+            print(elem[6:elem[6:].find('"')])
+            end_elem = elem.find('"')
+            data = {
+                "id": i,
+                "url": f"https://vkvideo.ru{elem[:end_elem]}",
+
+            }
+            flag = 0
+            for i in range(len(href_list)):
+                if href_list[i]["url"] == data["url"]:
+                    flag = 1
+                    break
+            if flag == 0:
+                href_list.append(data)
+            elem = elem[end_elem:]
             print(href_list)
+
+    with open("Data/href.json", "w", encoding="utf-8") as f:
+        json.dump(href_list, f, ensure_ascii=False)
     return True, href_list
-parse_vk_video("mash")
