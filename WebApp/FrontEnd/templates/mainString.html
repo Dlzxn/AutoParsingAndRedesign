@@ -37,10 +37,25 @@
 
         <!-- Settings Dropdown -->
         <div class="settings-dropdown" id="settingsDropdown">
+            <button class="settings-item" id="openFolderBtn">
+                <span class="material-icons">folder_open</span>
+                Открыть папку
+            </button>
             <button class="settings-item danger" id="deleteDataBtn">
                 <span class="material-icons">delete_forever</span>
                 Удалить все данные
             </button>
+        </div>
+
+        <!-- File Explorer Modal -->
+        <div id="fileModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Выбранные файлы</h3>
+                    <span class="close">&times;</span>
+                </div>
+                <div id="fileList" class="file-list"></div>
+            </div>
         </div>
 
         <div id="results" class="results-container"></div>

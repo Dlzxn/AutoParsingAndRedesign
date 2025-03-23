@@ -10,6 +10,7 @@ search_router = APIRouter(prefix="/search", tags=["Search"])
 @search_router.get("/")
 async def search(tag: str):
     status, url_list = parse_vk_video(tag)
+    print("URL: ", url_list)
     if not status:
         return JSONResponse({"status": "error", "message": "No video found"})
     else:
