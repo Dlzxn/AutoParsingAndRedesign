@@ -88,7 +88,6 @@ def parse_vk_video(hashtag: str) -> tuple[bool, list[str]]:
 
             finally:
                 if len(href_list) >= 10:
-                    json_dump(href_list)
                     return True, href_list
 
     except Exception as e:
@@ -96,5 +95,5 @@ def parse_vk_video(hashtag: str) -> tuple[bool, list[str]]:
         return False, href_list
     finally:
         driver.quit()
-    json_dump(href_list)
+        json_dump(href_list)
     return True, href_list
