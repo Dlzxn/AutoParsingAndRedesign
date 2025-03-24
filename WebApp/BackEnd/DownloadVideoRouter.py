@@ -6,7 +6,7 @@ router = APIRouter()
 
 @router.get("/api/{video_id}")
 async def get_video(video_id: str):
-    with open("Data/href.json", "r", encoding="utf-8") as f:
+    with open("Data/clips.json", "r", encoding="utf-8") as f:
         href = json.load(f)
     for x in href:
         if str(x["id"]) == video_id:
