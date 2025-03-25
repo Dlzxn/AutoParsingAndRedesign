@@ -1,5 +1,6 @@
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import FileResponse, RedirectResponse
+from WebApp.BackEnd.auth_api.auth_api_router import list_with_tokens
 
 
 class TokenMiddleware(BaseHTTPMiddleware):
@@ -13,6 +14,9 @@ class TokenMiddleware(BaseHTTPMiddleware):
         if not token is None or request.url.path == "/registration":
             response = await call_next(request)
             return response
+        for elem in list_with_tokens:
+            if elem["token"] == token:
+                return await call_next(request)
         else:
             return RedirectResponse("/registration")
 
