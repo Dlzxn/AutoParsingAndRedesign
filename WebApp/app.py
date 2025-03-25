@@ -1,23 +1,28 @@
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-import os, sys
+import os, sys,uvicorn
 
 from WebApp.BackEnd.SearchRouter import search_router
 from WebApp.BackEnd.DownloadVideoRouter import router
-
-
-
-import uvicorn
+from WebApp.BackEnd.auth.auth_router import auth_router
+from WebApp.BackEnd.auth_api import auth_api_router
+from WebApp.BackEnd.auth_api.auth_api_router import auth
+from WebApp.Middleware.BaseTokenMiddleware import TokenMiddleware
 
 app = FastAPI()
 app.include_router(search_router)
 app.include_router(router)
+app.include_router(auth_router)
+app.include_router(auth)
+
+app.add_middleware(TokenMiddleware)
 
 app.mount("/WebApp/FrontEnd", StaticFiles(directory="WebApp/FrontEnd"), name="static")
 @app.get("/")
 async def main():
     return FileResponse("WebApp/FrontEnd/templates/mainString.html")
+
 
 @app.get("/files")
 async def files():

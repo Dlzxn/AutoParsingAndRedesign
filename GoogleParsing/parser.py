@@ -86,7 +86,7 @@ class GoogleBot:
     def search(self, search_query):
         """Выполняет поиск по запросу."""
         search_box = self.driver.find_element(By.NAME, "q")
-        search_box.send_keys(search_query + "вк клипы")
+        search_box.send_keys(search_query + " вк клипы")
         self._get_random_sleep()
         search_box.send_keys(Keys.RETURN)
         self._get_random_sleep()
@@ -152,15 +152,15 @@ class GoogleBot:
                     href = video.get_attribute("href")
                     video_id = href.split('/')[-1]  # Получаем ID видео из ссылки
 
-                    # Проверяем, было ли уже сохранено это видео
-                    if any(v['id'] == video_id for v in saved_videos):
-                        print(f"Видео {video_id} уже сохранено, пропускаем.")
-                    else:
-                        name = video.text[:5]  # Берем первые 5 символов названия видео
-                        video_data.append({"id": video_id, "name": name, "url": href})
-                        saved_videos.append({"id": video_id, "name": name, "url": href})
-                        video_count += 1
-                        print(f"Найдено новое видео {video_id}, сохраняем.")
+                    # # Проверяем, было ли уже сохранено это видео
+                    # if any(v['id'] == video_id for v in saved_videos):
+                    #     print(f"Видео {video_id} уже сохранено, пропускаем.")
+                    # else:
+                    name = video.text[:5]  # Берем первые 5 символов названия видео
+                    video_data.append({"id": video_id, "name": name, "url": href})
+                    saved_videos.append({"id": video_id, "name": name, "url": href})
+                    video_count += 1
+                    print(f"Найдено новое видео {video_id}, сохраняем.")
 
                     # Если собрано 10 видео, выходим
                     if video_count >= required_video_count:
