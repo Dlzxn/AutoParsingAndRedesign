@@ -45,6 +45,14 @@ const createResultItem = ({ title, url, id }) => {
         </div>
     `;
 
+    const copyButton = item.querySelector('.copy-btn');
+    copyButton.addEventListener('click', () => {
+        const videoUrl = copyButton.getAttribute('data-url');
+        navigator.clipboard.writeText(videoUrl)
+            .then(() => showNotification('Ссылка скопирована! ✅', 'success'))
+            .catch(() => showNotification('Ошибка копирования 😞', 'error'));
+    });
+
     const downloadButton = item.querySelector('.download-btn');
     downloadButton.addEventListener('click', () => {
         // Получаем URL из атрибута data-url кнопки

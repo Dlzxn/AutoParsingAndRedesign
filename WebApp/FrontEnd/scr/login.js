@@ -1,8 +1,8 @@
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    const identity = document.getElementById('loginIdentity').value;
-    const password = document.getElementById('loginPassword').value;
+    const identity = document.getElementById('loginIdentity').value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
     const errorElement = document.getElementById('loginError');
     const successElement = document.getElementById('loginSuccess');
     const submitButton = this.querySelector('button[type="submit"]');
@@ -10,13 +10,12 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     errorElement.style.display = 'none';
     successElement.style.display = 'none';
 
-    // Валидация полей
-    if(!identity || !password) {
+    if (!identity || !password) {
         showError(errorElement, 'Все поля обязательны для заполнения');
         return;
     }
 
-    if(!validateIdentity(identity)) {
+    if (!validateIdentity(identity)) {
         showError(errorElement, 'Введите корректный email или телефон');
         return;
     }
@@ -27,28 +26,30 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     try {
         const response = await fetch('/api/login', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                identity,
-                password
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ identity, password })
         });
 
-        const data = await response.json();
+        let data;
+        try {
+            data = await response.json();
+        } catch {
+            throw new Error('Некорректный ответ сервера');
+        }
 
-        if(!response.ok) {
+        if (!response.ok) {
             throw new Error(data.message || 'Ошибка авторизации');
         }
 
-        // Сохранение токена и перенаправление
         localStorage.setItem('authToken', data.token);
         showSuccess(successElement, 'Вход выполнен!');
 
-        setTimeout(() => {
-            window.location.href = '/'; // Перенаправление на главную
+        const redirectTimeout = setTimeout(() => {
+            window.location.href = '/';
         }, 1500);
+
+        window.addEventListener('beforeunload', () => clearTimeout(redirectTimeout));
+
     } catch (error) {
         showError(errorElement, error.message);
     } finally {

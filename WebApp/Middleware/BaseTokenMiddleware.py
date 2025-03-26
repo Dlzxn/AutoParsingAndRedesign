@@ -10,13 +10,19 @@ class TokenMiddleware(BaseHTTPMiddleware):
         print(request.url.path)
         if (".js" in request.url.path or ".css" in request.url.path or "/login" == request.url.path or "/api"
                 in request.url.path):
+            print(". call_next")
             return await call_next(request)
-        if not token is None or request.url.path == "/registration":
+        if request.url.path == "/registration":
             response = await call_next(request)
+            print("/reg call_next")
             return response
+        print("len now", len(list_with_tokens))
         for elem in list_with_tokens:
-            if elem["token"] == token:
+            print(elem["token"], len(list_with_tokens))
+            if str(elem["token"]) == str(token):
+                print("in list_with_tokens")
                 return await call_next(request)
         else:
+            print("not in list_with_tokens")
             return RedirectResponse("/registration")
 

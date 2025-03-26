@@ -10,7 +10,9 @@ list_with_tokens:list = []
 async def login(data: Login, re: Response):
     print(data)
     user = db.verify_user(data.identity, data.password)
+    print("User in login", user)
     if user:
+        print("User in login(created)", user)
         token = randint(1, 10000)
         list_with_tokens.append({"token": token, "user": user})
 

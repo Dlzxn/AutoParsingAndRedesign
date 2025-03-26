@@ -15,7 +15,7 @@ class CRUD:
     def verify_user(self, username, password):
         """Проверяем, существует ли пользователь с указанными данными"""
         user = self.db.query(User).filter(
-            User.username == username,
+            User.email == username,
             User.password == password
         ).first()
 
