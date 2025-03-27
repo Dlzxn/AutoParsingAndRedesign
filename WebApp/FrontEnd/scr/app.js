@@ -145,12 +145,15 @@ const showNotification = (message, type = 'info') => {
     setTimeout(() => notification.remove(), 3000);
 };
 
-// Основной обработчик поиска
 const performSearch = async (query) => {
     try {
         toggleLoading(true);
 
-        const response = await fetch(`${API_ENDPOINT}?tag=${encodeURIComponent(query)}`);
+        // Убедись, что fetch всегда будет выполняться
+        const response = await fetch(`${API_ENDPOINT}?tag=${encodeURIComponent(query)}`, {
+            // Не добавляем никаких дополнительных ограничений или отмен (например, через AbortController)
+        });
+
         if (!response.ok) throw new Error('Ошибка API');
 
         const data = await response.json();
@@ -166,6 +169,7 @@ const performSearch = async (query) => {
         toggleLoading(false);
     }
 };
+
 
 // Обработчик ввода
 searchInput.addEventListener('input', debounce(e => {

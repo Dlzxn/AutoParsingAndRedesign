@@ -16,7 +16,7 @@ app.include_router(router)
 app.include_router(auth_router)
 app.include_router(auth)
 
-app.add_middleware(TokenMiddleware)
+#app.add_middleware(TokenMiddleware)
 
 app.mount("/WebApp/FrontEnd", StaticFiles(directory="WebApp/FrontEnd"), name="static")
 @app.get("/")

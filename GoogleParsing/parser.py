@@ -10,6 +10,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from WebApp.logger.log_cfg import logger
 
 class GoogleBot:
     def __init__(self, user_agent=None, headless=True):
@@ -28,14 +29,14 @@ class GoogleBot:
 
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=self.chrome_options)
 
-    def _wait_for_element(self, by, value, timeout=10):
+    def _wait_for_element(self, by, value, timeout=3):
         """Ожидаем появления элемента на странице."""
         wait = WebDriverWait(self.driver, timeout)
         return wait.until(EC.element_to_be_clickable((by, value)))
 
     def _get_random_sleep(self):
         """Случайная задержка, чтобы имитировать поведение реального пользователя."""
-        time.sleep(random.uniform(1, 3))
+        time.sleep(random.uniform(0.3, 1.3))
 
     def open_google(self):
         """Открывает главную страницу Google."""
@@ -140,13 +141,16 @@ class GoogleBot:
         self.apply_vk_filter()
 
         # Загружаем уже сохраненные ссылки
-        saved_videos = self.load_video_data()
+        # saved_videos = self.load_video_data()
 
         video_data = []
         video_count = 0
         try:
+            i = 0
             while video_count < required_video_count:
                 # Извлекаем все видео на странице
+                if i > 15:
+                    break
                 video_elements = self.driver.find_elements(By.XPATH, "//a[contains(@href, 'vk.com/video')]")
                 for video in video_elements:
                     href = video.get_attribute("href")
@@ -179,23 +183,24 @@ class GoogleBot:
                         self._get_random_sleep()  # Ждем перед следующим шагом
                     except Exception as e:
                         print("Кнопка 'Ещё результаты' не найдена или ошибка:", e)
+                        logger.error("Кнопка 'Ещё результаты' не найдена или ошибка:", e)
                         print("Недостаточно видео, продолжаем скроллинг...")
+
                         self.driver.execute_script("window.scrollBy(0, document.body.scrollHeight);")
                         self._get_random_sleep()  # Ждем перед следующим скроллом
 
                 # Если видео меньше 10, продолжаем скроллинг
                 if video_count < required_video_count:
                     print("Недостаточно видео, продолжаем скроллинг...")
+                    logger.info("Недостаточно видео, продолжаем скроллить")
                     self.driver.execute_script("window.scrollBy(0, document.body.scrollHeight);")
                     self._get_random_sleep()  # Ждем перед следующим скроллом
-
-            # Сохраняем все новые видео в JSON
-            if saved_videos:
-                self.save_video_data(saved_videos)
         except Exception as e:
             print("Ошибка при извлечении данных о видео:", e)
+            logger.error("Ошибка при извлечении данных о видео")
         return video_data
 
     def close(self):
         """Закрытие браузера."""
         self.driver.quit()
+
