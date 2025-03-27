@@ -15,7 +15,9 @@ document.body.appendChild(floatingShapes);
 const toggleLoading = (show) => {
     loadingContainer.style.display = show ? 'block' : 'none';
     searchInput.disabled = show;
+    document.body.style.cursor = show ? 'progress' : 'default'; // Изменение курсора
 };
+
 
 // Дебаунс запросов (500ms)
 const debounce = (func, delay = 500) => {

@@ -26,6 +26,7 @@ class GoogleBot:
         self.chrome_options.add_argument("--disable-blink-features=AutomationControlled")
         self.chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
         self.chrome_options.add_experimental_option("useAutomationExtension", False)
+        self.chrome_options.add_argument("--no-sandbox")
 
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=self.chrome_options)
 
@@ -162,8 +163,8 @@ class GoogleBot:
                     # else:
                     name = video.text[:5]  # Берем первые 5 символов названия видео
                     video_data.append({"id": video_id, "name": name, "url": href})
-                    saved_videos.append({"id": video_id, "name": name, "url": href})
                     video_count += 1
+
                     print(f"Найдено новое видео {video_id}, сохраняем.")
 
                     # Если собрано 10 видео, выходим
@@ -183,7 +184,7 @@ class GoogleBot:
                         self._get_random_sleep()  # Ждем перед следующим шагом
                     except Exception as e:
                         print("Кнопка 'Ещё результаты' не найдена или ошибка:", e)
-                        logger.error("Кнопка 'Ещё результаты' не найдена или ошибка:", e)
+                        logger.error(f"Кнопка 'Ещё результаты' не найдена или ошибка: {e}")
                         print("Недостаточно видео, продолжаем скроллинг...")
 
                         self.driver.execute_script("window.scrollBy(0, document.body.scrollHeight);")
