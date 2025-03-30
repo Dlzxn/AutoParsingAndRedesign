@@ -13,9 +13,8 @@ search_router = APIRouter(prefix="/search", tags=["Search"])
 async def search(tag: str):
     try:
         logger.info(f"Searching for {tag} started...")
-        bot = GoogleBot(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-                                   "Chrome/91.0.4472.124 Safari/537.36")
-        url_list = bot.get_video_links(tag)
+        bot = GoogleBot()
+        url_list = await bot.get_video_links(tag)
         bot.close()
         print("URL: ", url_list)
         logger.info(f"Found {len(url_list)} videos.")

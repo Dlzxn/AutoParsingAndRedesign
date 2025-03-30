@@ -20,7 +20,7 @@ const toggleLoading = (show) => {
 
 
 // Дебаунс запросов (500ms)
-const debounce = (func, delay = 500) => {
+const debounce = (func, delay = 5000) => {
     let timeoutId;
     return (...args) => {
         clearTimeout(timeoutId);
@@ -35,16 +35,19 @@ const createResultItem = ({ title, url, id }) => {
 
     item.innerHTML = `
         <div class="link-container" style="background-color: #f0f0f0; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-            <a href="${url}" target="_blank" class="link-title" style="color: #0073e6; font-size: 16px; text-decoration: none; font-weight: bold; transition: color 0.3s ease;" onmouseover="this.style.color='#005bb5'" onmouseout="this.style.color='#0073e6'">${title || url}</a>
-            <div class="link-actions" style="margin-top: 10px;">
-                <button class="copy-btn" data-url="${url}" title="Скопировать ссылку" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; margin-right: 10px;" onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'">
-                    <span class="material-icons" style="font-size: 20px;">content_copy</span>
-                </button>
-                <button class="download-btn" data-url="${url}" title="Скачать видео" style="background-color: #ff5722; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px;" onmouseover="this.style.backgroundColor='#e64a19'" onmouseout="this.style.backgroundColor='#ff5722'">
-                    <span class="material-icons" style="font-size: 20px;">download</span>
-                </button>
-            </div>
-        </div>
+    <a href="${url}" target="_blank" class="link-title" style="color: #0073e6; font-size: 16px; text-decoration: none; font-weight: bold; transition: color 0.3s ease;" onmouseover="this.style.color='#005bb5'" onmouseout="this.style.color='#0073e6'">
+        ${title || (url.length > 35 ? url.substring(0, 35) + '...' : url)}
+    </a>
+    <div class="link-actions" style="margin-top: 10px;">
+        <button class="copy-btn" data-url="${url}" title="Скопировать ссылку" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; margin-right: 10px;" onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'">
+            <span class="material-icons" style="font-size: 20px;">content_copy</span>
+        </button>
+        <button class="download-btn" data-url="${url}" title="Скачать видео" style="background-color: #ff5722; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px;" onmouseover="this.style.backgroundColor='#e64a19'" onmouseout="this.style.backgroundColor='#ff5722'">
+            <span class="material-icons" style="font-size: 20px;">download</span>
+        </button>
+    </div>
+</div>
+
     `;
 
     const copyButton = item.querySelector('.copy-btn');

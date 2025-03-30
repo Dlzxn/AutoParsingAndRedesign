@@ -1,7 +1,8 @@
+import asyncio
 import time
 import random
 import json
-import os
+import os, datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -9,40 +10,120 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import undetected_chromedriver as uc
 
 from WebApp.logger.log_cfg import logger
 
 class GoogleBot:
     def __init__(self, user_agent=None, headless=True):
-        self.chrome_options = webdriver.ChromeOptions()
+        self.browsers = [
+            {"name": "Chrome", "versions": ["91.0.4472.124", "93.0.4577.82", "95.0.4638.54"]},
+            {"name": "Firefox", "versions": ["89.0", "92.0", "93.0"]},
+            {"name": "Safari", "versions": ["14.0", "15.0", "13.1"]},
+            {"name": "Edge", "versions": ["91.0.864.59", "92.0.902.62", "93.0.961.52"]},
+            {"name": "Opera", "versions": ["76.0.4017.94", "78.0.4093.31", "80.0.4170.34"]}
+        ]
+
+        self.operating_systems = [
+            {"name": "Windows NT 10.0", "versions": ["Win64; x64", "Win32"]},
+            {"name": "Macintosh; Intel Mac OS X", "versions": ["10_15_7", "10_14_6", "10_13_6"]},
+            {"name": "X11", "versions": ["Linux x86_64", "Linux i686"]},
+            {"name": "Android", "versions": ["10", "11", "12"]},
+            {"name": "iPhone", "versions": ["iOS 14_6", "iOS 15_0", "iOS 13_5"]}
+        ]
+
+        self.languages = [
+            "en-US", "en-GB", "fr-FR", "de-DE", "ru-RU", "es-ES", "it-IT", "pt-PT"
+        ]
+
+        self.devices = [
+            "Mobile", "Desktop"
+        ]
+        self.chrome_options = uc.ChromeOptions()
         if headless:
             self.chrome_options.add_argument("--headless")  # для работы без интерфейса
-        if user_agent:
-            self.chrome_options.add_argument(f"user-agent={user_agent}")
-        else:
-            self.chrome_options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                                             "(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
 
         self.chrome_options.add_argument("--disable-blink-features=AutomationControlled")
-        self.chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        self.chrome_options.add_experimental_option("useAutomationExtension", False)
+        # self.chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        # self.chrome_options.add_experimental_option("useAutomationExtension", False)
+        self.chrome_options.add_argument("--window-size=1920,1080")  # Добавить!
+
         self.chrome_options.add_argument("--no-sandbox")
+        self.chrome_options.add_argument("--disable-gpu")
+        self.chrome_options.add_argument("--disable-dev-shm-usage")
+        self.chrome_options.add_argument("--remote-debugging-port=9222")
+        self.generate()
 
-        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=self.chrome_options)
+        self.driver = uc.Chrome(options=self.chrome_options)
+        self._bypass_bot_detection()  # Добавить!
 
-    def _wait_for_element(self, by, value, timeout=3):
+    def generate(self):
+        browser = random.choice(self.browsers)
+        os = random.choice(self.operating_systems)
+        language = random.choice(self.languages)
+        device = random.choice(self.devices)
+
+        browser_name = browser["name"]
+        browser_version = random.choice(browser["versions"])
+        os_name = os["name"]
+        os_version = random.choice(os["versions"])
+
+        if device == "Mobile":
+            user_agent = f"Mozilla/5.0 ({os_name} {os_version}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{browser_version} Mobile Safari/537.36"
+        else:
+            user_agent = f"Mozilla/5.0 ({os_name} {os_version}) AppleWebKit/537.36 (KHTML, like Gecko) {browser_name}/{browser_version} Safari/537.36"
+
+        user_agent += f" Accept-Language: {language}"
+        self.chrome_options.add_argument(f"user-agent={user_agent}")
+        return user_agent
+
+    def _wait_for_element(self, by, value, timeout = random.randint(2, 6)):
         """Ожидаем появления элемента на странице."""
         wait = WebDriverWait(self.driver, timeout)
         return wait.until(EC.element_to_be_clickable((by, value)))
 
-    def _get_random_sleep(self):
-        """Случайная задержка, чтобы имитировать поведение реального пользователя."""
-        time.sleep(random.uniform(0.3, 1.3))
+    def _bypass_bot_detection(self):
+        """Убирает navigator.webdriver и другие параметры, которые палят бота"""
+        self.driver.execute_script(
+            "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
+        )
 
-    def open_google(self):
+    def save_html_page(self, driver):
+        try:
+            print("сохраняем")
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            logger.info(f"сохраняем html {timestamp}")
+            file_path = f"Data/page_{timestamp}.html"
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(driver.page_source)
+            logger.info(f"HTML страницы сохранён в {file_path}")
+            print("сохранили")
+        except Exception as e:
+            print(e)
+            logger.error(f"Ошибка при сохранении HTML страницы: {e}")
+
+    def save_start_html_page(self, driver):
+        try:
+            print("сохраняем")
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            logger.info(f"сохраняем html {timestamp}")
+            file_path = f"Data/page.html"
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(driver.page_source)
+            logger.info(f"HTML страницы сохранён в {file_path}")
+            print("сохранили")
+        except Exception as e:
+            print(e)
+            logger.error(f"Ошибка при сохранении HTML страницы: {e}")
+
+    async def _get_random_sleep(self):
+        """Случайная задержка, чтобы имитировать поведение реального пользователя."""
+        await asyncio.sleep(random.uniform(0.9, 3.5))
+
+    async def open_google(self):
         """Открывает главную страницу Google."""
         self.driver.get("https://www.google.com")
-        self._get_random_sleep()
+        await self._get_random_sleep()
 
     def apply_vk_filter(self):
         """Применяет фильтр для поиска только на vk.com и нажимает на кнопку 'Инструменты' рядом с поисковой строкой."""
@@ -79,19 +160,19 @@ class GoogleBot:
     def accept_cookies(self):
         """Принять cookies, если появляется окно."""
         try:
-            agree_button = self._wait_for_element(By.XPATH, "//div[text()='Принять все']")
+            agree_button = self._wait_for_element(By.XPATH, "//div[text()='Отклонить все']")
             agree_button.click()
             print("Кнопка 'Принять все' нажата.")
         except Exception as e:
             print(f"Ошибка при поиске кнопки 'Принять все': {e}")
 
-    def search(self, search_query):
+    async def search(self, search_query):
         """Выполняет поиск по запросу."""
         search_box = self.driver.find_element(By.NAME, "q")
         search_box.send_keys(search_query + " вк клипы")
-        self._get_random_sleep()
+        await self._get_random_sleep()
         search_box.send_keys(Keys.RETURN)
-        self._get_random_sleep()
+        await self._get_random_sleep()
 
     def go_to_short_videos_section(self):
         """Переход в раздел 'Короткие видео'."""
@@ -129,16 +210,24 @@ class GoogleBot:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(video_data, f, ensure_ascii=False, indent=4)
 
-    def get_video_links(self, search_query, required_video_count=10):
+    async def get_video_links(self, search_query, required_video_count=10):
         """Извлекает ссылки на видео с результатов поиска и из раздела 'Короткие видео'."""
-        self.open_google()
-        self.accept_cookies()
-        self.search(search_query)
+        await self.open_google()
 
+        await self._get_random_sleep()
+        self.accept_cookies()
+
+        await self._get_random_sleep()
+        await self.search(search_query)
+
+        await self._get_random_sleep()
+        self.save_start_html_page(self.driver)
 
         # Переходим в раздел коротких видео
+        await self._get_random_sleep()
         self.go_to_short_videos_section()
 
+        await self._get_random_sleep()
         self.apply_vk_filter()
 
         # Загружаем уже сохраненные ссылки
@@ -153,6 +242,10 @@ class GoogleBot:
                 if i > 15:
                     break
                 video_elements = self.driver.find_elements(By.XPATH, "//a[contains(@href, 'vk.com/video')]")
+                if len(video_elements) == 0:
+                    logger.error("0 elements on page")
+                    self.save_html_page(self.driver)
+                    return video_data
                 for video in video_elements:
                     href = video.get_attribute("href")
                     video_id = href.split('/')[-1]  # Получаем ID видео из ссылки
@@ -181,24 +274,29 @@ class GoogleBot:
                                                    load_more_button)  # Прокрутка до кнопки
                         load_more_button.click()  # Клик по кнопке "Ещё результаты"
                         print("Нажата кнопка 'Ещё результаты'.")
-                        self._get_random_sleep()  # Ждем перед следующим шагом
+                        await self._get_random_sleep()
                     except Exception as e:
                         print("Кнопка 'Ещё результаты' не найдена или ошибка:", e)
                         logger.error(f"Кнопка 'Ещё результаты' не найдена или ошибка: {e}")
                         print("Недостаточно видео, продолжаем скроллинг...")
 
                         self.driver.execute_script("window.scrollBy(0, document.body.scrollHeight);")
-                        self._get_random_sleep()  # Ждем перед следующим скроллом
+                        await self._get_random_sleep()
+
+                    finally:
+                        self.save_html_page(self.driver)
 
                 # Если видео меньше 10, продолжаем скроллинг
                 if video_count < required_video_count:
                     print("Недостаточно видео, продолжаем скроллинг...")
                     logger.info("Недостаточно видео, продолжаем скроллить")
                     self.driver.execute_script("window.scrollBy(0, document.body.scrollHeight);")
-                    self._get_random_sleep()  # Ждем перед следующим скроллом
+                    await self._get_random_sleep()
+
         except Exception as e:
             print("Ошибка при извлечении данных о видео:", e)
             logger.error("Ошибка при извлечении данных о видео")
+            self.save_html_page(self.driver)
         return video_data
 
     def close(self):
