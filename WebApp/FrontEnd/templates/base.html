@@ -1,10 +1,41 @@
-        <div class="link-container" style="background-color: #f0f0f0; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
-    <a href="${url}" target="_blank" class="link-title" style="color: #0073e6; font-size: 16px; text-decoration: none; font-weight: bold; transition: color 0.3s ease;" onmouseover="this.style.color='#005bb5'" onmouseout="this.style.color='#0073e6'">${title || url}</a>
-    <div class="link-actions" style="margin-top: 10px;">
-        <button class="copy-btn" data-url="${url}" title="Скопировать ссылку" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; margin-right: 10px;" onmouseover="this.style.backgroundColor='#45a049'" onmouseout="this.style.backgroundColor='#4CAF50'">
-            <span class="material-icons" style="font-size: 20px;">content_copy</span>
-        </button>
-        <button class="download-btn" data-url="${url}" title="Скачать видео" style="background-color: #ff5722; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px;" onmouseover="this.style.backgroundColor='#e64a19'" onmouseout="this.style.backgroundColor='#ff5722'">
-            <span class="material-icons" style="font-size: 20px;">download</span>
-        </button>
-    </div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parser Platform</title>
+    <link rel="stylesheet" href="/WebApp/FrontEnd/styles/base.css">
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <!-- Боковое меню -->
+    <nav class="sidebar">
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="/" class="nav-link">
+                    <span class="icon">🏠</span>
+                    <span class="link-text">Главная</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/profile" class="nav-link">
+                    <span class="icon">👤</span>
+                    <span class="link-text">Профиль</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/about" class="nav-link">
+                    <span class="icon">ℹ️</span>
+                    <span class="link-text">О нас</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,433 +1,60 @@
-:root {
-    --primary-color: #6366f1;
-    --primary-hover: #4f46e5;
-    --background: #f8fafc;
-    --text-color: #1e293b;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --danger-color: #ef4444;
-    --danger-hover: #dc2626;
+/* Общие стили страницы */
+body {
+    background-color: #f0f0f0;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    text-align: center;
 }
 
-/* ... предыдущие стили ... */
-
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    position: relative;
+/* Заголовок */
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.settings-btn {
-    background: var(--primary-color);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+/* Контейнер с кнопками */
+.buttons-container {
     display: flex;
-    align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow);
+    flex-wrap: wrap;
+    gap: 20px;
+    max-width: 80%;
+    margin: 30px auto;
 }
 
-.settings-btn:hover {
-    background: var(--primary-hover);
-    transform: rotate(90deg);
-}
-
-.settings-btn span {
-    color: white;
-    font-size: 24px;
-}
-
-.search-wrapper {
-    position: relative;
+/* Кнопки */
+.platform-button {
     display: flex;
+    justify-content: center;
     align-items: center;
-}
-
-.search-btn {
-    position: absolute;
-    right: 15px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    transition: all 0.3s ease;
+    background-color: #f7f7f7;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
-.search-btn span {
-    color: var(--primary-color);
-    font-size: 24px;
+/* Эффект при наведении на кнопку */
+.platform-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    background-color: #ecf0f1;
 }
 
-.search-btn:hover {
-    background: rgba(99, 102, 241, 0.1);
+/* Изображения внутри кнопки */
+.platform-button img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
 }
 
-.search-btn:active {
-    transform: scale(0.95);
-}
-
-.settings-dropdown {
-    position: absolute;
-    right: 2rem;
-    top: 100px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    padding: 1rem;
-    width: 220px;
-    z-index: 100;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    transform: translateY(-10px);
-}
-
-.settings-dropdown.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.settings-item {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    color: var(--text-color);
-    transition: all 0.2s ease;
-}
-
-.settings-item span {
-    margin-right: 12px;
-}
-
-.settings-item:hover {
-    background: #f1f5f9;
-}
-
-.settings-item.danger {
-    color: var(--danger-color);
-}
-
-.settings-item.danger:hover {
-    background: #fee2e2;
-}
-
-/* Анимация появления результатов */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.video-card {
-    animation: fadeIn 0.4s ease forwards;
-}
-
-/* Декоративные элементы */
-body::after {
-    content: '';
-    position: fixed;
-    top: -50px;
-    right: -50px;
-    width: 200px;
-    height: 200px;
-    background: linear-gradient(45deg, #6366f155, #8b5cf655);
-    border-radius: 50%;
-    z-index: -1;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    bottom: -80px;
-    left: -80px;
-    width: 300px;
-    height: 300px;
-    background: linear-gradient(45deg, #6366f122, #8b5cf622);
-    border-radius: 50%;
-    z-index: -1;
-}
-
-.search-input {
-    width: 100%;
-    padding: 1.25rem 3rem 1.25rem 1.5rem;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 50px;
-    background: white;
-    box-shadow: var(--shadow);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-    position: relative;
-    background-image: linear-gradient(
-        to right,
-        var(--primary-color) 0%,
-        var(--primary-color) 50%,
-        transparent 50%,
-        transparent 100%
-    );
-    background-size: 200% 100%;
-    background-position: 100% 0;
-}
-
-.search-input:focus {
-    outline: none;
-    box-shadow: 0 4px 20px -6px rgba(99, 102, 241, 0.3);
-    background-position: 0 0;
-    padding-left: 2.5rem;
-}
-
-.search-input::placeholder {
-    color: #94a3b8;
-    transition: all 0.3s ease, transform 0.3s ease;
-    transform-origin: left center;
-}
-
-.search-input:focus::placeholder {
-    color: transparent;
-    transform: translateX(10px);
-}
-
-/* Анимированная подложка */
-.search-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 50px;
-    padding: 2px;
-    background: linear-gradient(45deg,
-        var(--primary-color) 0%,
-        #8b5cf6 50%,
-        #ec4899 100%);
-    mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.search-input:focus ~ .search-wrapper::before {
-    opacity: 1;
-}
-
-/* Иконка лупы в инпуте */
-.search-input:not(:placeholder-shown) + .search-btn {
-    transform: rotate(360deg) scale(1.1);
-}
-
-/* Анимация ввода текста */
-@keyframes input-wave {
-    0% { background-size: 200% 100%; }
-    50% { background-size: 100% 100%; }
-    100% { background-size: 200% 100%; }
-}
-
-.search-input:focus {
-    animation: input-wave 1.5s ease infinite;
-}
-
-/* Стили для новых элементов */
-
-
-.link-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.link-title {
-    color: var(--text-light); /* Белый цвет текста */
-}
-
-.settings-item {
-    color: var(--text-light); /* Белый цвет текста */
-}
-
-
-.link-actions {
-    display: flex;
-    gap: 12px;
-}
-
-.copy-btn, .download-btn {
-    background: none;
-    border: none;
-    padding: 8px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-}
-
-.copy-btn:hover {
-    background: rgba(99, 102, 241, 0.1);
-    transform: translateY(-2px);
-}
-
-.download-btn:hover {
-    background: rgba(99, 102, 241, 0.2);
-}
-
-.notification {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    background: white;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
-
-.notification.success {
-    border-left: 4px solid #10b981;
-}
-
-.notification.error {
-    border-left: 4px solid #ef4444;
-}
-
-.floating-shapes {
-    position: fixed;
-    pointer-events: none;
-    z-index: -1;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(5deg); }
-}
-
-
-
-/* Обновим стили карточек */
-.result-item {
-    background: var(--background-card);
-    /* остальные стили без изменений */
-}
-
-.link-title {
-    color: var(--text-dark);
-    /* остальные стили */
-}
-
-/* Делаем кнопки более контрастными */
-.copy-btn span, .download-btn span {
-    color: var(--primary-color);
-}
-
-.copy-btn:hover span {
-    color: var(--primary-hover);
-}
-
-.download-btn:hover span {
-    color: var(--primary-hover);
-}
-.loading-container {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-}
-
-.loading-spinner {
-    width: 50px;
-    height: 50px;
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid var(--primary-color);
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-/* Добавим тень для текста */
-.link-title {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-/* Обновим стили уведомлений */
-.notification {
-    background: var(--background-card);
-    color: var(--text-dark);
-}
-
-/* Модальное окно */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-}
-
-.modal-content {
-    background: white;
-    margin: 15% auto;
-    padding: 1.5rem;
-    border-radius: 12px;
-    width: 80%;
-    max-width: 600px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 1rem;
-}
-
-.close {
-    cursor: pointer;
-    font-size: 24px;
-    transition: transform 0.2s;
-}
-
-.close:hover {
-    transform: rotate(90deg);
-}
-
-.file-list {
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.file-item {
-    padding: 0.75rem;
-    margin: 0.5rem 0;
-    background: #f8fafc;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-}
-
-.file-item span {
-    flex-grow: 1;
-    margin-left: 1rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+/* Эффект на изображение при наведении */
+.platform-button:hover img {
+    transform: scale(1.1);
 }

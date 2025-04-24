@@ -1,67 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Tag Search Pro</title>
-    <link rel="stylesheet" href="WebApp/FrontEnd/styles/main.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <header class="header">
-            <div class="header-content">
-                <h1 class="title">🎥 Video Finder</h1>
-                <div class="settings-btn" id="settingsBtn">
-                    <span class="material-icons">settings</span>
-                </div>
-            </div>
+{% extends "base.html" %}
 
-            <div class="search-container">
-                <div class="search-wrapper">
-                    <input type="text"
-                           id="searchInput"
-                           class="search-input"
-                           placeholder="Введите тег для поиска..."
-                           autocomplete="off">
-                    <button class="search-btn" id="searchButton">
-                        <span class="material-icons">search</span>
-                    </button>
-                </div>
-                <div class="search-loader"></div>
-            </div>
-        </header>
+{% block styles %}
+<link rel="stylesheet" href="WebApp/FrontEnd/styles/main.css">
+{% endblock %}
 
-        <!-- Settings Dropdown -->
-        <div class="settings-dropdown" id="settingsDropdown">
-            <button class="settings-item" id="openFolderBtn">
-                <span class="material-icons">folder_open</span>
-                Открыть папку
-            </button>
-            <button class="settings-item danger" id="deleteDataBtn">
-                <span class="material-icons">delete_forever</span>
-                Удалить все данные
-            </button>
-        </div>
-
-        <!-- File Explorer Modal -->
-        <div id="fileModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Выбранные файлы</h3>
-                    <span class="close">&times;</span>
-                </div>
-                <div id="fileList" class="file-list"></div>
-            </div>
-        </div>
-
-        <div id="results" class="results-container"></div>
-        <div id="loading" class="loading-container"></div>
+{% block content %}
+<section class="platforms">
+    <h1 class="title">Выберите платформу для парсинга</h1>
+    <div class="buttons-container" style="display: flex; justify-content: space-evenly; flex-wrap: wrap; gap: 15px; max-width: 100%; margin: 30px auto;">
+        <a href="/vk" class="platform-button vk" style="display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; border-radius: 50%; background-color: #f7f7f7; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-decoration: none; transition: transform 0.3s, box-shadow 0.3s;">
+            <img src="WebApp/FrontEnd/images/vk.png" alt="VK" style="width: 50px; height: 50px; object-fit: contain;">
+        </a>
+        <a href="/youtube" class="platform-button youtube" style="display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; border-radius: 50%; background-color: #f7f7f7; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-decoration: none; transition: transform 0.3s, box-shadow 0.3s;">
+            <img src="WebApp/FrontEnd/images/yt.png" alt="YouTube" style="width: 50px; height: 50px; object-fit: contain;">
+        </a>
+        <a href="/telegram" class="platform-button telegram" style="display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; border-radius: 50%; background-color: #f7f7f7; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-decoration: none; transition: transform 0.3s, box-shadow 0.3s;">
+            <img src="WebApp/FrontEnd/images/tg.png" alt="Telegram" style="width: 50px; height: 50px; object-fit: contain;">
+        </a>
     </div>
-
-    <script src="WebApp/FrontEnd/scr/app.js"></script>
-</body>
-</html>
+</section>
+{% endblock %}
