@@ -34,7 +34,7 @@ async def get_video_details(session, video_ids):
             durations[vid] = total_seconds
         return durations
 
-async def search_youtube(tag):
+async def search_youtube(tag, clips):
     async with aiohttp.ClientSession() as session:
         params = {
             'part': 'snippet',
@@ -54,7 +54,7 @@ async def search_youtube(tag):
         results = []
         for item in video_items:
             vid = item['id']['videoId']
-            if durations.get(vid, 9999) <= 60:
+            if durations.get(vid, 9999) <= 60 and f'https://www.youtube.com/watch?v={vid}' not in clips:
                 video_data = {
                     'title': item['snippet']['title'],
                     'url': f'https://www.youtube.com/watch?v={vid}',

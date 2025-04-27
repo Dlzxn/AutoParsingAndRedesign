@@ -1,99 +1,81 @@
-import json
-import time
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
+import aiohttp
+import asyncio
 
-chrome_options = Options()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--disable-gpu")
-chrome_options.add_argument("--no-sandbox")
+# Ваш токен доступа для API ВКонтакте
+access_token = ''
+vk_api_url = 'https://api.vk.com/method/video.search'
 
 
-def json_dump(href_list: list) -> bool:
-    try:
-        with open("Data/href.json", "w", encoding="utf-8") as file:
-            json.dump(href_list, file, ensure_ascii=False, indent=4)
-        return True
-    except FileNotFoundError:
-        return False
+# Функция для поиска видео по тегу
+async def search_vk_videos(tag):
+    async with aiohttp.ClientSession() as session:
+        params = {
+            'q': tag,  # Тег для поиска
+            'count': 50,  # Количество видео
+            'access_token': access_token,  # Ваш токен доступа
+            'v': '5.131'  # Версия API
+        }
+
+        async with session.get(vk_api_url, params=params) as response:
+            data = await response.json()
+
+            if 'response' not in data:
+                print("Ошибка при получении данных:", data)
+                return []
+
+            videos = data['response']['items']
+            return videos
 
 
-
-def scroll_to_bottom(driver, max_scrolls=10):
-    """Плавный скроллинг с проверкой появления новых элементов"""
-    last_height = driver.execute_script("return document.body.scrollHeight")
-    scroll_attempts = 0
-    collected = 0
-
-    while scroll_attempts < max_scrolls:
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(2)  # Увеличенное время для загрузки
-
-        # Ждем появления новых элементов
-        try:
-            WebDriverWait(driver, 10).until(
-                lambda d: len(d.find_elements(By.XPATH, '//a[contains(@href, "/video")]')) > collected
-            )
-            collected = len(driver.find_elements(By.XPATH, '//a[contains(@href, "/video")]'))
-        except:
-            pass
-
-        new_height = driver.execute_script("return document.body.scrollHeight")
-        if new_height == last_height:
-            break
-        last_height = new_height
-        scroll_attempts += 1
+# Функция для фильтрации видео по длительности
+def filter_videos_by_duration(videos, max_duration=60):
+    filtered_videos = [video for video in videos if video.get('duration', 0) <= max_duration]
+    return filtered_videos
 
 
-def parse_vk_video(hashtag: str) -> tuple[bool, list[str]]:
-    driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager().install()),
-        options=chrome_options
-    )
-    href_list = []
+# Функция для создания iframe для видео
+async def create_iframe(videos):
+    iframe_videos = []
 
-    try:
-        driver.get(f"https://vkvideo.ru/?q={hashtag}")
+    for video in videos:
+        owner_id = video['owner_id']
+        video_id = video['id']
+        title = video.get('title', 'Без названия')
 
-        # Ожидание первичной загрузки
-        WebDriverWait(driver, 15).until(
-            EC.presence_of_element_located((By.XPATH, '//a[contains(@href, "/video")]'))
-        )
+        # Сформируем ссылку на встроенный плеер для ВКонтакте
+        iframe_url = f"https://vk.com/video_ext.php?oid={owner_id}&id={video_id}&hd=1"
 
-        # Динамический скроллинг
-        scroll_to_bottom(driver)
+        iframe_video = {
+            'title': title,
+            'iframe': iframe_url
+        }
 
-        # Сбор всех видео-ссылок
-        video_links = driver.find_elements(By.XPATH, '//a[contains(@href, "/video")]')
+        iframe_videos.append(iframe_video)
 
-        for i, link in enumerate(video_links):
-            try:
-                url = link.get_attribute('href')
+    return iframe_videos
 
-                if url not in [x['url'] for x in href_list]:
-                    if url[25] != '@' and 'playlist' not in url and 'club' not in url:
-                        href_list.append({
-                        "id": i,
-                        "title": url[19:],
-                        "url": url
-                    })
-            except Exception as e:
-                print(f"Ошибка при обработке элемента {i}: {str(e)}")
-                continue
 
-            finally:
-                if len(href_list) >= 10:
-                    return True, href_list
+# Основная асинхронная функция
+async def main(tag):
+    # Ищем видео по тегу
+    videos = await search_vk_videos(tag)
 
-    except Exception as e:
-        print(f"Критическая ошибка: {e}")
-        return False, href_list
-    finally:
-        driver.quit()
-        json_dump(href_list)
-    return True, href_list
+    if not videos:
+        print("Видео не найдены.")
+        return
+
+    # Фильтруем видео по длительности
+    filtered_videos = filter_videos_by_duration(videos)
+
+    if not filtered_videos:
+        print("Нет видео до 1 минуты.")
+        return
+
+    # Создаем iframe для встраивания видео
+    iframe_videos = await create_iframe(filtered_videos)
+
+    # Выводим ссылки на видео
+    for video in iframe_videos:
+        print(f"Заголовок: {video['title']}")
+        print(
+            f"Встроенный плеер: <iframe src='{video['iframe']}' width='640' height='360' frameborder='0' allowfullscreen='true'></iframe>")

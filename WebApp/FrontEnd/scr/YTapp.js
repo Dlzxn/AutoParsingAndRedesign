@@ -26,7 +26,7 @@ const createResultItem = ({ title, url }) => {
 
     item.innerHTML = `
         <div class="video-box">
-            <h3>${title || url}</h3>
+            <h3><a href="${url}" target="_blank" rel="noopener noreferrer">${title || url}</a></h3>
             <iframe width="560" height="315" 
                     src="${iframeUrl}" 
                     title="${title || 'YouTube video'}" 
@@ -34,11 +34,30 @@ const createResultItem = ({ title, url }) => {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                     allowfullscreen>
             </iframe>
+            <div class="button-group" style="margin-top: 10px;">
+                <button class="download-button" data-url="${url}">Скачать</button>
+                <button class="edit-button" data-url="${url}">Редактировать</button>
+            </div>
         </div>
     `;
 
+    // Добавляем обработчик на кнопку "Скачать"
+    const downloadButton = item.querySelector('.download-button');
+    downloadButton.addEventListener('click', () => {
+        const downloadUrl = `/download/yt?url=${encodeURIComponent(url)}`;
+        window.location.href = downloadUrl;
+    });
+
+    // Обработчик на кнопку "Редактировать" — пока просто вывод в консоль
+    const editButton = item.querySelector('.edit-button');
+    editButton.addEventListener('click', () => {
+        console.log('Редактировать видео:', url);
+        // тут можно будет открывать форму или модалку
+    });
+
     return item;
 };
+
 
 // Отправка запроса
 const performSearch = async (query) => {
