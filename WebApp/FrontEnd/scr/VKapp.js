@@ -18,7 +18,6 @@ const showError = (message) => {
 };
 
 // Создает блок с видео
-// Создает блок с видео
 const createResultItem = ({ title, url }) => {
     const item = document.createElement('div');
     item.className = 'result-item';
@@ -39,13 +38,32 @@ const createResultItem = ({ title, url }) => {
 
     item.innerHTML = `
         <div class="video-box">
-            <h3>${title || url}</h3>
+            <h3><a href="${url}" target="_blank" rel="noopener noreferrer">${title || url}</a></h3>
             <iframe src="${embedUrl}" width="640" height="360" frameborder="0" allowfullscreen="true"></iframe>
+            <div class="button-group" style="margin-top: 10px;">
+                <button class="download-button" data-url="${url}">Скачать</button>
+                <button class="edit-button" data-url="${url}">Редактировать</button>
+            </div>
         </div>
     `;
 
+    // Добавляем обработчик на кнопку "Скачать"
+    const downloadButton = item.querySelector('.download-button');
+    downloadButton.addEventListener('click', () => {
+        const downloadUrl = `/download/vkvideo?url=${encodeURIComponent(url)}`;
+        window.location.href = downloadUrl;
+    });
+
+    // Обработчик на кнопку "Редактировать" — пока просто вывод в консоль
+    const editButton = item.querySelector('.edit-button');
+    editButton.addEventListener('click', () => {
+        console.log('Редактировать видео:', url);
+        // Здесь можно потом добавить открытие модалки или формы
+    });
+
     return item;
 };
+
 
 // Отправка запроса
 const performSearch = async (query) => {
