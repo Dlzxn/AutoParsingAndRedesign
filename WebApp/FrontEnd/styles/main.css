@@ -58,3 +58,270 @@ body {
 .platform-button:hover img {
     transform: scale(1.1);
 }
+/* Основные стили */
+.platforms {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.title {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateY(-50px);
+    transition: all 0.8s ease-out;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.platform-button {
+    width: 120px;
+    height: 120px;
+    background: #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    opacity: 0;
+    transform: translateY(50px);
+}
+
+.platform-button img {
+    width: 60px;
+    height: 60px;
+}
+
+.platform-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.2);
+}
+
+/* Класс, который добавляется при появлении */
+.show {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+.platform-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 250px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
+}
+
+.platform-name {
+    margin-top: 15px;
+    font-size: 1.4rem;
+    color: #333;
+}
+
+.platform-description {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Чтобы анимация применялась и к карточке */
+.show {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+.intro-text {
+    text-align: center;
+    margin-bottom: 50px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInText 1s ease-out forwards;
+}
+
+.intro-text h1 {
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.intro-text p {
+    font-size: 1.2rem;
+    color: #fafafa;;
+    margin-top: 10px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.platforms-container {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    align-items: center;
+}
+
+.platform-card {
+    display: flex;
+    align-items: center;
+    max-width: 700px;
+    background-color: #fafafa;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+}
+
+.platform-card.from-left {
+    transform: translateX(-100vw);
+    animation: slideInFromLeft 1s forwards;
+}
+
+.platform-card.from-right {
+    transform: translateX(100vw);
+    animation: slideInFromRight 1s forwards;
+}
+
+.platform-button {
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+    margin-right: 30px;
+    flex-shrink: 0;
+}
+
+.platform-button img {
+    width: 60%;
+    height: 60%;
+}
+
+.platform-info h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #222;
+}
+
+.platform-info p {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    color: #555;
+}
+
+@keyframes slideInFromLeft {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromRight {
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInText {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.intro-text {
+    text-align: center;
+    margin-bottom: 60px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
+}
+
+.platforms-container {
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+    align-items: center;
+}
+
+.platform-card {
+    display: flex;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 20px 30px;
+    border-radius: 18px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+    animation: appearUp 1s forwards;
+}
+
+.platform-card.align-left {
+    flex-direction: row;
+}
+
+.platform-card.align-right {
+    flex-direction: row-reverse;
+}
+
+.platform-button {
+    width: 100px;
+    height: 100px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 20px;
+    flex-shrink: 0;
+}
+
+.platform-button img {
+    width: 60%;
+}
+
+.platform-info h2 {
+    font-size: 1.8rem;
+    margin: 0;
+    color: #333;
+}
+
+.platform-info p {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* Анимация появления вверх */
+@keyframes appearUp {
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Анимация для текста */
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Задержки для последовательного появления */
+.delay-1 {
+    animation-delay: 0.3s;
+}
+.delay-2 {
+    animation-delay: 0.6s;
+}
+.delay-3 {
+    animation-delay: 0.9s;
+}
+
