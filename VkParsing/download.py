@@ -19,4 +19,4 @@ def remove_file_on_close(video_file, video_path):
     video_file.close()
     os.remove(video_path)
 
-download_vkvideo("https://vk.com/video-47347778_456245937", "asgaaa.mp4")
+#download_vkvideo("https://vk.com/video-47347778_456245937", "asgaaa.mp4")

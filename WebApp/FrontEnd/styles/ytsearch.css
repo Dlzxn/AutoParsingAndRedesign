@@ -9,11 +9,31 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #4c7cbf; /* Основной синий для ВКонтакте */
-  background: -webkit-linear-gradient(to bottom, #4c7cbf, #0077b5); /* Для старых браузеров */
-  background: linear-gradient(to bottom, #4c7cbf, #0077b5); /* Основной градиент */
+  background: #ff0000; /* основной красный */
+  background: -webkit-linear-gradient(to bottom, #ff0000, #cc0000); /* для старых браузеров */
+  background: linear-gradient(to bottom, #ff0000, #cc0000); /* основной градиент */
+}
+.sidebar {
+    background: #1e2a33; /* Тёмно-серый с холодным оттенком для контраста с красным */
+    color: #ffffff; /* Белый текст для хорошей видимости */
+}
+.video-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px; /* Расстояние между видео */
 }
 
+.video-container {
+    flex: 1 1 48%; /* Два видео в ряду, и они будут адаптироваться по ширине */
+    max-width: 48%;
+}
+
+.video-iframe {
+    width: 100%; /* Видео будет адаптироваться по ширине контейнера */
+    height: auto;
+    max-height: 200px; /* Ограничение по высоте */
+}
 
 
 

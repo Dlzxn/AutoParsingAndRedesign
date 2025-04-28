@@ -1,20 +1,39 @@
 const searchInput = document.getElementById('searchInput');
 const searchButton = document.getElementById('searchButton');
 const resultsContainer = document.getElementById('results');
-const loadingContainer = document.getElementById('loading');
+const loadingOverlay = document.getElementById('loadingOverlay');
+const errorTemplate = document.getElementById('errorTemplate');
 
-// Показывает или скрывает индикатор загрузки
 const toggleLoading = (show) => {
-    console.log(`Toggle loading: ${show}`); // Логируем статус загрузки
-    loadingContainer.style.display = show ? 'block' : 'none';
+    if (show) {
+        loadingOverlay.style.display = 'flex';
+        searchButton.querySelector('.button-text').style.opacity = '0';
+        searchButton.querySelector('.button-loader').style.display = 'block';
+    } else {
+        loadingOverlay.style.display = 'none';
+        searchButton.querySelector('.button-text').style.opacity = '1';
+        searchButton.querySelector('.button-loader').style.display = 'none';
+    }
     searchInput.disabled = show;
     searchButton.disabled = show;
 };
 
-// Показывает уведомление об ошибке
 const showError = (message) => {
-    console.error(message); // Логируем ошибку
-    resultsContainer.innerHTML = `<div class="error-message">❌ ${message}</div>`;
+    const errorClone = errorTemplate.content.cloneNode(true);
+    const errorMessage = errorClone.querySelector('.error-message');
+    const retryButton = errorClone.querySelector('.retry-button');
+
+    errorMessage.textContent = message;
+
+    retryButton.addEventListener('click', () => {
+        document.querySelector('.error-notification')?.remove();
+    });
+
+    document.body.appendChild(errorClone);
+
+    setTimeout(() => {
+        document.querySelector('.error-notification')?.remove();
+    }, 5000);
 };
 
 // Создает блок с видео
@@ -37,15 +56,27 @@ const createResultItem = ({ title, url }) => {
     }
 
     item.innerHTML = `
-        <div class="video-box">
-            <h3><a href="${url}" target="_blank" rel="noopener noreferrer">${title || url}</a></h3>
-            <iframe src="${embedUrl}" width="640" height="360" frameborder="0" allowfullscreen="true"></iframe>
-            <div class="button-group" style="margin-top: 10px;">
+    <div class="video-box">
+        <div class="video-container">
+            <iframe class="video-iframe" 
+                    src="${embedUrl}" 
+                    width="100%" 
+                    height="auto" 
+                    style="max-width: 320px; max-height: 180px;" 
+                    frameborder="0" 
+                    allowfullscreen="true"></iframe>
+        </div>
+        <div class="video-info">
+            <h3 class="video-title"><a href="${url}" target="_blank" rel="noopener noreferrer">${title || url}</a></h3>
+            <div class="actions">
                 <button class="download-button" data-url="${url}">Скачать</button>
                 <button class="edit-button" data-url="${url}">Редактировать</button>
             </div>
         </div>
-    `;
+    </div>
+`;
+
+
 
     // Добавляем обработчик на кнопку "Скачать"
     const downloadButton = item.querySelector('.download-button');

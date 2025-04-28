@@ -1,11 +1,10 @@
 const searchInput = document.getElementById('searchInput');
 const searchButton = document.getElementById('searchButton');
 const resultsContainer = document.getElementById('results');
-const loadingContainer = document.getElementById('loading');
+const loadingOverlay = document.getElementById('loadingOverlay');
 
-// Показывает или скрывает индикатор загрузки
 const toggleLoading = (show) => {
-    loadingContainer.style.display = show ? 'block' : 'none';
+    loadingOverlay.style.display = show ? 'flex' : 'none';
     searchInput.disabled = show;
     searchButton.disabled = show;
 };

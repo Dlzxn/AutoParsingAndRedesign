@@ -40,28 +40,32 @@ async def search_youtube(tag, clips):
             'part': 'snippet',
             'q': tag,
             'type': 'video',
-            'maxResults': 20,
+            'maxResults': 80,
             'key': YOUTUBE_API_KEY
         }
-        async with session.get(SEARCH_URL, params=params) as resp:
-            data = await resp.json()
-            video_items = data.get('items', [])
-            video_ids = [item['id']['videoId'] for item in video_items]
+        try:
+            async with session.get(SEARCH_URL, params=params) as resp:
+                data = await resp.json()
+                video_items = data.get('items', [])
+                video_ids = [item['id']['videoId'] for item in video_items]
 
-        durations = await get_video_details(session, video_ids)
+            durations = await get_video_details(session, video_ids)
 
-        # Отфильтруем по длительности <= 60 секунд
-        results = []
-        for item in video_items:
-            vid = item['id']['videoId']
-            if durations.get(vid, 9999) <= 60 and f'https://www.youtube.com/watch?v={vid}' not in clips:
-                video_data = {
-                    'title': item['snippet']['title'],
-                    'url': f'https://www.youtube.com/watch?v={vid}',
-                    'duration': durations[vid]
-                }
-                results.append(video_data)
+            # Отфильтруем по длительности <= 60 секунд
+            results = []
+            for item in video_items:
+                vid = item['id']['videoId']
+                if durations.get(vid, 9999) <= 60 and f'https://www.youtube.com/watch?v={vid}' not in clips:
+                    video_data = {
+                        'title': item['snippet']['title'],
+                        'url': f'https://www.youtube.com/watch?v={vid}',
+                        'duration': durations[vid]
+                    }
+                    results.append(video_data)
 
-        return results
+            return results
+        except Exception as e:
+            print(e)
+            return []
 
 

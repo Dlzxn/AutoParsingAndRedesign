@@ -1,22 +1,52 @@
 {% extends "base.html" %}
 
 {% block styles %}
-<link rel="stylesheet" href="WebApp/FrontEnd/styles/main.css">
+<link rel="stylesheet" href="WebApp/FrontEnd/styles/main.css?v1.1">
 {% endblock %}
 
 {% block content %}
 <section class="platforms">
-    <h1 class="title">Выберите платформу для парсинга</h1>
-    <div class="buttons-container" style="display: flex; justify-content: space-evenly; flex-wrap: wrap; gap: 15px; max-width: 100%; margin: 30px auto;">
-        <a href="/vk" class="platform-button vk" style="display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; border-radius: 50%; background-color: #f7f7f7; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-decoration: none; transition: transform 0.3s, box-shadow 0.3s;">
-            <img src="WebApp/FrontEnd/images/vk.png" alt="VK" style="width: 50px; height: 50px; object-fit: contain;">
-        </a>
-        <a href="/youtube" class="platform-button youtube" style="display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; border-radius: 50%; background-color: #f7f7f7; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-decoration: none; transition: transform 0.3s, box-shadow 0.3s;">
-            <img src="WebApp/FrontEnd/images/yt.png" alt="YouTube" style="width: 50px; height: 50px; object-fit: contain;">
-        </a>
-        <a href="/telegram" class="platform-button telegram" style="display: flex; justify-content: center; align-items: center; width: 100px; height: 100px; border-radius: 50%; background-color: #f7f7f7; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-decoration: none; transition: transform 0.3s, box-shadow 0.3s;">
-            <img src="WebApp/FrontEnd/images/tg.png" alt="Telegram" style="width: 50px; height: 50px; object-fit: contain;">
-        </a>
+    <section class="service-description">
+    <div class="intro-text">
+        <h1>Выберите платформу для парсинга</h1>
+        <p>Наш сервис поможет быстро находить клипы в соцсетях и публиковать их на ваших площадках.</p>
+    </div>
+
+
+    <div class="platforms-container">
+        <div class="platform-card appear delay-1 align-left">
+            <a href="/vk" class="platform-button">
+                <img src="WebApp/FrontEnd/images/vk.png" alt="VK">
+            </a>
+            <div class="platform-info">
+                <h2>ВКонтакте</h2>
+                <p>Автопоиск и загрузка клипов для ваших групп и страниц.</p>
+            </div>
+        </div>
+
+        <div class="platform-card appear delay-2 align-right">
+            <a href="/youtube" class="platform-button">
+                <img src="WebApp/FrontEnd/images/yt.png" alt="YouTube">
+            </a>
+            <div class="platform-info">
+                <h2>YouTube</h2>
+                <p>Поиск популярных видео на YouTube и автоматическая публикация.</p>
+            </div>
+        </div>
+
+        <div class="platform-card appear delay-3 align-left">
+            <a href="/telegram" class="platform-button">
+                <img src="WebApp/FrontEnd/images/tg.png" alt="Telegram">
+            </a>
+            <div class="platform-info">
+                <h2>Telegram</h2>
+                <p>Парсинг и автопостинг в телеграм-каналы и чаты.</p>
+            </div>
+        </div>
     </div>
 </section>
+
+
+
+<script src="WebApp/FrontEnd/scr/MainMenuAnimation.js?v1.0"></script>
 {% endblock %}
