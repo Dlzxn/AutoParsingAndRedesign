@@ -91,9 +91,8 @@ async def search(tag: str, request: Request):
         return url_list
     except KeyError:
         logger.info(f"Searching for {tag} started...")
-        bot = GoogleBot()
         print("start parsing")
-        url_list = await bot.get_video_links(tag, [])
+        url_list = get_tumblr_posts_by_tag(tag)
         print("URL: ", url_list)
         logger.info(f"Found {len(url_list)} videos.")
         return url_list
