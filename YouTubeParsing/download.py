@@ -4,6 +4,7 @@ def download_yt(url, file_path):
     ydl_opts = {
         'format': 'bestvideo+bestaudio/best',
         'outtmpl': file_path,
+        'proxy': "http://root:qiHH^VVy4m@Q?_@185.104.115.35:3128"
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         try:

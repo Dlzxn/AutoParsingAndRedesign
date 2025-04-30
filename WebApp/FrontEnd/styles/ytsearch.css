@@ -15,7 +15,7 @@
 }
 .sidebar {
     background: #1e2a33; /* Тёмно-серый с холодным оттенком для контраста с красным */
-    color: #ffffff; /* Белый текст для хорошей видимости */
+    color: #000; /* Белый текст для хорошей видимости */
 }
 .video-box {
     display: flex;
@@ -64,14 +64,14 @@
 
 .platform-title {
     font-size: 2.5rem;
-    color: #2787F5;
+    color: #cf0000;
     margin-bottom: 1rem;
     animation: slideInLeft 0.6s ease-out;
 }
 
 .platform-description {
     font-size: 1.1rem;
-    color: #666;
+    color: #000000;
     animation: slideInRight 0.6s ease-out;
 }
 
@@ -397,18 +397,7 @@
     margin-bottom: 3rem;
 }
 
-.platform-title {
-    font-size: 2.5rem;
-    color: #fafafa;
-    margin-bottom: 1rem;
-    animation: slideInLeft 0.6s ease-out forwards;
-}
 
-.platform-description {
-    font-size: 1.1rem;
-    color: #fafafa;
-    animation: slideInRight 0.6s ease-out forwards;
-}
 
 
 /* Поисковая панель */
