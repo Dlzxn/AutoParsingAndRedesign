@@ -1,16 +1,15 @@
 {% extends 'base.html' %}
 
 {% block styles %}
-<link rel="stylesheet" href="WebApp/FrontEnd/styles/vksearch.css?v1.2">
+<link rel="stylesheet" href="WebApp/FrontEnd/styles/tumblrsearch.css?v1.3">
 {% endblock %}
-
 
 {% block content %}
 <section class="vk-platform">
     <!-- Анимированный заголовок -->
     <div class="platform-header">
-        <h1 class="platform-title slide-in-left">VK клипы</h1>
-        <p class="platform-description slide-in-right">Поиск и анализ видео контента в социальной сети ВКонтакте</p>
+        <h1 class="platform-title slide-in-left">Tumblr</h1>
+        <p class="platform-description slide-in-right">Поиск и анализ постов в Tumblr</p>
     </div>
 
     <!-- Поисковая панель -->
@@ -22,7 +21,7 @@
                    placeholder="Введите хэштег..."
                    autocomplete="off">
             <button id="searchButton" class="search-button">
-                <span class="button-text">Найти видео</span>
+                <span class="button-text">Найти посты</span>
                 <div class="button-loader"></div>
             </button>
         </div>
@@ -35,7 +34,7 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="loader"></div>
-            <p class="loading-text">Сканируем ВКонтакте...</p>
+            <p class="loading-text">Сканируем Tumblr...</p>
         </div>
     </div>
 
@@ -49,5 +48,5 @@
         </div>
     </template>
 </section>
-<script src="WebApp/FrontEnd/scr/VKapp.js?v1.2"></script>
+<script src="WebApp/FrontEnd/scr/TumblrApp.js?v1.2"></script>
 {% endblock %}

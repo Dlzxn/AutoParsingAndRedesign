@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="WebApp/FrontEnd/styles/videos.css?v1.2">
+{% endblock %}
+
+{% block content %}
+<section class="platforms">
+    <section class="service-description">
+    <div class="intro-text">
+        <h1>Выберите платформу для сбора роликов</h1>
+        <p>Наш сервис поможет быстро находить клипы в соцсетях и публиковать их на ваших площадках.</p>
+    </div>
+
+
+    <div class="platforms-container">
+        <div class="platform-card appear delay-1 align-left">
+            <a href="/vk" class="platform-button">
+                <img src="WebApp/FrontEnd/images/vk.png" alt="VK">
+            </a>
+            <div class="platform-info">
+                <h2>ВКонтакте</h2>
+                <p>Автопоиск и загрузка клипов для ваших групп и страниц.</p>
+            </div>
+        </div>
+
+        <div class="platform-card appear delay-2 align-right">
+            <a href="/youtube" class="platform-button">
+                <img src="WebApp/FrontEnd/images/yt.png" alt="YouTube">
+            </a>
+            <div class="platform-info">
+                <h2>YouTube</h2>
+                <p>Поиск популярных видео на YouTube и автоматическая публикация.</p>
+            </div>
+        </div>
+
+        <div class="platform-card appear delay-3 align-left">
+            <a href="/telegram" class="platform-button">
+                <img src="WebApp/FrontEnd/images/tg.png" alt="Telegram">
+            </a>
+            <div class="platform-info">
+                <h2>Telegram</h2>
+                <p>Парсинг и автопостинг в телеграм-каналы и чаты.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script src="WebApp/FrontEnd/scr/videos.js?v1.0"></script>
+{% endblock %}

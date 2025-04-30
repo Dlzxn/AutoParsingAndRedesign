@@ -1,52 +1,80 @@
 {% extends "base.html" %}
 
 {% block styles %}
-<link rel="stylesheet" href="WebApp/FrontEnd/styles/main.css?v1.2">
+<link rel="stylesheet" href="WebApp/FrontEnd/styles/main.css?v1.3">
 {% endblock %}
 
 {% block content %}
-<section class="platforms">
-    <section class="service-description">
+<section class="parsing-options">
     <div class="intro-text">
-        <h1>Выберите платформу для парсинга</h1>
-        <p>Наш сервис поможет быстро находить клипы в соцсетях и публиковать их на ваших площадках.</p>
-    </div>
+    <h1>Выберите тип контента для работы</h1>
+    <p>Наш сервис поможет автоматизировать сбор и публикацию вашего контента</p>
+</div>
 
 
-    <div class="platforms-container">
-        <div class="platform-card appear delay-1 align-left">
-            <a href="/vk" class="platform-button">
-                <img src="WebApp/FrontEnd/images/vk.png" alt="VK">
-            </a>
-            <div class="platform-info">
-                <h2>ВКонтакте</h2>
-                <p>Автопоиск и загрузка клипов для ваших групп и страниц.</p>
+    <div class="options-container">
+        <a href="/text" class="option-card appear delay-1">
+            <div class="option-button">
+                <img src="WebApp/FrontEnd/images/text.png" alt="Статьи">
             </div>
-        </div>
-
-        <div class="platform-card appear delay-2 align-right">
-            <a href="/youtube" class="platform-button">
-                <img src="WebApp/FrontEnd/images/yt.png" alt="YouTube">
-            </a>
-            <div class="platform-info">
-                <h2>YouTube</h2>
-                <p>Поиск популярных видео на YouTube и автоматическая публикация.</p>
+            <div class="option-info">
+                <h2>Парсинг статей</h2>
+                <p>Автоматический сбор текстового контента из различных источников</p>
             </div>
-        </div>
+        </a>
 
-        <div class="platform-card appear delay-3 align-left">
-            <a href="/telegram" class="platform-button">
-                <img src="WebApp/FrontEnd/images/tg.png" alt="Telegram">
-            </a>
-            <div class="platform-info">
-                <h2>Telegram</h2>
-                <p>Парсинг и автопостинг в телеграм-каналы и чаты.</p>
+        <a href="/video" class="option-card appear delay-2">
+            <div class="option-button">
+                <img src="WebApp/FrontEnd/images/video.png" alt="Видео">
             </div>
-        </div>
+            <div class="option-info">
+                <h2>Парсинг роликов</h2>
+                <p>Сбор видео контента и автоматическая публикация на ваших платформах</p>
+            </div>
+        </a>
     </div>
 </section>
 
 
+<section class="pricing-section">
+    <div class="pricing-container">
+        <a href="/subscribe/standard" class="pricing-card slide-in">
+            <h3>Standard</h3>
+            <div class="price">$29/мес</div>
+            <ul>
+                <li>До 10 000 запросов</li>
+                <li>5 источников</li>
+                <li>Базовая аналитика</li>
+            </ul>
+            <div class="btn">Выбрать</div>
+        </a>
 
-<script src="WebApp/FrontEnd/scr/MainMenuAnimation.js?v1.0"></script>
+        <a href="/subscribe/pro" class="pricing-card featured slide-in">
+            <h3>Pro</h3>
+            <div class="price">$99/мес</div>
+            <ul>
+                <li>До 50 000 запросов</li>
+                <li>20 источников</li>
+                <li>Расширенная аналитика</li>
+                <li>Приоритетная поддержка</li>
+            </ul>
+            <div class="btn">Выбрать</div>
+        </a>
+
+        <a href="/subscribe/premium" class="pricing-card slide-in">
+            <h3>Premium</h3>
+            <div class="price">$199/мес</div>
+            <ul>
+                <li>Неограниченные запросы</li>
+                <li>50+ источников</li>
+                <li>Персональный менеджер</li>
+                <li>Кастомные решения</li>
+            </ul>
+            <div class="btn">Выбрать</div>
+        </a>
+    </div>
+</section>
+
+
+<script src="WebApp/FrontEnd/scr/animations.js?v1.2"></script>
 {% endblock %}

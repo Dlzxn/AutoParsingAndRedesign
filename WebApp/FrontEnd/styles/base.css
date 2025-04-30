@@ -13,6 +13,14 @@ body {
     flex-direction: column;
 }
 
+.social-icons img {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+
 /* Шапка */
 .header {
   position: fixed;

@@ -1,9 +1,5 @@
 /* Основные стили */
-.vk-platform {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-}
+
 .wrapper {
   position: absolute;
   width: 100%;
@@ -370,6 +366,7 @@
     min-height: 100vh; /* Используем min-height для корректного отображения */
     display: flex;
     flex-direction: column;
+    padding-bottom: 6rem;
 }
 
 /* Анимации */

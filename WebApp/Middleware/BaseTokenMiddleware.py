@@ -9,7 +9,7 @@ class TokenMiddleware(BaseHTTPMiddleware):
         print("TOKEN", token)
         print(request.url.path)
         if (".js" in request.url.path or ".css" in request.url.path or "/login" == request.url.path or "/api"
-                in request.url.path):
+                in request.url.path or request.url.path[-1] == "/"):
             print(". call_next")
             return await call_next(request)
         if request.url.path == "/registration":

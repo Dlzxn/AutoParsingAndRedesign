@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+ <link rel="stylesheet" href="WebApp/FrontEnd/styles/editor.css?v1.0">
+<div class="editor-container">
+    <!-- Панель инструментов -->
+    <div class="toolbar">
+        <button data-command="copy" title="Копировать">⎘</button>
+        <button data-command="selectAll" title="Выделить все">☰</button>
+        <button data-command="bold" title="Жирный"><b>B</b></button>
+        <button data-command="italic" title="Курсив"><i>I</i></button>
+        <button data-command="underline" title="Подчеркивание"><u>U</u></button>
+        <button data-command="insertUnorderedList" title="Список">•</button>
+        <button data-command="justifyLeft" title="По левому краю">◀</button>
+        <button data-command="justifyCenter" title="По центру">↔</button>
+        <button data-command="justifyRight" title="По правому краю">▶</button>
+    </div>
+
+    <!-- Область редактирования -->
+    <div id="editor" class="editor-content" contenteditable="true" spellcheck="false">
+        {{ text }}
+    </div>
+</div>
+
+<script src="WebApp/FrontEnd/scr/editor.js?v1.0"></script>
+{% endblock %}
