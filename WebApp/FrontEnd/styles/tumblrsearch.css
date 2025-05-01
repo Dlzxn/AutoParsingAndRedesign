@@ -446,3 +446,148 @@ html, body {
     background: #27ae60;
     transform: translateY(-1px);
 }
+.result-item {
+    max-width: 800px;
+    margin: 0 auto 20px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.post-image {
+    max-height: 500px;
+    object-fit: contain;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+/* Контейнер результатов */
+.results-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 15px;
+}
+
+.result-item:hover {
+    transform: translateY(-2px);
+}
+
+/* Основные стили контейнера */
+.results-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Стили карточки */
+.result-item {
+    border: 1px solid #e1e1e1;
+    border-radius: 12px;
+    padding: 16px;
+    background: #fff;
+    height: 250px; /* Увеличили высоту */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .results-container {
+        grid-template-columns: 1fr;
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .result-item {
+        height: auto;
+        min-height: 200px;
+    }
+}
+
+/* Стили контента */
+.post-content {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #444;
+    flex-grow: 1;
+    overflow: hidden;
+    margin: 12px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* Показываем 5 строк */
+    -webkit-box-orient: vertical;
+}
+
+/* Улучшенные стили кнопок */
+.post-controls {
+    margin-top: auto;
+    padding: 12px 0 0;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+.post-controls button {
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+}
+
+.copy-button {
+    background: #f8f9fa;
+    border: 2px solid #2d72d9;
+    color: #2d72d9;
+    font-weight: 500;
+}
+
+.edit-button {
+    background: #2d72d9;
+    border: 2px solid #2d72d9;
+    color: white;
+    font-weight: 500;
+}
+
+/* Ховер-эффекты */
+.copy-button:hover {
+    background: #e3f0ff;
+    transform: translateY(-1px);
+}
+
+.edit-button:hover {
+    background: #1a5ab5;
+    border-color: #1a5ab5;
+    transform: translateY(-1px);
+}
+
+/* Дополнительные улучшения */
+.post-title {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.post-date {
+    font-size: 12px;
+    color: #666;
+}

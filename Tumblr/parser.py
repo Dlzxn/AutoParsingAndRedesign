@@ -1,60 +1,94 @@
+import asyncio
+import aiohttp
 import pytumblr
+from typing import List
 
-# 🔑 Ключи доступа
-client = pytumblr.TumblrRestClient(
+# 🔐 Первый клиент (основной)
+client_primary = pytumblr.TumblrRestClient(
     'plqKbbtkiJQN0TWO2mjx8kHg5J9yWm28PpyK82NBVMkESNG4iK',
     'SWosE8lRDLH4PD3pYjd7hvoCVpcBnTVPi7JdiXhykl7q7xpyQC',
     'xUnUdemqpex63N8un5pMk6SUnyiCnaXqEBa3oqTNxWe9eO42hX',
     'cyycRMfChvva4utwkih2yMz9QLxy9YzyZYLxdVXi1BVmGQ8F88'
 )
 
+# 🔐 Второй клиент (резерв)
+client_backup = pytumblr.TumblrRestClient(
+    'VZkceLUE4MkQBuAL7h8xMALUlB5ySJTHjDwqOgIteYelmi3Lal',
+    'BlJv13NYW5JlQ8RX7gzsuVwwxf6BWLvCCDyeSuiqZ8wAEvYPjg',
+    'bT78woryaO3vKsw8C5N1nwlOyFAbwd1BfAMrOLYsa4lohsxJSu',
+    'ODAE5OaoQVnD5SyVVZhzITrME0ysxFQhThd7vnJpJhqtj9QoBu'
+)
 
-def get_tumblr_posts_by_tag(tag, limit=100):
-    """
-    Возвращает список постов с Tumblr, соответствующих указанному тегу.
 
-    :param tag: Тег для поиска.
-    :param limit: Максимальное количество постов.
-    :return: Список словарей с данными постов.
-    """
+async def fetch_posts(client, tag, seen_urls, session, limit=100):
     posts = []
     before = None
 
-    while len(posts) < limit:
-        response = client.tagged(tag=tag, limit=20, before=before)
-        if not response:
-            break
+    try:
+        while len(posts) < limit:
+            loop = asyncio.get_event_loop()
+            response = await loop.run_in_executor(
+                None,
+                lambda: client.tagged(tag=tag, limit=20, before=before)
+            )
 
-        posts.extend(response)
+            if not isinstance(response, list):
+                break
 
-        if len(response) < 20:
-            break
+            for post in response:
+                if post.get("type") != "text":
+                    continue
 
-        before = response[-1]['id']
+                body = post.get("body", "")
+                if not body:
+                    continue
 
-    # Обрезаем, если постов больше, чем нужно
-    posts = posts[:limit]
+                if tag.lower() not in body.lower():
+                    continue
 
-    result = []
-    for post in posts:
-        post_data = {
-            "type": post.get("type"),
-            "summary": post.get("summary"),
-            "post_url": post.get("post_url"),
-            "blog_name": post.get("blog_name"),
-            "timestamp": post.get("timestamp"),
-            "tags": post.get("tags"),
-            "id": post.get("id"),
-        }
+                post_url = post.get("post_url")
+                if post_url in seen_urls:
+                    continue
 
-        if post["type"] == "video":
-            post_data["video_url"] = post.get("video_url")
-        elif post["type"] == "photo":
-            post_data["photos"] = [p.get("original_size", {}).get("url") for p in post.get("photos", [])]
-        elif post["type"] == "text":
-            post_data["title"] = post.get("title")
-            post_data["body"] = post.get("body")
+                posts.append({
+                    "type": post.get("type"),
+                    "summary": post.get("summary"),
+                    "post_url": post_url,
+                    "blog_name": post.get("blog_name"),
+                    "timestamp": post.get("timestamp"),
+                    "tags": post.get("tags"),
+                    "id": post.get("id"),
+                    "title": post.get("title"),
+                    "body": body
+                })
 
-        result.append(post_data)
+                if len(posts) >= limit:
+                    break
 
-    return result
+            if len(response) < 20:
+                break
+
+            before = response[-1]["id"]
+
+    except Exception as e:
+        print(f"Ошибка при запросе: {e}")
+
+    return posts
+
+
+async def get_tumblr_posts_by_tag(tag: str, seen_urls: List[str], limit: int = 100) -> List[dict]:
+    try:
+        async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=40)) as session:
+            posts = await fetch_posts(client_primary, tag, seen_urls, session, limit)
+            if posts:
+                return posts
+            print("Пробуем резервный клиент...")
+            return await fetch_posts(client_backup, tag, seen_urls, session, limit)
+    except asyncio.TimeoutError:
+        print("⏱ Превышено время ожидания Tumblr API.")
+        return []
+    except Exception as e:
+        print(f"❌ Общая ошибка: {e}")
+        return []
+
+

@@ -37,49 +37,48 @@ const showError = (message) => {
 };
 
 const createResultItem = (postData) => {
-    const { type, summary, post_url, blog_name, timestamp, tags, id} = postData;
+    const { type, summary, post_url, blog_name, timestamp, tags, id, title } = postData;
     const item = document.createElement('div');
     item.className = 'result-item';
 
     // Форматируем дату
     const postDate = new Date(timestamp * 1000).toLocaleDateString('ru-RU', {
         day: 'numeric',
-        month: 'long',
+        month: 'short',
         year: 'numeric'
     });
 
-    // Создаем блок с постом
-    const embedUrl = `https://embed.tumblr.com/embed/post/${blog_name}/${id}`;
-    console.log(embedUrl)
+    // Обрезаем текст до 200 символов
+    const shortText = (summary || '').substring(0, 200).trim() + '...';
 
-item.innerHTML = `
-    <div class="tumblr-post-container">
-        <iframe src="${embedUrl}" 
-                class="tumblr-iframe" 
-                frameborder="0" 
-                allowfullscreen
-                scrolling="no"
-                width="100%"
-                height="500">
-        </iframe>
-        
-        <div class="post-controls">
-            <button class="copy-button" data-summary="${encodeURIComponent(summary)}">
-                📋 Копировать текст
-            </button>
-            <button class="edit-button" data-summary="${encodeURIComponent(summary)}">
-                ✏️ Редактировать
-            </button>
+    item.innerHTML = `
+        <div class="tumblr-post-container">
+            <div class="post-header">
+                <a href="${post_url}" 
+                   target="_blank" 
+                   class="post-title">
+                    ${title || blog_name}
+                </a>
+                <div class="post-date">${postDate}</div>
+            </div>
+
+            <div class="post-content">${shortText}</div>
+
+            <div class="post-controls">
+                <button class="copy-button" data-summary="${encodeURIComponent(summary)}">
+                    📋 Копировать
+                </button>
+                <button class="edit-button" data-summary="${encodeURIComponent(summary)}">
+                    ✏️ Редактировать
+                </button>
+            </div>
         </div>
-    </div>
-`;
+    `;
 
-
-    // Обработчики для кнопок
+    // Обработчики для кнопок (остаются без изменений)
     const copyButton = item.querySelector('.copy-button');
     const editButton = item.querySelector('.edit-button');
 
-    // Копирование текста
     copyButton.addEventListener('click', () => {
         navigator.clipboard.writeText(summary)
             .then(() => {
@@ -92,13 +91,13 @@ item.innerHTML = `
             .catch(err => console.error('Ошибка копирования:', err));
     });
 
-    // Редактирование поста
     editButton.addEventListener('click', () => {
         window.location.href = `/editor?text=${encodeURIComponent(summary)}`;
     });
 
     return item;
 };
+
 
 // Обновленная функция выполнения поиска
 const performSearch = async (query) => {

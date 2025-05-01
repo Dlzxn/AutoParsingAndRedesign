@@ -84,7 +84,7 @@ async def search(tag: str, request: Request):
             clips_of_user = clips[f"{str(user.id)}"]
             print(clips_of_user)
         logger.info(f"Searching for {tag} started...")
-        url_list = get_tumblr_posts_by_tag(tag)
+        url_list = await get_tumblr_posts_by_tag(tag, clips_of_user)
         print("start parsing")
         print("URL: ", url_list)
         logger.info(f"Found {len(url_list)} videos.")
@@ -92,7 +92,7 @@ async def search(tag: str, request: Request):
     except KeyError:
         logger.info(f"Searching for {tag} started...")
         print("start parsing")
-        url_list = get_tumblr_posts_by_tag(tag)
+        url_list = await get_tumblr_posts_by_tag(tag, clips_of_user)
         print("URL: ", url_list)
         logger.info(f"Found {len(url_list)} videos.")
         return url_list
