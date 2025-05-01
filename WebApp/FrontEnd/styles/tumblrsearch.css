@@ -591,3 +591,29 @@ html, body {
     font-size: 12px;
     color: #666;
 }
+@media (min-width: 769px) {
+    .result-item {
+        height: 300px; /* Увеличили высоту карточки */
+        padding: 15px; /* Больше внутреннего пространства */
+    }
+
+    .post-controls {
+        padding: 15px 0 5px; /* Верхний и нижний отступы */
+        gap: 12px; /* Расстояние между кнопками */
+    }
+
+
+    .post-content {
+        margin: 15px 0; /* Больше воздуха вокруг текста */
+        -webkit-line-clamp: 6; /* На десктопе показываем 6 строк */
+    }
+}
+/* Общие стили для всех разрешений */
+.post-controls {
+    margin-top: auto;
+    padding-top: 15px; /* Единый отступ сверху */
+}
+
+.result-item {
+    transition: all 0.3s ease; /* Плавные анимации */
+}

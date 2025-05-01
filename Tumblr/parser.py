@@ -2,6 +2,7 @@ import asyncio
 import aiohttp
 import pytumblr
 from typing import List
+from bs4 import BeautifulSoup
 
 # 🔐 Первый клиент (основной)
 client_primary = pytumblr.TumblrRestClient(
@@ -59,7 +60,7 @@ async def fetch_posts(client, tag, seen_urls, session, limit=100):
                     "tags": post.get("tags"),
                     "id": post.get("id"),
                     "title": post.get("title"),
-                    "body": body
+                    "body": BeautifulSoup(body, "html.parser").get_text(),
                 })
 
                 if len(posts) >= limit:
@@ -80,6 +81,7 @@ async def get_tumblr_posts_by_tag(tag: str, seen_urls: List[str], limit: int = 1
     try:
         async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=40)) as session:
             posts = await fetch_posts(client_primary, tag, seen_urls, session, limit)
+            print(posts)
             if posts:
                 return posts
             print("Пробуем резервный клиент...")
@@ -91,4 +93,5 @@ async def get_tumblr_posts_by_tag(tag: str, seen_urls: List[str], limit: int = 1
         print(f"❌ Общая ошибка: {e}")
         return []
 
-
+# lisrt = asyncio.run(get_tumblr_posts_by_tag("текст", []))
+# print(lisrt[0]["body"], lisrt[0]["summary"], lisrt[0]["post_url"])

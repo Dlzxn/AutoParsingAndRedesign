@@ -37,7 +37,7 @@ const showError = (message) => {
 };
 
 const createResultItem = (postData) => {
-    const { type, summary, post_url, blog_name, timestamp, tags, id, title } = postData;
+    const { type, summary, post_url, blog_name, timestamp, tags, id, title, body } = postData;
     const item = document.createElement('div');
     item.className = 'result-item';
 
@@ -92,8 +92,9 @@ const createResultItem = (postData) => {
     });
 
     editButton.addEventListener('click', () => {
-        window.location.href = `/editor?text=${encodeURIComponent(summary)}`;
-    });
+    window.location.href = `/editor?text=${encodeURIComponent(body)}&video_url=${encodeURIComponent(post_url)}`;
+});
+
 
     return item;
 };
