@@ -73,6 +73,7 @@ async def search(tag: str, request: Request):
 
 @search_router.get("/tumblr")
 async def search(tag: str, request: Request):
+    clips_of_user = []
     try:
         token = request.cookies.get("token")
         for x in list_with_tokens:

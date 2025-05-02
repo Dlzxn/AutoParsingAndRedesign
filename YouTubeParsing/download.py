@@ -1,10 +1,18 @@
 import yt_dlp
+from urllib.parse import quote
 
 def download_yt(url, file_path):
+    username = "root"
+    password = "qiHH^VVy4m@Q?_"
+    proxy_host = "185.104.115.35"
+    proxy_port = "3128"
+
+    proxy = f"http://{quote(username)}:{quote(password)}@{proxy_host}:{proxy_port}"
+
     ydl_opts = {
         'format': 'bestvideo+bestaudio/best',
         'outtmpl': file_path,
-        'proxy': "http://root:qiHH^VVy4m@Q?_@185.104.115.35:3128"
+        'proxy': proxy
     }
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         try:
