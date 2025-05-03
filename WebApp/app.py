@@ -12,6 +12,7 @@ from WebApp.BackEnd.auth_api.auth_api_router import auth
 from WebApp.BackEnd.profile.profile_router import profile_router as profile
 from WebApp.Middleware.BaseTokenMiddleware import TokenMiddleware
 from WebApp.BackEnd.EditorRouter import editor
+from WebApp.BackEnd.ViewRouter import view
 
 app = FastAPI()
 app.include_router(search_router)
@@ -20,6 +21,7 @@ app.include_router(auth_router)
 app.include_router(auth)
 app.include_router(profile)
 app.include_router(editor)
+app.include_router(view)
 
 app.add_middleware(TokenMiddleware)
 
@@ -44,3 +46,7 @@ async def main(request: Request):
 @app.get("/tumblr")
 async def main(request: Request):
     return templates.TemplateResponse("TumblrSearch.html", {"request": request})
+
+@app.get("/coub")
+async def main(request: Request):
+    return templates.TemplateResponse("CoubSearch.html", {"request": request})

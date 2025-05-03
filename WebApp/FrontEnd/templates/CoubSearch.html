@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block styles %}
-<link rel="stylesheet" href="WebApp/FrontEnd/styles/ytsearch.css?v1.3">
+<link rel="stylesheet" href="WebApp/FrontEnd/styles/coubsearch.css?v1.36">
 {% endblock %}
 
 {% block content %}
 <section class="vk-platform">
     <!-- Анимированный заголовок -->
     <div class="platform-header">
-        <h1 class="platform-title slide-in-left">YT-shorts</h1>
-        <p class="platform-description slide-in-right">Поиск и анализ видео контента в YouTube</p>
+        <h1 class="platform-title slide-in-left">Coub</h1>
+        <p class="platform-description slide-in-right">Поиск и анализ видео контента в Coub</p>
     </div>
 
     <!-- Поисковая панель -->
@@ -34,7 +34,7 @@
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="loader"></div>
-            <p class="loading-text">Сканируем YouTube...</p>
+            <p class="loading-text">Сканируем Coub...</p>
         </div>
     </div>
 
@@ -48,5 +48,5 @@
         </div>
     </template>
 </section>
-<script src="WebApp/FrontEnd/scr/YTapp.js?v1.26"></script>
+<script src="WebApp/FrontEnd/scr/CoubApp.js?v1.48"></script>
 {% endblock %}

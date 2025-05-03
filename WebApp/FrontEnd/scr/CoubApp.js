@@ -14,33 +14,36 @@ const showError = (message) => {
     resultsContainer.innerHTML = `<div class="error-message">❌ ${message}</div>`;
 };
 
-// Создает блок с видео
-const createResultItem = ({ title, url }) => {
+const createResultItem = (url) => {
+    if (!url || typeof url !== 'string') {
+        console.warn('Некорректный URL:', url);
+        return document.createElement('div'); // пустой элемент вместо ошибки
+    }
+
     const item = document.createElement('div');
     item.className = 'result-item';
 
-    // Вставляем iframe для видео
-    const videoId = url.split('v=')[1]; // Получаем videoId из ссылки
-    const iframeUrl = `https://www.youtube.com/embed/${videoId}`;
+    item.innerHTML = `
+    <div class="video-box">
+        <h3>
+            <span class="video-title" title="${url}">
+                ${url.slice(0, 25)}${url.length > 22 ? '...' : ''}
+            </span>
+        </h3>
 
-    item.innerHTML = `<div class="video-box">
-    <h3><a href="${url}" target="_blank" rel="noopener noreferrer">${title || url}</a></h3>
-    <iframe width="560" height="315" 
-            src="${iframeUrl}" 
-            title="${title || 'YouTube video'}" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            allowfullscreen 
-            loading="lazy">
-    </iframe>
-    <div class="button-group" style="margin-top: 10px;">
-        <button class="download-button" data-url="${url}">Скачать</button>
-        <button class="edit-button" data-url="${url}">Редактировать</button>
+        <video width="100%" height="auto" controls preload="none" style="max-width: 560px; border-radius: 10px;">
+            <source src="${url}" type="video/mp4">
+            Ваш браузер не поддерживает воспроизведение видео.
+        </video>
+
+        <div class="button-group" style="margin-top: 10px;">
+            <a href="${url}" target="_blank">
+                <button class="download-button">Скачать</button>
+            </a>
+            <button class="edit-button" data-url="${url}">Редактировать</button>
+        </div>
     </div>
-</div>
-
-       
-           `;
+`;
     item.addEventListener('click', (event) => {
     const videoUrl = url; // Сохраняем URL
 
@@ -60,31 +63,26 @@ const createResultItem = ({ title, url }) => {
     });
 });
 
-    // Добавляем обработчик на кнопку "Скачать"
-    const downloadButton = item.querySelector('.download-button');
-    downloadButton.addEventListener('click', () => {
-        const downloadUrl = `/download/yt?url=${encodeURIComponent(url)}`;
-        window.location.href = downloadUrl;
-    });
 
-    // Обработчик на кнопку "Редактировать" — пока просто вывод в консоль
+
     const editButton = item.querySelector('.edit-button');
     editButton.addEventListener('click', () => {
         console.log('Редактировать видео:', url);
-        // тут можно будет открывать форму или модалку
     });
 
     return item;
 };
 
 
-// Отправка запроса
+
+
+// Отправка запроса для получения списка видео
 const performSearch = async (query) => {
     toggleLoading(true);
     resultsContainer.innerHTML = '';
 
     try {
-        const response = await fetch(`/search/YT?tag=${encodeURIComponent(query)}`);
+        const response = await fetch(`/search/Coub?tag=${encodeURIComponent(query)}`);
 
         const data = await response.json();
 
@@ -98,9 +96,11 @@ const performSearch = async (query) => {
             return;
         }
 
-        data.forEach(item => {
-            resultsContainer.appendChild(createResultItem(item));
-        });
+        // Теперь data - это массив, и можно использовать .forEach для обработки
+        data.forEach(url => {
+    resultsContainer.appendChild(createResultItem(url));
+});
+
 
     } catch (err) {
         console.error(err);
@@ -109,6 +109,7 @@ const performSearch = async (query) => {
         toggleLoading(false);
     }
 };
+
 
 // Слушатель кнопки
 searchButton.addEventListener('click', () => {

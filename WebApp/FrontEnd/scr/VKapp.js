@@ -75,6 +75,24 @@ const createResultItem = ({ title, url }) => {
         </div>
     </div>
 `;
+    item.addEventListener('click', (event) => {
+    const videoUrl = url; // Сохраняем URL
+
+    // Отправляем запрос на сервер при любом клике в контейнере
+    fetch(`/view?url=${encodeURIComponent(videoUrl)}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Ответ от сервера:', data);
+    })
+    .catch(error => {
+        console.error('Ошибка при отправке запроса:', error);
+    });
+});
 
 
 
