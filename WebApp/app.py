@@ -2,6 +2,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.exceptions import HTTPException
+from starlette.exceptions import HTTPException as HTTPstarException
 import os, sys,uvicorn
 
 from WebApp.BackEnd.SearchRouter import search_router
@@ -13,6 +15,11 @@ from WebApp.BackEnd.profile.profile_router import profile_router as profile
 from WebApp.Middleware.BaseTokenMiddleware import TokenMiddleware
 from WebApp.BackEnd.EditorRouter import editor
 from WebApp.BackEnd.ViewRouter import view
+from WebApp.BackEnd.Tests.TestRouter import test
+
+#settings
+TEST_STATUS: bool = True
+AUTH_MIDDLEWARE: bool = True
 
 app = FastAPI()
 app.include_router(search_router)
@@ -23,7 +30,10 @@ app.include_router(profile)
 app.include_router(editor)
 app.include_router(view)
 
-app.add_middleware(TokenMiddleware)
+if TEST_STATUS:
+    app.include_router(test)
+if AUTH_MIDDLEWARE:
+    app.add_middleware(TokenMiddleware)
 
 templates = Jinja2Templates(directory="WebApp/FrontEnd/templates")
 
@@ -32,21 +42,54 @@ app.mount("/WebApp/FrontEnd", StaticFiles(directory="WebApp/FrontEnd"), name="st
 async def main(request: Request):
     return templates.TemplateResponse("mainString.html", {"request": request})
 @app.get("/video")
-async def main(request: Request):
+async def main_video(request: Request):
     return templates.TemplateResponse("videos.html", {"request": request})
 @app.get("/text")
-async def main(request: Request):
+async def main_text(request: Request):
     return templates.TemplateResponse("text.html", {"request": request})
+"""
+Module with Platforms:
+-Vk Video
+-YouTube Shorts
+-Tumblr
+-Coub
+-Reddit
+...
+"""
 @app.get("/vk")
-async def main(request: Request):
+async def main_vk(request: Request):
     return templates.TemplateResponse("VkSearch.html", {"request": request})
 @app.get("/youtube")
-async def main(request: Request):
+async def main_yt(request: Request):
     return templates.TemplateResponse("YTSearch.html", {"request": request})
 @app.get("/tumblr")
-async def main(request: Request):
+async def main_tb(request: Request):
     return templates.TemplateResponse("TumblrSearch.html", {"request": request})
-
 @app.get("/coub")
-async def main(request: Request):
+async def main_cb(request: Request):
     return templates.TemplateResponse("CoubSearch.html", {"request": request})
+@app.get("/reddit")
+async def main_reddit(request: Request):
+    return templates.TemplateResponse("RedditSearch.html", {"request": request})
+
+"""
+Module For Exceptions:
+404 - Not Found
+And For All Exceptions
+"""
+@app.exception_handler(404)
+async def page_not_found(request: Request, exception: HTTPException):
+    return templates.TemplateResponse("NotFoundPage.html", {"request": request})
+
+@app.exception_handler(Exception)
+async def internet_error(request: Request, exception: Exception):
+    print("Exception")
+    return templates.TemplateResponse("InternetErrorPage.html", {"request": request})
+
+@app.exception_handler(HTTPstarException)
+async def all_exceptions(request: Request, exception: HTTPException):
+    if exception.status_code == 404:
+        return templates.TemplateResponse("NotFoundPage.html", {"request": request})
+    else:
+        return templates.TemplateResponse("InternetErrorPage.html", {"request": request})
+
