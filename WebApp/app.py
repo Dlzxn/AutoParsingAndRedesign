@@ -32,6 +32,7 @@ app.include_router(view)
 
 if TEST_STATUS:
     app.include_router(test)
+
 if AUTH_MIDDLEWARE:
     app.add_middleware(TokenMiddleware)
 
@@ -71,25 +72,29 @@ async def main_cb(request: Request):
 @app.get("/reddit")
 async def main_reddit(request: Request):
     return templates.TemplateResponse("RedditSearch.html", {"request": request})
+@app.get("/imgur")
+async def main_reddit(request: Request):
+    return templates.TemplateResponse("ImgurSearch.html", {"request": request})
 
-"""
-Module For Exceptions:
-404 - Not Found
-And For All Exceptions
-"""
-@app.exception_handler(404)
-async def page_not_found(request: Request, exception: HTTPException):
-    return templates.TemplateResponse("NotFoundPage.html", {"request": request})
-
-@app.exception_handler(Exception)
-async def internet_error(request: Request, exception: Exception):
-    print("Exception")
-    return templates.TemplateResponse("InternetErrorPage.html", {"request": request})
-
-@app.exception_handler(HTTPstarException)
-async def all_exceptions(request: Request, exception: HTTPException):
-    if exception.status_code == 404:
+if not TEST_STATUS:
+    """
+    Module For Exceptions:
+    404 - Not Found
+    And For All Exceptions
+    """
+    @app.exception_handler(404)
+    async def page_not_found(request: Request, exception: HTTPException):
         return templates.TemplateResponse("NotFoundPage.html", {"request": request})
-    else:
+
+    @app.exception_handler(Exception)
+    async def internet_error(request: Request, exception: Exception):
+        print("Exception")
         return templates.TemplateResponse("InternetErrorPage.html", {"request": request})
+
+    @app.exception_handler(HTTPstarException)
+    async def all_exceptions(request: Request, exception: HTTPException):
+        if exception.status_code == 404:
+            return templates.TemplateResponse("NotFoundPage.html", {"request": request})
+        else:
+            return templates.TemplateResponse("InternetErrorPage.html", {"request": request})
 
