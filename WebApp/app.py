@@ -4,24 +4,39 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.exceptions import HTTPException
 from starlette.exceptions import HTTPException as HTTPstarException
-import os, sys,uvicorn
+import os, sys, uvicorn
 
 from WebApp.BackEnd.SearchRouter import search_router
 from WebApp.BackEnd.DownloadVideoRouter import router
 from WebApp.BackEnd.auth.auth_router import auth_router
-from WebApp.BackEnd.auth_api import auth_api_router
 from WebApp.BackEnd.auth_api.auth_api_router import auth
 from WebApp.BackEnd.profile.profile_router import profile_router as profile
 from WebApp.Middleware.BaseTokenMiddleware import TokenMiddleware
 from WebApp.BackEnd.EditorRouter import editor
 from WebApp.BackEnd.ViewRouter import view
 from WebApp.BackEnd.Tests.TestRouter import test
+from WebApp.BackEnd.db.create_tables import create_tables, drop_tables
+from WebApp.BackEnd.user_data.user_api import data_router
+from WebApp.BackEnd.admin_panel.admin import adm_router
 
 #settings
 TEST_STATUS: bool = True
 AUTH_MIDDLEWARE: bool = True
+DELETE_DATABASE: bool = False
+ERROR_FIX: bool = True
 
-app = FastAPI()
+"""Start app"""
+app = FastAPI(docs_url=None,          # отключает Swagger UI (/docs)
+    redoc_url=None,         # отключает ReDoc (/redoc)
+    openapi_url=None        # отключает OpenAPI JSON (/openapi.json)
+                )
+@app.on_event("startup")
+async def startup():
+    if DELETE_DATABASE:
+        await drop_tables()
+    await create_tables()
+
+"""Handlers"""
 app.include_router(search_router)
 app.include_router(router)
 app.include_router(auth_router)
@@ -29,6 +44,8 @@ app.include_router(auth)
 app.include_router(profile)
 app.include_router(editor)
 app.include_router(view)
+app.include_router(data_router)
+app.include_router(adm_router)
 
 if TEST_STATUS:
     app.include_router(test)
@@ -76,20 +93,12 @@ async def main_reddit(request: Request):
 async def main_reddit(request: Request):
     return templates.TemplateResponse("ImgurSearch.html", {"request": request})
 
-if not TEST_STATUS:
+if ERROR_FIX:
     """
     Module For Exceptions:
     404 - Not Found
     And For All Exceptions
     """
-    @app.exception_handler(404)
-    async def page_not_found(request: Request, exception: HTTPException):
-        return templates.TemplateResponse("NotFoundPage.html", {"request": request})
-
-    @app.exception_handler(Exception)
-    async def internet_error(request: Request, exception: Exception):
-        print("Exception")
-        return templates.TemplateResponse("InternetErrorPage.html", {"request": request})
 
     @app.exception_handler(HTTPstarException)
     async def all_exceptions(request: Request, exception: HTTPException):

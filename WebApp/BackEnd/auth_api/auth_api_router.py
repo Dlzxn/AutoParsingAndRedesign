@@ -9,7 +9,7 @@ list_with_tokens:list = []
 @auth.post("/login")
 async def login(data: Login, re: Response):
     print(data)
-    user = db.verify_user(data.identity, data.password)
+    user = await db.verify_user(data.identity, data.password)
     print("User in login", user)
     if user is not None:
         print("User in login(created)", user)
@@ -24,7 +24,7 @@ async def login(data: Login, re: Response):
 @auth.post("/registration")
 async def registration(data: Login, re: Response):
     print(data)
-    user = db.create_user(data.identity, data.password)
+    user = await db.create_user(data.identity, data.password)
     if user:
         token = randint(1, 10000)
         list_with_tokens.append({"token": token, "user": user})

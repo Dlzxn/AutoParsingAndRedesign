@@ -1,0 +1,18 @@
+{
+  "free":{
+    "price": 0,
+    "token_in_day": 0,
+  },
+  "standard": {
+    "price": 5000,
+    "token_in_day": 20,
+  },
+  "pro": {
+    "price": 10000,
+    "token_in_day": 100,
+  },
+  "premium": {
+    "price": 15000,
+    "token_in_day": 300,
+  }
+}

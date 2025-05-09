@@ -1,12 +1,11 @@
-from fastapi import APIRouter, HTTPException, FastAPI, Request, BackgroundTasks
+from fastapi import APIRouter, HTTPException, Request, BackgroundTasks
 from fastapi.responses import StreamingResponse, FileResponse
-from VkParsing.download import download_vkvideo, remove_file_on_close
-from YouTubeParsing.download import download_video
+from Platforms.VkParsing.download import download_vkvideo, remove_file_on_close
+from Platforms.YouTubeParsing.download import download_video
 from WebApp.BackEnd.auth_api.auth_api_router import list_with_tokens
-from Imgur.download import download_video_imgur
+from Platforms.Imgur.download import download_video_imgur
 
-import os, json, httpx
-
+import os, json
 
 router = APIRouter(prefix = "/download")
 

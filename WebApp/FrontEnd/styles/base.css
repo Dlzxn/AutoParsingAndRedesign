@@ -286,3 +286,6 @@ body {
         font-size: 0.9rem;
     }
 }
+.plan.premium { color: gold; }
+.plan.business { color: #00ff00; }
+.plan.free { color: silver; }

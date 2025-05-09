@@ -1,15 +1,14 @@
 from fastapi import APIRouter, Request
-from starlette.responses import JSONResponse
 import json
 
-from GoogleParsing.parser import GoogleBot
+from Platforms.GoogleParsing.parser import GoogleBot
 from WebApp.logger.log_cfg import logger
-from YouTubeParsing.parser import search_youtube
+from Platforms.YouTubeParsing.parser import search_youtube
 from WebApp.BackEnd.auth_api.auth_api_router import list_with_tokens
-from Tumblr.parser import get_tumblr_posts_by_tag
-from coub.parser import get_video
-from Reddit.parser import find_vertical_shorts_by_tag
-from Imgur.parser import find_imgur_shorts_by_tag
+from Platforms.Tumblr.parser import get_tumblr_posts_by_tag
+from Platforms.coub.parser import get_video
+from Platforms.Reddit.parser import find_vertical_shorts_by_tag
+from Platforms.Imgur.parser import find_imgur_shorts_by_tag
 
 search_router = APIRouter(prefix="/search", tags=["Search"])
 

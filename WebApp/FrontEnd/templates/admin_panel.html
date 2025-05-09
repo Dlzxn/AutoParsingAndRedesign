@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block styles %}
+  <link rel="stylesheet" href="/WebApp/FrontEnd/styles/admin_panel.css?v1.00">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+  <h1 class="admin-title">Административная панель</h1>
+  
+  <div class="admin-grid">
+    <div class="admin-card" data-action="promocode">
+      <div class="card-icon">🎁</div>
+      <h3>Создать промокод</h3>
+      <p>Генерация новых промо-предложений</p>
+    </div>
+
+    <div class="admin-card" data-action="users">
+      <div class="card-icon">👥</div>
+      <h3>Управление пользователями</h3>
+      <p>Просмотр и редактирование аккаунтов</p>
+    </div>
+
+    <div class="admin-card" data-action="export">
+      <div class="card-icon">💾</div>
+      <h3>Выгрузить БД</h3>
+      <p>Экспорт данных в формате SQL/CSV</p>
+    </div>
+
+    <div class="admin-card" data-action="pricing">
+      <div class="card-icon">💰</div>
+      <h3>Изменить цены</h3>
+      <p>Настройка тарифных планов</p>
+    </div>
+
+    <div class="admin-card danger" data-action="shutdown">
+      <div class="card-icon">⛔</div>
+      <h3>Закрыть платформу</h3>
+      <p>Экстренное отключение сервиса</p>
+    </div>
+
+    <div class="admin-card" data-action="stats">
+      <div class="card-icon">📊</div>
+      <h3>Просмотр статистики</h3>
+      <p>Аналитика использования сервиса</p>
+    </div>
+    <div class="admin-card" data-action="stats">
+      <div class="card-icon">📊</div>
+      <h3>Выдать админ-права</h3>
+      <p>Выдача прав</p>
+    </div>
+  </div>
+</div>
+
+<div id="confirmationModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Подтверждение действия</h2>
+    <p id="modalText"></p>
+    <button id="confirmAction" class="btn-danger">Подтвердить</button>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="/WebApp/FrontEnd/scr/admin_panel.js?v1.00"></script>
+{% endblock %}
