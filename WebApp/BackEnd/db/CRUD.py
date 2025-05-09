@@ -63,3 +63,4 @@ class CRUD:
 
 db = CRUD()
 
+# asyncio.run(db.create_admin("aleshamarichev09@gmail.com", "Yamnovo2006"))
