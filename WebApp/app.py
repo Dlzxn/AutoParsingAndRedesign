@@ -18,12 +18,13 @@ from WebApp.BackEnd.Tests.TestRouter import test
 from WebApp.BackEnd.db.create_tables import create_tables, drop_tables
 from WebApp.BackEnd.user_data.user_api import data_router
 from WebApp.BackEnd.admin_panel.admin import adm_router
+from WebApp.BackEnd.admin_panel.admin_api import adm_api
 
 #settings
 TEST_STATUS: bool = True
 AUTH_MIDDLEWARE: bool = True
 DELETE_DATABASE: bool = False
-ERROR_FIX: bool = True
+ERROR_FIX: bool = False
 
 """Start app"""
 app = FastAPI(docs_url=None,          # отключает Swagger UI (/docs)
@@ -46,6 +47,7 @@ app.include_router(editor)
 app.include_router(view)
 app.include_router(data_router)
 app.include_router(adm_router)
+app.include_router(adm_api)
 
 if TEST_STATUS:
     app.include_router(test)

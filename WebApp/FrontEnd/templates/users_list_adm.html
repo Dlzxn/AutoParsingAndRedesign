@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block styles %}
+  <link rel="stylesheet" href="/WebApp/FrontEnd/styles/users_list_adm.css?v1.10">
+{% endblock %}
+
+{% block content %}
+<div class="admin-users-container">
+  <h1>Управление пользователями</h1>
+
+  <div class="controls-header">
+    <div class="left-controls">
+      <button class="btn-create" onclick="openCreateModal()">+ Создать пользователя</button>
+      <button class="btn-export" onclick="exportCSV()">📁 Экспорт CSV</button>
+    </div>
+
+    <div class="right-controls">
+      <input type="text" id="searchInput" placeholder="Поиск...">
+      <select id="perPage" onchange="loadUsers()">
+        <option value="10">10 на страницу</option>
+        <option value="25">25 на страницу</option>
+        <option value="50">50 на страницу</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <div class="loader" id="loader">Загрузка...</div>
+    <table id="usersTable">
+      <thead>
+        <tr>
+          <th data-column="id" onclick="sortTable('id')">ID ▲</th>
+          <th data-column="email" onclick="sortTable('email')">Email</th>
+          <th data-column="subscribe_status" onclick="sortTable('subscribe_status')">Статус</th>
+          <th data-column="date_end" onclick="sortTable('date_end')">Подписка до</th>
+          <th data-column="token_today" onclick="sortTable('token_today')">Токены</th>
+          <th data-column="is_admin" onclick="sortTable('is_admin')">Админ</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody id="usersBody"></tbody>
+    </table>
+  </div>
+
+  <div class="pagination">
+    <button id="prevPage" onclick="changePage(-1)">← Назад</button>
+    <span id="currentPage">1</span>/<span id="totalPages">1</span>
+    <button id="nextPage" onclick="changePage(1)">Вперед →</button>
+  </div>
+
+  <!-- Модальные окна -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeEditModal()">&times;</span>
+      <h2>Редактирование пользователя</h2>
+      <form id="userForm" onsubmit="saveUser(event)"></form>
+    </div>
+  </div>
+
+  <div id="createModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeCreateModal()">&times;</span>
+    <h2>Создать нового пользователя</h2>
+    <form id="createForm" onsubmit="createUser(event)">
+      <div class="form-group">
+        <label>Email:</label>
+        <input type="email" id="createEmail" required>
+      </div>
+
+      <div class="form-group">
+        <label>Пароль:</label>
+        <input type="password" id="createPassword" required>
+      </div>
+
+      <div class="form-group">
+        <label>Статус подписки:</label>
+        <select id="createSubscribeStatus">
+          <option value="Free">Free</option>
+          <option value="Premium">Premium</option>
+          <option value="VIP">VIP</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Дата окончания подписки:</label>
+        <input type="date" id="createDateEnd">
+      </div>
+
+      <div class="form-group">
+        <label>Лимит токенов:</label>
+        <input type="number" id="createTokenToday" min="0" value="0">
+      </div>
+
+      <div class="form-group checkbox-group">
+        <input type="checkbox" id="createIsAdmin">
+        <label>Администратор</label>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-save">Создать</button>
+        <button type="button" class="btn-cancel" onclick="closeCreateModal()">Отмена</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <div id="confirmModal" class="modal">
+    <div class="modal-content">
+      <h2>Подтвердите действие</h2>
+      <p id="confirmMessage"></p>
+      <div class="modal-actions">
+        <button class="btn-confirm" onclick="confirmAction()">Подтвердить</button>
+        <button class="btn-cancel" onclick="closeConfirmModal()">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="/WebApp/FrontEnd/scr/users_list_adm.js?v1.20"></script>
+{% endblock %}

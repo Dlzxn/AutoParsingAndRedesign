@@ -379,3 +379,52 @@
     width: 32px;
     height: auto; /* или фиксированно: height: 32px */
 }
+/* Стили для ценовых карточек */
+.price-container {
+    margin: 1.5rem 0;
+}
+
+.price-discount {
+    position: relative;
+    display: inline-block;
+}
+
+.old-price {
+    color: #e74c3c;
+    text-decoration: line-through;
+    margin-right: 0.5rem;
+}
+
+.new-price {
+    color: #27ae60;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.discount-badge {
+    position: absolute;
+    top: -15px;
+    right: -25px;
+    background: #e67e22;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    transform: rotate(15deg);
+}
+
+.featured .discount-badge {
+    background: #c0392b;
+    font-size: 0.9rem;
+}
+
+.pricing-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.price {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2c3e50;
+}

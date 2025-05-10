@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Найти клип - Онлайн-платформа для поиска контента</title>
-  <link rel="stylesheet" href="/WebApp/FrontEnd/styles/base.css?v1.3">
+  <link rel="stylesheet" href="/WebApp/FrontEnd/styles/base.css?v1.30">
   {% block styles %}{% endblock %}
 </head>
 <body>
@@ -21,18 +21,13 @@
 
       <div class="profile" id="profileDropdown">
         <div class="profile-info">
-          <span class="username">user</span>
-          <span class="plan">Premium</span>
+            <span class="username">Гость</span>
+            <span class="plan">Неавторизован</span>
         </div>
         <div class="dropdown-menu">
-          <a href="/profile" class="dropdown-item">Перейти в профиль</a>
-          <a href="/tariffs" class="dropdown-item">Тарифы</a>
-            <a href="/tariffs" class="dropdown-item" style="background-color: #ff4d4d; color: white; font-weight: bold;">
-            Выйти
-            </a>
-
+            <!-- Динамическое меню будет здесь -->
         </div>
-      </div>
+        </div>
     </div>
   </header>
 
@@ -42,7 +37,7 @@
   </main>
 
   {% block extra_scripts %}{% endblock %}
-  <script src="/WebApp/FrontEnd/scr/base.js?v1.1"></script>
+  <script src="/WebApp/FrontEnd/scr/base.js?v1.11"></script>
     <footer id="footer">
         <div class="inner-wrapper">
             <div class="navigation">

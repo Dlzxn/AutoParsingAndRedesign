@@ -1,0 +1,270 @@
+.admin-users-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 20px;
+}
+
+.users-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+#searchInput {
+  flex: 1;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.btn-refresh {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-refresh:hover {
+  background: #2980b9;
+}
+
+.table-container {
+  overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+th {
+  background: #34495e;
+  color: white;
+}
+
+tr:hover {
+  background-color: #f8f9fa;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+}
+
+.status-Free { background: #bdc3c7; color: #2c3e50; }
+.status-Premium { background: #2ecc71; color: white; }
+.status-VIP { background: #e67e22; color: white; }
+
+.btn-edit {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-edit:hover {
+  background: #2980b9;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+/* Остальные стили для модального окна аналогичны предыдущему примеру */
+.admin-users-container {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 20px;
+}
+
+.controls-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.left-controls, .right-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.btn-create, .btn-export {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-create {
+  background: #27ae60;
+  color: white;
+}
+
+.btn-export {
+  background: #2980b9;
+  color: white;
+}
+
+#searchInput {
+  padding: 0.8rem;
+  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#perPage {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.table-container {
+  position: relative;
+  min-height: 400px;
+}
+
+.loader {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+th {
+  cursor: pointer;
+  background: #2c3e50;
+  color: white;
+  padding: 1rem;
+  position: relative;
+}
+
+th:hover {
+  background: #34495e;
+}
+
+th.sort-asc::after {
+  content: ' ▲';
+  font-size: 0.8em;
+}
+
+th.sort-desc::after {
+  content: ' ▼';
+  font-size: 0.8em;
+}
+
+td {
+  padding: 0.8rem;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.editable-cell {
+  cursor: pointer;
+  position: relative;
+}
+
+.editable-cell:hover {
+  background: #f8f9fa;
+}
+
+.cell-edit-input {
+  width: 100%;
+  padding: 0.3rem;
+  border: 1px solid #3498db;
+  border-radius: 3px;
+}
+
+.pagination {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.modal-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+#createModal .modal-content {
+  max-width: 600px;
+}
+
+#createPassword {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}

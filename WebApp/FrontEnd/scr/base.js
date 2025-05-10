@@ -13,13 +13,12 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
 
-// base.js - Динамическое обновление профиля и управление выпадающим меню
 
 // Функция для обновления информации профиля
 function updateProfileInfo() {
-    // Получаем элементы DOM
     const usernameElement = document.querySelector('.username');
     const planElement = document.querySelector('.plan');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
 
     fetch('/api/user/user_data')
         .then(response => {
@@ -27,21 +26,41 @@ function updateProfileInfo() {
             return response.json();
         })
         .then(data => {
-            // Обновляем данные только если элементы существуют
+            // Обновление основной информации
             if (usernameElement) {
                 usernameElement.textContent = data.name || 'Пользователь';
             }
             if (planElement) {
                 planElement.textContent = data.subscriptionPlan || 'Бесплатный';
-                // Добавляем класс для стилизации плана
                 planElement.className = 'plan ' + (data.subscriptionPlan?.toLowerCase() || 'free');
+            }
+
+            // Динамическое обновление меню
+            if (dropdownMenu) {
+                if (data) {
+                    dropdownMenu.innerHTML = `
+                        <a href="/profile" class="dropdown-item">Перейти в профиль</a>
+                        <a href="/tariffs" class="dropdown-item">Тарифы</a>
+                        <a href="/logout" class="dropdown-item logout-btn">Выйти</a>
+                    `;
+                } else {
+                    dropdownMenu.innerHTML = `
+                        <a href="/login" class="dropdown-item">Войти</a>
+                        <a href="/register" class="dropdown-item">Зарегистрироваться</a>
+                    `;
+                }
             }
         })
         .catch(error => {
             console.error('Ошибка загрузки профиля:', error);
-            // Устанавливаем значения по умолчанию при ошибке
             if (usernameElement) usernameElement.textContent = 'Гость';
             if (planElement) planElement.textContent = 'Неавторизован';
+            if (dropdownMenu) {
+                dropdownMenu.innerHTML = `
+                    <a href="/login" class="dropdown-item">Войти</a>
+                    <a href="/register" class="dropdown-item">Зарегистрироваться</a>
+                `;
+            }
         });
 }
 

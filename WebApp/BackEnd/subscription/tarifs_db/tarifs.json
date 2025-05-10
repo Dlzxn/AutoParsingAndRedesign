@@ -1,18 +1,26 @@
 {
-  "free":{
+  "free": {
     "price": 0,
     "token_in_day": 0,
+    "sale": "False",
+    "new_price": "0"
   },
   "standard": {
     "price": 5000,
-    "token_in_day": 20,
+    "token_in_day": 30,
+    "sale": "True",
+    "new_price": "4000"
   },
   "pro": {
     "price": 10000,
     "token_in_day": 100,
+    "sale": "False",
+    "new_price": "0"
   },
   "premium": {
     "price": 15000,
     "token_in_day": 300,
+    "sale": "False",
+    "new_price": "0"
   }
 }

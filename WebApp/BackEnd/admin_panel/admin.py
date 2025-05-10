@@ -11,3 +11,9 @@ adm_router.mount("/WebApp/FrontEnd", StaticFiles(directory="WebApp/FrontEnd"), n
 @adm_router.get("/")
 async def adm_main_page(request: Request):
     return templates.TemplateResponse("admin_panel.html", {"request": request})
+@adm_router.get("/users")
+async def adm_main_page(request: Request):
+    return templates.TemplateResponse("users_list_adm.html", {"request": request})
+@adm_router.get("/pricing")
+async def adm_main_page(request: Request):
+    return templates.TemplateResponse("tarif_adm.html", {"request": request})

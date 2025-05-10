@@ -1,7 +1,10 @@
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException
+import json
+
 from WebApp.BackEnd.auth_api.auth_api_router import list_with_tokens
 from WebApp.BackEnd.db.CRUD import db
 
+PRICING_FILE = "WebApp/BackEnd/subscription/tarifs_db/tarifs.json"
 data_router = APIRouter(prefix = "/api/user")
 
 @data_router.get("/user_data")
@@ -29,5 +32,14 @@ async def get_user_data(request: Request):
     else:
         print("Token is None")
         return None
+
+@data_router.get("/pricing")
+async def get_pricing():
+    try:
+        with open(PRICING_FILE, "r") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"[ERROR] {e}")
+        raise HTTPException(500, detail="Ошибка чтения файла тарифов")
 
 

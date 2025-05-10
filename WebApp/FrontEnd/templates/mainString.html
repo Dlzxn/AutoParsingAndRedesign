@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block styles %}
-<link rel="stylesheet" href="WebApp/FrontEnd/styles/main.css?v1.3">
+<link rel="stylesheet" href="WebApp/FrontEnd/styles/main.css?v1.30">
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,6 @@
     <h1>Выберите тип контента для работы</h1>
     <p>Наш сервис поможет автоматизировать сбор и публикацию вашего контента</p>
 </div>
-
 
     <div class="options-container">
         <a href="/text" class="option-card appear delay-1">
@@ -35,46 +34,11 @@
     </div>
 </section>
 
-
 <section class="pricing-section">
-    <div class="pricing-container">
-        <a href="/subscribe/standard" class="pricing-card slide-in">
-            <h3>Standard</h3>
-            <div class="price">$29/мес</div>
-            <ul>
-                <li>До 10 000 запросов</li>
-                <li>5 источников</li>
-                <li>Базовая аналитика</li>
-            </ul>
-            <div class="btn">Выбрать</div>
-        </a>
-
-        <a href="/subscribe/pro" class="pricing-card featured slide-in">
-            <h3>Pro</h3>
-            <div class="price">$99/мес</div>
-            <ul>
-                <li>До 50 000 запросов</li>
-                <li>20 источников</li>
-                <li>Расширенная аналитика</li>
-                <li>Приоритетная поддержка</li>
-            </ul>
-            <div class="btn">Выбрать</div>
-        </a>
-
-        <a href="/subscribe/premium" class="pricing-card slide-in">
-            <h3>Premium</h3>
-            <div class="price">$199/мес</div>
-            <ul>
-                <li>Неограниченные запросы</li>
-                <li>50+ источников</li>
-                <li>Персональный менеджер</li>
-                <li>Кастомные решения</li>
-            </ul>
-            <div class="btn">Выбрать</div>
-        </a>
+    <div class="pricing-container" id="pricingContainer">
+        <!-- Динамически генерируемые карточки -->
     </div>
 </section>
 
-
-<script src="WebApp/FrontEnd/scr/animations.js?v1.2"></script>
+<script src="WebApp/FrontEnd/scr/mainAnimation.js?v1.21"></script>
 {% endblock %}
