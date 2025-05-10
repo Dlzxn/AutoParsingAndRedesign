@@ -50,6 +50,10 @@ class CRUD:
         user = result.scalars().first()
         return user
 
+    async def db_to_csv_data(self):
+        result = await self.db.execute(select(User))
+        rows = result.scalars().all()
+        return rows
 
     async def is_subscribe(self, id) -> tuple[str, int] | None:
         """Проверяем статус подписки пользователя"""

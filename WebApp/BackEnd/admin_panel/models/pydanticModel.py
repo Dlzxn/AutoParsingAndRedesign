@@ -1,6 +1,8 @@
 from datetime import datetime, date
 from pydantic import BaseModel, field_validator
 from typing import Optional
+from pydantic import BaseModel, validator
+from datetime import datetime
 
 
 class UserUpdate(BaseModel):
@@ -18,3 +20,18 @@ class UserUpdate(BaseModel):
             except ValueError:
                 raise ValueError("Invalid date format. Use YYYY-MM-DD")
         return value
+
+class Promo(BaseModel):
+    name: str
+    type: str
+    status: bool
+    date_ended: Optional[datetime]
+    count_activated: Optional[int]
+    bonus_count: Optional[int]
+    description: Optional[str]
+
+    @validator('date_ended', pre=True)
+    def empty_string_to_none(cls, v):
+        if v == '':
+            return None
+        return v

@@ -4,7 +4,8 @@ import json
 
 from WebApp.Middleware.AdminMiddleware import admin_middleware
 from WebApp.BackEnd.db.CRUD import db
-from WebApp.BackEnd.admin_panel.models.pydanticModel import UserUpdate
+from WebApp.BackEnd.admin_panel.models.pydanticModel import UserUpdate, Promo
+from WebApp.BackEnd.promo.db.promo_CRUD import db_promo
 
 adm_api = APIRouter(prefix = "/api", tags = ["admin"],
                     dependencies=[Depends(admin_middleware)]
@@ -85,3 +86,23 @@ async def update_pricing(data: dict):
     except Exception as e:
         print(f"[ERROR] {e}")
         raise HTTPException(500, detail="Ошибка сохранения тарифов")
+
+@adm_api.get("/promocodes")
+async def all_promo():
+    promo = await db_promo.get_all_promo()
+    return promo
+
+@adm_api.post("/promocodes")
+async def update_promocodes(data: Promo):
+    promo = await db_promo.create_promo(data)
+    if promo:
+        return True
+    return False
+
+@adm_api.get("/promocodes/{promo}")
+async def get_promo_code(promo: int):
+    promo = await db_promo.get_promo(promo)
+    return promo
+@adm_api.put("/promocodes/{promo}")
+async def update_promo_code(promo: int, data: Promo):
+    promo = await db_promo.update_promo(promo, data)

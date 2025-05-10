@@ -38,12 +38,24 @@ function updateProfileInfo() {
             // Динамическое обновление меню
             if (dropdownMenu) {
                 if (data) {
-                    dropdownMenu.innerHTML = `
+                    console.log(data.name)
+                    if ( data.subscriptionPlan == "Administrator" ) {
+                        dropdownMenu.innerHTML = `
+                        <a href="/profile" class="dropdown-item">Перейти в профиль</a>
+                        <a href="/admin" class="dropdown-item">Админ панель</a>
+                        <a href="/tariffs" class="dropdown-item">Тарифы</a>
+                        <a href="/logout" class="dropdown-item logout-btn">Выйти</a>
+                    `;
+                    }
+                    else {
+                        dropdownMenu.innerHTML = `
                         <a href="/profile" class="dropdown-item">Перейти в профиль</a>
                         <a href="/tariffs" class="dropdown-item">Тарифы</a>
                         <a href="/logout" class="dropdown-item logout-btn">Выйти</a>
                     `;
-                } else {
+                    }
+                }
+                else {
                     dropdownMenu.innerHTML = `
                         <a href="/login" class="dropdown-item">Войти</a>
                         <a href="/register" class="dropdown-item">Зарегистрироваться</a>

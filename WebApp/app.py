@@ -19,6 +19,7 @@ from WebApp.BackEnd.db.create_tables import create_tables, drop_tables
 from WebApp.BackEnd.user_data.user_api import data_router
 from WebApp.BackEnd.admin_panel.admin import adm_router
 from WebApp.BackEnd.admin_panel.admin_api import adm_api
+from WebApp.BackEnd.promo.db.create_tables_promo import create_tables_promo, drop_tables_promo
 
 #settings
 TEST_STATUS: bool = True
@@ -35,7 +36,9 @@ app = FastAPI(docs_url=None,          # отключает Swagger UI (/docs)
 async def startup():
     if DELETE_DATABASE:
         await drop_tables()
+        await drop_tables_promo()
     await create_tables()
+    await create_tables_promo()
 
 """Handlers"""
 app.include_router(search_router)

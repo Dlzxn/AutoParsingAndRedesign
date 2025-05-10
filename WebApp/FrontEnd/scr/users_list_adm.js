@@ -179,8 +179,9 @@ document.addEventListener('DOMContentLoaded', () => {
     searchTimeout = setTimeout(loadUsers, 500);
   });
 });
+
 function openCreateModal() {
-  document.getElementById('createModal').style.display = 'flex';
+  document.getElementById('createModal').style.display = 'block';
 }
 
 function closeCreateModal() {
