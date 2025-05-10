@@ -106,3 +106,21 @@ async def get_promo_code(promo: int):
 @adm_api.put("/promocodes/{promo}")
 async def update_promo_code(promo: int, data: Promo):
     promo = await db_promo.update_promo(promo, data)
+
+@adm_api.get("/platforms")
+async def get_platforms():
+    with open("WebApp/BackEnd/platform_status/platforms.json", "r") as f:
+        return json.load(f)
+
+@adm_api.put("/platforms/{platform}")
+async def put_platform(platform: str, data: dict):
+    try:
+        with open("WebApp/BackEnd/platform_status/platforms.json", "r") as f:
+            platfroms_status = json.load(f)
+        platfroms_status[platform]["status"] = data["status"]
+        with open("WebApp/BackEnd/platform_status/platforms.json", "w") as f:
+            json.dump(platfroms_status, f, indent=2)
+        return True
+    except Exception as e:
+        print(f"[ERROR] {e}")
+        return False

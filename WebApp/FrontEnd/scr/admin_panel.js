@@ -10,10 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     users: () => window.location.href = '/admin/users',
     export: () => window.location.href = '/admin/export',
     pricing: () => window.location.href = '/admin/pricing',
-    shutdown: () => {
-      modalText.textContent = "Вы уверены, что хотите закрыть платформу? Это действие остановит работу сервиса для всех пользователей!";
-      modal.style.display = 'flex';
-    },
+    shutdown: () => window.location.href = '/admin/platforms',
     stats: () => window.location.href = '/admin/stats'
   };
 

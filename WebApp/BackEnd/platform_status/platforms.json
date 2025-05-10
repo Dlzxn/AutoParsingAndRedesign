@@ -1,0 +1,23 @@
+{
+  "yt": {
+    "status": "off"
+  },
+  "vk": {
+    "status": "on"
+  },
+  "tg": {
+    "status": "on"
+  },
+  "coub": {
+    "status": "on"
+  },
+  "reddit": {
+    "status": "on"
+  },
+  "imgur": {
+    "status": "on"
+  },
+  "tumblr": {
+    "status": "on"
+  }
+}

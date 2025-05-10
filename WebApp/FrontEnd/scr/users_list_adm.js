@@ -48,8 +48,9 @@ function renderUsers(users) {
       <td class="editable-cell" data-field="subscribe_status">
         <select class="cell-select" data-value="${user.subscribe_status}">
           <option value="Free">Free</option>
+          <option value="Standart">Standart</option>
+          <option value="Pro">Pro</option>
           <option value="Premium">Premium</option>
-          <option value="VIP">VIP</option>
         </select>
       </td>
       <td class="editable-cell" data-field="date_end">

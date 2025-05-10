@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.exceptions import HTTPException
 from starlette.exceptions import HTTPException as HTTPstarException
-import os, sys, uvicorn
+import os, sys, uvicorn, json
 
 from WebApp.BackEnd.SearchRouter import search_router
 from WebApp.BackEnd.DownloadVideoRouter import router
@@ -32,6 +32,14 @@ app = FastAPI(docs_url=None,          # отключает Swagger UI (/docs)
     redoc_url=None,         # отключает ReDoc (/redoc)
     openapi_url=None        # отключает OpenAPI JSON (/openapi.json)
                 )
+def platform_status(name: str) -> bool:
+    """Проверка доступности платформы"""
+    with open("WebApp/BackEnd/platform_status/platforms.json", "r") as f:
+        status = json.load(f)[name]["status"]
+    if status == "on":
+        return True
+    return False
+
 @app.on_event("startup")
 async def startup():
     if DELETE_DATABASE:
@@ -81,22 +89,34 @@ Module with Platforms:
 """
 @app.get("/vk")
 async def main_vk(request: Request):
-    return templates.TemplateResponse("VkSearch.html", {"request": request})
+    if platform_status("vk"):
+        return templates.TemplateResponse("VkSearch.html", {"request": request})
+    return templates.TemplateResponse("tex_platform.html", {"request": request})
 @app.get("/youtube")
 async def main_yt(request: Request):
-    return templates.TemplateResponse("YTSearch.html", {"request": request})
+    if platform_status("yt"):
+        return templates.TemplateResponse("YTSearch.html", {"request": request})
+    return templates.TemplateResponse("tex_platform.html", {"request": request})
 @app.get("/tumblr")
 async def main_tb(request: Request):
-    return templates.TemplateResponse("TumblrSearch.html", {"request": request})
+    if platform_status("tumblr"):
+        return templates.TemplateResponse("TumblrSearch.html", {"request": request})
+    return templates.TemplateResponse("tex_platform.html", {"request": request})
 @app.get("/coub")
 async def main_cb(request: Request):
-    return templates.TemplateResponse("CoubSearch.html", {"request": request})
+    if platform_status("coub"):
+        return templates.TemplateResponse("CoubSearch.html", {"request": request})
+    return templates.TemplateResponse("tex_platform.html", {"request": request})
 @app.get("/reddit")
 async def main_reddit(request: Request):
-    return templates.TemplateResponse("RedditSearch.html", {"request": request})
+    if platform_status("reddit"):
+        return templates.TemplateResponse("RedditSearch.html", {"request": request})
+    return templates.TemplateResponse("tex_platform.html", {"request": request})
 @app.get("/imgur")
 async def main_reddit(request: Request):
-    return templates.TemplateResponse("ImgurSearch.html", {"request": request})
+    if platform_status("imgur"):
+        return templates.TemplateResponse("ImgurSearch.html", {"request": request})
+    return templates.TemplateResponse("tex_platform.html", {"request": request})
 
 if ERROR_FIX:
     """

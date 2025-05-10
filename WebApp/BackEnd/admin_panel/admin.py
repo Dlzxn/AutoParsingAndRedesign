@@ -27,3 +27,6 @@ async def to_csv(request: Request):
 @adm_router.get("/promocode")
 async def adm_promo(request: Request):
     return templates.TemplateResponse("adm_promo.html", {"request": request})
+@adm_router.get("/platforms")
+async def adm_promo(request: Request):
+    return templates.TemplateResponse("platforms.html", {"request": request})
