@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 import asyncio
 from fastapi import HTTPException
 from typing import Optional
+from functools import wraps
 
 from WebApp.BackEnd.promo.db.create_tables_promo import Promo
 from WebApp.BackEnd.db.create_database import DATABASE_URL, engine
@@ -15,28 +16,30 @@ AsyncSessionLocal = sessionmaker(
     engine, class_= AsyncSession, expire_on_commit=False
 )
 
+def with_session(func):
+    """Create and Delete Session"""
+    @wraps(func)
+    async def wrapper(self, *args, **kwargs):
+        self.db = AsyncSessionLocal()
+        try:
+            return await func(self, *args, **kwargs)
+        finally:
+            await self.db.close()
+
+    return wrapper
+
 class CRUD:
-    def __getattribute__(self, name):
-        attr = object.__getattribute__(self, name)
-        if callable(attr):
-            print(f"Метод {name} вызывается!")
-            self.db = AsyncSessionLocal()
-        return attr
-
-    async def __close_session__(self):
-        """Close session"""
-        await self.db.close()
-
+    def __init__(self):
+        self.db = None
+    @with_session
     async def get_all_promo(self):
         query = await self.db.execute(select(Promo))
-        await self.__close_session__()
         return query.scalars().all()
-
+    @with_session
     async def get_promo(self, num):
         query = await self.db.execute(select(Promo).filter(Promo.id == num))
-        await self.__close_session__()
         return query.scalars().first()
-
+    @with_session
     async def create_promo(self, data: Promo):
         promo = Promo(name = data.name, type = data.type, status = data.status,
                      date_ended = data.date_ended, count_activated=data.count_activated,
@@ -46,9 +49,8 @@ class CRUD:
 
 
         await self.db.commit()
-        await self.__close_session__()
         return promo
-
+    @with_session
     async def update_promo(self, id: int, data: Promo):
         result = await self.db.execute(select(Promo).filter(Promo.id == id))
         promo = result.scalars().first()
@@ -60,7 +62,6 @@ class CRUD:
 
         await self.db.commit()
         await self.db.refresh(promo)
-        await self.__close_session__()
         return promo
 
 

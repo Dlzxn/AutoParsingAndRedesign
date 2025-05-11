@@ -25,7 +25,7 @@ from WebApp.BackEnd.promo.db.create_tables_promo import create_tables_promo, dro
 TEST_STATUS: bool = True
 AUTH_MIDDLEWARE: bool = True
 DELETE_DATABASE: bool = False
-ERROR_FIX: bool = True
+ERROR_FIX: bool = False
 
 """Start app"""
 app = FastAPI(docs_url=None,          # отключает Swagger UI (/docs)

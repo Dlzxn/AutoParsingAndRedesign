@@ -4,10 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Найти клип - Онлайн-платформа для поиска контента</title>
-  <link rel="stylesheet" href="/WebApp/FrontEnd/styles/base.css?v1.30">
+  <link rel="stylesheet" href="/WebApp/FrontEnd/styles/base.css?v1.31">
   {% block styles %}{% endblock %}
 </head>
 <body>
+<!-- Прелоадер -->
+  <div class="preloader">
+    <div class="loader">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+    </div>
+  </div>
   <!-- Заголовок (шапка) -->
   <header class="header">
     <div class="header-content">
@@ -37,7 +46,7 @@
   </main>
 
   {% block extra_scripts %}{% endblock %}
-  <script src="/WebApp/FrontEnd/scr/base.js?v1.14"></script>
+  <script src="/WebApp/FrontEnd/scr/base.js?v1.15"></script>
     <footer id="footer">
         <div class="inner-wrapper">
             <div class="navigation">

@@ -1,4 +1,18 @@
 
+// Preloader Logic
+window.addEventListener('load', () => {
+  const preloader = document.querySelector('.preloader');
+
+  // Добавляем задержку для демонстрации анимации
+  setTimeout(() => {
+    preloader.style.opacity = '0';
+    setTimeout(() => {
+      preloader.style.display = 'none';
+    }, 500);
+  }, 500); // Минимальная задержка перед исчезновением
+});
+
+
 document.addEventListener('DOMContentLoaded', function() {
       const profile = document.getElementById('profileDropdown');
       const dropdown = profile.querySelector('.dropdown-menu');

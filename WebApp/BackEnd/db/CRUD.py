@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 import asyncio
 from fastapi import HTTPException
 from typing import Optional
+from functools import wraps
 
 from WebApp.BackEnd.db.create_tables import User
 from WebApp.BackEnd.db.create_database import DATABASE_URL, engine
@@ -15,17 +16,24 @@ AsyncSessionLocal = sessionmaker(
     engine, class_= AsyncSession, expire_on_commit=False
 )
 
+
+def with_session(func):
+    """Create and Delete Session"""
+    @wraps(func)
+    async def wrapper(self, *args, **kwargs):
+        self.db = AsyncSessionLocal()
+        try:
+            return await func(self, *args, **kwargs)
+        finally:
+            await self.db.close()
+
+    return wrapper
+
 class CRUD:
-    def __getattribute__(self, name):
-        attr = object.__getattribute__(self, name)
-        if callable(attr):
-            print(f"Метод {name} вызывается!")
-            self.db = AsyncSessionLocal()
-        return attr
+    def __init__(self):
+        self.db = None
 
-    async def __close_session__(self):
-        await self.db.close()
-
+    @with_session
     async def create_user(self, email, password):
         # Проверяем, существует ли пользователь с таким email
         result = await self.db.execute(select(User).where(User.email == email))
@@ -40,9 +48,8 @@ class CRUD:
             self.db.add(user)
 
         await self.db.commit()
-        await self.__close_session__()
         return user
-
+    @with_session
     async def verify_user(self, username, password):
         """Проверяем, существует ли пользователь с указанными данными"""
         result = await self.db.execute(
@@ -52,15 +59,15 @@ class CRUD:
             )
         )
         user = result.scalars().first()
-        await self.__close_session__()
         return user
 
+    @with_session
     async def db_to_csv_data(self):
         result = await self.db.execute(select(User))
         rows = result.scalars().all()
-        await self.__close_session__()
         return rows
 
+    @with_session
     async def is_subscribe(self, id) -> tuple[str, int] | None:
         """Проверяем статус подписки пользователя"""
         result = await self.db.execute(
@@ -69,26 +76,24 @@ class CRUD:
         user = result.scalars().first()
         if user.is_admin:
             return ("Administrator", user.email)
-        await self.__close_session__()
         return (user.subscribe_status, user.email) if user else None
-
+    @with_session
     async def is_admin(self, id) -> tuple[str, int] | None:
         result = await self.db.execute(
             select(User).filter(User.id == id)
         )
         user = result.scalars().first()
-        await self.__close_session__()
         return user.is_admin
-
+    @with_session
     async def create_admin(self, email, password) -> bool:
         user = User(email=email, password=password, is_admin=True)
         async with self.db.begin():
             self.db.add(user)
         await self.db.commit()
-        await self.__close_session__()
         return user
 
     """Admin Function"""
+    @with_session
     async def get_users(
         self,
         page: int = 1,
@@ -130,7 +135,6 @@ class CRUD:
             total = await self.db.execute(
                 select(func.count()).select_from(query.subquery()))
             total_count = total.scalar()
-            await self.__close_session__()
 
             return {
                 "users": users,
@@ -141,13 +145,12 @@ class CRUD:
             }
 
         except Exception as e:
-            await self.__close_session__()
             print(f"[ERROR] {e}")
             raise HTTPException(
                 status_code=500,
                 detail=f"Database error: {str(e)}"
             )
-
+    @with_session
     async def update_user(self, user_id: int, user_data: dict):
         try:
             result = await self.db.execute(
@@ -171,16 +174,13 @@ class CRUD:
                     setattr(user, key, value)
 
             await self.db.commit()
-            await self.__close_session__()
             return user
 
         except ValueError as ve:
             print(f"[ERROR] {ve}")
-            await self.__close_session__()
             raise HTTPException(status_code=400, detail=str(ve))
         except Exception as e:
             await self.db.rollback()
-            await self.__close_session__()
             print(f"[ERROR] {e}")
             raise HTTPException(
                 status_code=500,
