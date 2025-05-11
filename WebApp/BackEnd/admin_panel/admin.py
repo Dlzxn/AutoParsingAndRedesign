@@ -19,7 +19,6 @@ async def adm_main_page(request: Request):
 @adm_router.get("/pricing")
 async def adm_main_page(request: Request):
     return templates.TemplateResponse("tarif_adm.html", {"request": request})
-
 @adm_router.get("/export")
 async def to_csv(request: Request):
     await export_to_csv()

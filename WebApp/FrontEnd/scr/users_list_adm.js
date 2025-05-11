@@ -125,6 +125,8 @@ async function confirmDelete(userId) {
   showModal('confirmModal');
 }
 
+
+
 async function deleteUser(userId) {
   try {
     const response = await fetch(`/api/users/${userId}`, { method: 'DELETE' });

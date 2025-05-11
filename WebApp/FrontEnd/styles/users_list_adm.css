@@ -102,8 +102,6 @@ tr:hover {
   max-width: 500px;
   position: relative;
 }
-
-/* Остальные стили для модального окна аналогичны предыдущему примеру */
 .admin-users-container {
   max-width: 1400px;
   margin: 2rem auto;
@@ -267,4 +265,172 @@ td {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
+}
+.modal {
+    display: none; /* По умолчанию скрыто */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex; /* Показываем только с классом active */
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-content {
+    position: relative;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    margin: 20px;
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: scale(1);
+}
+
+.close {
+    position: absolute;
+    right: 25px;
+    top: 15px;
+    color: #aaa;
+    font-size: 32px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close:hover {
+    color: #666;
+}
+
+h2 {
+    color: #2c3e50;
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: 24px;
+}
+
+/* Стили для формы */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #34495e;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #3498db;
+    cursor: pointer;
+}
+
+/* Стили для кнопок */
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 25px;
+}
+
+.btn-save,
+.btn-cancel {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-save {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+}
+
+.btn-cancel {
+    background-color: #f5f6fa;
+    color: #7f8c8d;
+    border: 1px solid #e0e0e0;
+}
+
+.btn-cancel:hover {
+    background-color: #e0e0e0;
+    color: #666;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .modal-content {
+        margin: 20px;
+        padding: 25px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-save,
+    .btn-cancel {
+        width: 100%;
+    }
 }

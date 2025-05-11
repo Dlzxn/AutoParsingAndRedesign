@@ -1,11 +1,9 @@
 from sqlalchemy import select, asc, desc, or_, func
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.future import select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
-import asyncio
 from fastapi import HTTPException
-from typing import Optional
 from functools import wraps
+from typing import Optional, Dict
 
 from WebApp.BackEnd.db.create_tables import User
 from WebApp.BackEnd.db.create_database import DATABASE_URL, engine
@@ -13,20 +11,21 @@ from WebApp.BackEnd.db.create_database import DATABASE_URL, engine
 
 # Создаём асинхронный SessionLocal
 AsyncSessionLocal = sessionmaker(
-    engine, class_= AsyncSession, expire_on_commit=False
+    engine, class_=AsyncSession, expire_on_commit=False
 )
 
 
 def with_session(func):
-    """Create and Delete Session"""
+    """Создание и закрытие сессии"""
     @wraps(func)
     async def wrapper(self, *args, **kwargs):
-        self.db = AsyncSessionLocal()
-        try:
-            return await func(self, *args, **kwargs)
-        finally:
-            await self.db.close()
-
+        async with AsyncSessionLocal() as db:  # создаем сессию для каждого запроса
+            try:
+                return await func(self, db, *args, **kwargs)  # передаем сессию в функцию
+            except Exception as e:
+                # Логируем ошибку и поднимаем HTTP исключение
+                print(f"[ERROR] {e}")
+                raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
     return wrapper
 
 class CRUD:
@@ -34,9 +33,9 @@ class CRUD:
         self.db = None
 
     @with_session
-    async def create_user(self, email, password):
+    async def create_user(self, db: AsyncSession, email: str, password: str):
         # Проверяем, существует ли пользователь с таким email
-        result = await self.db.execute(select(User).where(User.email == email))
+        result = await db.execute(select(User).where(User.email == email))
         existing_user = result.scalar_one_or_none()
 
         if existing_user:
@@ -44,15 +43,16 @@ class CRUD:
 
         # Если пользователя нет, создаём нового
         user = User(email=email, password=password)
-        async with self.db.begin():
-            self.db.add(user)
+        async with db.begin():
+            db.add(user)
 
-        await self.db.commit()
+        await db.commit()
         return user
+
     @with_session
-    async def verify_user(self, username, password):
+    async def verify_user(self, db: AsyncSession, username: str, password: str):
         """Проверяем, существует ли пользователь с указанными данными"""
-        result = await self.db.execute(
+        result = await db.execute(
             select(User).filter(
                 User.email == username,
                 User.password == password
@@ -62,40 +62,43 @@ class CRUD:
         return user
 
     @with_session
-    async def db_to_csv_data(self):
-        result = await self.db.execute(select(User))
+    async def db_to_csv_data(self, db: AsyncSession):
+        result = await db.execute(select(User))
         rows = result.scalars().all()
         return rows
 
     @with_session
-    async def is_subscribe(self, id) -> tuple[str, int] | None:
+    async def is_subscribe(self, db: AsyncSession, user_id: int) -> Optional[tuple[str, int]]:
         """Проверяем статус подписки пользователя"""
-        result = await self.db.execute(
-            select(User).filter(User.id == id)
+        result = await db.execute(
+            select(User).filter(User.id == user_id)
         )
         user = result.scalars().first()
-        if user.is_admin:
+        if user and user.is_admin:
             return ("Administrator", user.email)
         return (user.subscribe_status, user.email) if user else None
+
     @with_session
-    async def is_admin(self, id) -> tuple[str, int] | None:
-        result = await self.db.execute(
-            select(User).filter(User.id == id)
+    async def is_admin(self, db: AsyncSession, user_id: int) -> bool:
+        result = await db.execute(
+            select(User).filter(User.id == user_id)
         )
         user = result.scalars().first()
-        return user.is_admin
+        return user.is_admin if user else False
+
     @with_session
-    async def create_admin(self, email, password) -> bool:
+    async def create_admin(self, db: AsyncSession, email: str, password: str) -> bool:
         user = User(email=email, password=password, is_admin=True)
-        async with self.db.begin():
-            self.db.add(user)
-        await self.db.commit()
-        return user
+        async with db.begin():
+            db.add(user)
+        await db.commit()
+        return True
 
     """Admin Function"""
     @with_session
     async def get_users(
         self,
+        db: AsyncSession,
         page: int = 1,
         per_page: int = 10,
         sort: str = "id",
@@ -116,23 +119,19 @@ class CRUD:
                 )
 
             # Сортировка
-            if order.lower() == "asc":
-                order_func = asc
-            else:
-                order_func = desc
-
+            order_func = asc if order.lower() == "asc" else desc
             if hasattr(User, sort):
                 query = query.order_by(order_func(getattr(User, sort)))
 
             # Пагинация
             offset = (page - 1) * per_page
-            result = await self.db.execute(
+            result = await db.execute(
                 query.offset(offset).limit(per_page)
             )
             users = result.scalars().all()
 
             # Общее количество
-            total = await self.db.execute(
+            total = await db.execute(
                 select(func.count()).select_from(query.subquery()))
             total_count = total.scalar()
 
@@ -150,10 +149,11 @@ class CRUD:
                 status_code=500,
                 detail=f"Database error: {str(e)}"
             )
+
     @with_session
-    async def update_user(self, user_id: int, user_data: dict):
+    async def update_user(self, db: AsyncSession, user_id: int, user_data: dict):
         try:
-            result = await self.db.execute(
+            result = await db.execute(
                 select(User).where(User.id == user_id)
             )
             user = result.scalar_one_or_none()
@@ -173,14 +173,14 @@ class CRUD:
 
                     setattr(user, key, value)
 
-            await self.db.commit()
+            await db.commit()
             return user
 
         except ValueError as ve:
             print(f"[ERROR] {ve}")
             raise HTTPException(status_code=400, detail=str(ve))
         except Exception as e:
-            await self.db.rollback()
+            await db.rollback()
             print(f"[ERROR] {e}")
             raise HTTPException(
                 status_code=500,
@@ -188,5 +188,3 @@ class CRUD:
             )
 
 db = CRUD()
-
-# asyncio.run(db.create_admin("aleshamarichev09@gmail.com", "Yamnovo2006"))

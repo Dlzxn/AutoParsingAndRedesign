@@ -65,6 +65,4 @@ class CRUD:
         return promo
 
 
-
-
 db_promo = CRUD()
