@@ -23,6 +23,9 @@ class CRUD:
             self.db = AsyncSessionLocal()
         return attr
 
+    async def __close_session__(self):
+        await self.db.close()
+
     async def create_user(self, email, password):
         # Проверяем, существует ли пользователь с таким email
         result = await self.db.execute(select(User).where(User.email == email))
@@ -37,6 +40,7 @@ class CRUD:
             self.db.add(user)
 
         await self.db.commit()
+        await self.__close_session__()
         return user
 
     async def verify_user(self, username, password):
@@ -48,11 +52,13 @@ class CRUD:
             )
         )
         user = result.scalars().first()
+        await self.__close_session__()
         return user
 
     async def db_to_csv_data(self):
         result = await self.db.execute(select(User))
         rows = result.scalars().all()
+        await self.__close_session__()
         return rows
 
     async def is_subscribe(self, id) -> tuple[str, int] | None:
@@ -63,6 +69,7 @@ class CRUD:
         user = result.scalars().first()
         if user.is_admin:
             return ("Administrator", user.email)
+        await self.__close_session__()
         return (user.subscribe_status, user.email) if user else None
 
     async def is_admin(self, id) -> tuple[str, int] | None:
@@ -70,6 +77,7 @@ class CRUD:
             select(User).filter(User.id == id)
         )
         user = result.scalars().first()
+        await self.__close_session__()
         return user.is_admin
 
     async def create_admin(self, email, password) -> bool:
@@ -77,6 +85,7 @@ class CRUD:
         async with self.db.begin():
             self.db.add(user)
         await self.db.commit()
+        await self.__close_session__()
         return user
 
     """Admin Function"""
@@ -121,6 +130,7 @@ class CRUD:
             total = await self.db.execute(
                 select(func.count()).select_from(query.subquery()))
             total_count = total.scalar()
+            await self.__close_session__()
 
             return {
                 "users": users,
@@ -131,6 +141,8 @@ class CRUD:
             }
 
         except Exception as e:
+            await self.__close_session__()
+            print(f"[ERROR] {e}")
             raise HTTPException(
                 status_code=500,
                 detail=f"Database error: {str(e)}"
@@ -159,12 +171,17 @@ class CRUD:
                     setattr(user, key, value)
 
             await self.db.commit()
+            await self.__close_session__()
             return user
 
         except ValueError as ve:
+            print(f"[ERROR] {ve}")
+            await self.__close_session__()
             raise HTTPException(status_code=400, detail=str(ve))
         except Exception as e:
             await self.db.rollback()
+            await self.__close_session__()
+            print(f"[ERROR] {e}")
             raise HTTPException(
                 status_code=500,
                 detail=f"Update failed: {str(e)}"

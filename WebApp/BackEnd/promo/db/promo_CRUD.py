@@ -23,12 +23,18 @@ class CRUD:
             self.db = AsyncSessionLocal()
         return attr
 
+    async def __close_session__(self):
+        """Close session"""
+        await self.db.close()
+
     async def get_all_promo(self):
         query = await self.db.execute(select(Promo))
+        await self.__close_session__()
         return query.scalars().all()
 
     async def get_promo(self, num):
         query = await self.db.execute(select(Promo).filter(Promo.id == num))
+        await self.__close_session__()
         return query.scalars().first()
 
     async def create_promo(self, data: Promo):
@@ -38,7 +44,9 @@ class CRUD:
         async with self.db.begin():
             self.db.add(promo)
 
+
         await self.db.commit()
+        await self.__close_session__()
         return promo
 
     async def update_promo(self, id: int, data: Promo):
@@ -52,6 +60,7 @@ class CRUD:
 
         await self.db.commit()
         await self.db.refresh(promo)
+        await self.__close_session__()
         return promo
 
 
