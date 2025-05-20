@@ -34,19 +34,16 @@ class CRUD:
 
     @with_session
     async def create_user(self, db: AsyncSession, email: str, password: str):
-        # Проверяем, существует ли пользователь с таким email
         result = await db.execute(select(User).where(User.email == email))
         existing_user = result.scalar_one_or_none()
 
         if existing_user:
             return False
 
-        # Если пользователя нет, создаём нового
         user = User(email=email, password=password)
-        async with db.begin():
-            db.add(user)
+        db.add(user)
 
-        await db.commit()
+        await db.commit()  # ручной commit
         return user
 
     @with_session
