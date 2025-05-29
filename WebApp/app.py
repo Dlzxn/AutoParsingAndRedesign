@@ -25,7 +25,7 @@ from WebApp.BackEnd.promo.db.create_tables_promo import create_tables_promo, dro
 TEST_STATUS: bool = True
 AUTH_MIDDLEWARE: bool = True
 DELETE_DATABASE: bool = False
-ERROR_FIX: bool = False
+ERROR_FIX: bool = True
 
 """Start app"""
 app = FastAPI(docs_url=None,          # отключает Swagger UI (/docs)
@@ -72,6 +72,16 @@ app.mount("/WebApp/FrontEnd", StaticFiles(directory="WebApp/FrontEnd"), name="st
 @app.get("/")
 async def main(request: Request):
     return templates.TemplateResponse("mainString.html", {"request": request})
+
+@app.get("/tariffs")
+async def tariffs(request: Request):
+    return templates.TemplateResponse("tariffs.html", {"request": request})
+@app.get("/features")
+async def features(request: Request):
+    return templates.TemplateResponse("features.html", {"request": request})
+@app.get("/reviews")
+async def review(request: Request):
+    return templates.TemplateResponse("review.html", {"request": request})
 @app.get("/video")
 async def main_video(request: Request):
     return templates.TemplateResponse("videos.html", {"request": request})

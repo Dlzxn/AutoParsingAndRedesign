@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="/WebApp/FrontEnd/styles/tariffs.css?v1.00">
+{% endblock %}
+
+{% block content %}
+<div class="capabilities-container">
+    <h1 class="capabilities-title">Возможности платформы</h1>
+    <div class="capabilities-grid" id="capabilitiesGrid">
+        <!-- Динамически загружаемые возможности -->
+    </div>
+</div>
+
+<div class="confirmation-modal" id="confirmationModal">
+    <div class="modal-content">
+        <h3>Подтвердите действие</h3>
+        <p id="modalMessage">Вы уверены, что хотите выполнить это действие?</p>
+        <div class="modal-actions">
+            <button class="modal-cancel">Отмена</button>
+            <button class="modal-confirm">Подтвердить</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/WebApp/FrontEnd/scr/tariffs.js?v1.01"></script>
+{% endblock %}
