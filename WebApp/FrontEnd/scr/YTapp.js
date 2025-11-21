@@ -68,11 +68,15 @@ const createResultItem = ({ title, url }) => {
     });
 
     // Обработчик на кнопку "Редактировать" — пока просто вывод в консоль
+    // Обработчик на кнопку "Редактировать"
     const editButton = item.querySelector('.edit-button');
-    editButton.addEventListener('click', () => {
-        console.log('Редактировать видео:', url);
-        // тут можно будет открывать форму или модалку
+    editButton.addEventListener('click', (event) => {
+        event.stopPropagation(); // чтобы не срабатывал общий клик по item
+        const editUrl = `/VideoEditor/editor/${encodeURIComponent(url)}`;
+        console.log('Переход на страницу редактирования:', editUrl);
+        window.location.href = editUrl; // редирект
     });
+
 
     return item;
 };

@@ -6,16 +6,16 @@
     "new_price": "0"
   },
   "standard": {
-    "price": 5000,
-    "token_in_day": 30,
+    "price": 2000,
+    "token_in_day": 5,
     "sale": "True",
-    "new_price": "4000"
+    "new_price": "50"
   },
   "pro": {
-    "price": 10000,
-    "token_in_day": 100,
-    "sale": "False",
-    "new_price": "0"
+    "price": 40000,
+    "token_in_day": null,
+    "sale": "True",
+    "new_price": "150"
   },
   "premium": {
     "price": 15000,

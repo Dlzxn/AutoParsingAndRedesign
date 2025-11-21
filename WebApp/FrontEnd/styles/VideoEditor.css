@@ -1,0 +1,79 @@
+.editor-section {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #1e1e2e;
+    color: #f8f8f2;
+    border-radius: 16px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+.intro-text {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.upload-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.upload-label {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: #3b82f6;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.upload-label:hover {
+    background: #2563eb;
+}
+
+.editor-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-row label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-row input {
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: none;
+    background: #2e2e3e;
+    color: #f8f8f2;
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.edit-button {
+    background: #22c55e;
+    color: white;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.edit-button:hover {
+    background: #16a34a;
+}

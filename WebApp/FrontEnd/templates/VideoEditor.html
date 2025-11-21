@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="/WebApp/FrontEnd/styles/VideoEditor.css?v1.2">
+{% endblock %}
+
+{% block content %}
+<section class="editor-section">
+    <div class="intro-text">
+        <h1>Видео-редактор</h1>
+        <p>Загрузите видео и настройте параметры редактирования</p>
+    </div>
+
+<!-- Панель редактирования -->
+<form id="editorForm" class="editor-form">
+        <!-- Загрузка видео -->
+    <div class="upload-container">
+        <label class="upload-label">
+            <input type="file" id="videoFile" name="videoFile" accept="video/*">
+            <span>Выберите видео</span>
+        </label>
+    </div>
+
+    <div class="form-row">
+        <label>Обрезка (секунды):</label>
+        <input type="text" name="trim" placeholder="например: 10-60">
+    </div>
+
+    <div class="form-row">
+        <label>Размер:</label>
+        <input type="text" name="resize" placeholder="например: 1280x720 или 720p">
+    </div>
+
+    <div class="form-row">
+        <label>Скорость:</label>
+        <input type="number" name="speed" step="0.1" placeholder="например: 1.5">
+    </div>
+
+    <div class="form-row">
+        <label>Поворот (градусы):</label>
+        <input type="number" name="rotate" step="1" placeholder="например: 90">
+    </div>
+
+    <div class="form-row">
+        <label>Масштаб (%):</label>
+        <input type="number" name="scale" step="1" placeholder="например: 150">
+    </div>
+
+    <div class="form-row">
+        <label>Регулировка громкости (%):</label>
+        <input type="number" name="volume" step="1" placeholder="например: 120">
+    </div>
+
+    <div class="form-row">
+        <label>Фоновый звук:</label>
+        <input type="file" name="bg_audio" accept="audio/*">
+    </div>
+
+    <div class="form-row">
+        <label>Текст:</label>
+        <input type="text" name="text" placeholder="например: Подпишись!">
+    </div>
+
+    <div class="form-row">
+        <label>Изображение (логотип):</label>
+        <input type="file" name="overlay" accept="image/*">
+    </div>
+
+    <div class="button-container">
+        <button type="submit" class="edit-button">Редактировать</button>
+    </div>
+</form>
+
+
+<script src="/WebApp/FrontEnd/scr/VideoEditor.js?v1.33"></script>
+{% endblock %}

@@ -20,12 +20,13 @@ from WebApp.BackEnd.user_data.user_api import data_router
 from WebApp.BackEnd.admin_panel.admin import adm_router
 from WebApp.BackEnd.admin_panel.admin_api import adm_api
 from WebApp.BackEnd.promo.db.create_tables_promo import create_tables_promo, drop_tables_promo
+from WebApp.BackEnd.castomization.editor_router import editvideo_router
 
 #settings
 TEST_STATUS: bool = True
-AUTH_MIDDLEWARE: bool = True
+AUTH_MIDDLEWARE: bool = False
 DELETE_DATABASE: bool = False
-ERROR_FIX: bool = True
+ERROR_FIX: bool = False
 
 """Start app"""
 app = FastAPI(docs_url=None,          # отключает Swagger UI (/docs)
@@ -59,6 +60,7 @@ app.include_router(view)
 app.include_router(data_router)
 app.include_router(adm_router)
 app.include_router(adm_api)
+app.include_router(editvideo_router)
 
 if TEST_STATUS:
     app.include_router(test)

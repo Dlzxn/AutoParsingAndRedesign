@@ -76,3 +76,10 @@ websockets==15.0.1
 wsproto==1.2.0
 yarl==1.18.3
 yt-dlp==2025.3.21
+
+aiofiles~=24.1.0
+moviepy~=2.2.1
+praw~=7.8.1
+PyTumblr~=0.1.2
+bs4~=0.0.2
+instaloader~=4.14.1
