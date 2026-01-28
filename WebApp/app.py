@@ -33,6 +33,7 @@ app = FastAPI(docs_url=None,          # отключает Swagger UI (/docs)
     redoc_url=None,         # отключает ReDoc (/redoc)
     openapi_url=None        # отключает OpenAPI JSON (/openapi.json)
                 )
+
 def platform_status(name: str) -> bool:
     """Проверка доступности платформы"""
     with open("WebApp/BackEnd/platform_status/platforms.json", "r") as f:
