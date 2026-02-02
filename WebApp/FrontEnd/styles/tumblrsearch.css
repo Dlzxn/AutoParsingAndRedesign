@@ -1,0 +1,619 @@
+/* --- Сброс и Глобальные стили --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  /* Убираем дефолтный фон */
+  background: none;
+}
+
+/* --- Фон (обёртка) --- */
+.wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* Основной синий VK-подобный градиент */
+  background: #4c7cbf;
+  background: -webkit-linear-gradient(to bottom, #4c7cbf, #0077b5);
+  background: linear-gradient(to bottom, #4c7cbf, #0077b5);
+}
+
+/* --- Основной контейнер платформы --- */
+.vk-platform {
+  max-width: 1200px;
+  margin: 0 auto;
+    padding-bottom: 6rem;
+  padding: 2rem 1rem;
+  min-height: 100vh; /* Обеспечиваем заполнение по высоте */
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 20;
+  /* Прозрачный фон, чтобы видеть гамму градиента */
+  background: transparent;
+
+}
+
+/* --- Анимации --- */
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  50% { opacity: 0.5; }
+}
+
+/* --- Заголовок платформы --- */
+.platform-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.platform-title {
+  font-size: 2.5rem;
+  color: #0083cf;  /* Белый для четкого контраста с синим фоном */
+  margin-bottom: 1rem;
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.platform-description {
+  font-size: 1.1rem;
+  color: #000;
+  animation: slideInRight 0.6s ease-out forwards;
+}
+
+/* --- Поисковая панель --- */
+.search-wrapper {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+  flex-shrink: 0;
+}
+
+.search-container {
+  display: flex;
+  gap: 1rem;
+  background: #ffffff; /* Белый фон для контейнера ввода */
+  border-radius: 50px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  padding: 0.5rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 1rem 2rem;
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.search-input::placeholder {
+  color: #999;
+}
+
+.search-button {
+  position: relative;
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 40px;
+  background: linear-gradient(135deg, #2787F5 0%, #1A5DAB 100%);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.search-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(39, 135, 245, 0.3);
+}
+
+.button-loader {
+  display: none;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* --- Результаты поиска --- */
+.results-container {
+  background-color: transparent;  /* Прозрачность для гармонии с фоном */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+  flex-grow: 1;
+  max-height: calc(100vh - 300px);
+  overflow-y: auto;
+  position: relative;
+  z-index: 10;
+}
+
+/* Кастомный скроллбар для результатов */
+.results-container::-webkit-scrollbar {
+  width: 8px;
+}
+.results-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+.results-container::-webkit-scrollbar-thumb {
+  background: #2787F5;
+  border-radius: 4px;
+}
+.results-container::-webkit-scrollbar-thumb:hover {
+  background: #1A5DAB;
+}
+
+/* --- Видео карточки и блоки --- */
+.video-card,
+.video-box {
+  background: #ffffff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-card:hover,
+.video-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.video-iframe {
+  width: 100%;
+  border: none;
+}
+
+.video-info {
+  padding: 1rem;
+}
+
+.video-title {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* --- Действия (кнопки) --- */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.download-btn,
+.retry-button,
+.download-button,
+.edit-button {
+  padding: 8px 15px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.download-btn:hover,
+.retry-button:hover,
+.download-button:hover,
+.edit-button:hover {
+  background: #005bb5;
+}
+
+/* --- Оверлей загрузки --- */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255,255,255,0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #2787F5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+.loading-text {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* --- Уведомление об ошибке --- */
+.error-notification {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #ff4757;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  animation: slideInRight 0.3s ease-out;
+}
+
+.error-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* --- Адаптация для мобильных устройств --- */
+@media (max-width: 768px) {
+  .search-container {
+    flex-direction: column;
+    border-radius: 25px;
+    padding: 1rem;
+  }
+  .search-button {
+    width: 100%;
+    border-radius: 25px;
+  }
+  .results-container {
+    grid-template-columns: 1fr;
+    max-height: calc(100vh - 300px);
+  }
+}
+/* Стили для поста */
+.post-box {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.post-header {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.blog-name {
+    margin: 0;
+    font-size: 1.2em;
+    color: #2c3e50;
+}
+
+.post-date {
+    color: #95a5a6;
+    font-size: 0.9em;
+}
+
+.post-body {
+    padding: 15px;
+}
+
+.post-summary {
+    line-height: 1.6;
+    color: #34495e;
+    margin: 0 0 15px 0;
+}
+
+.post-footer {
+    padding: 15px;
+    background: #f9f9f9;
+    border-top: 1px solid #eee;
+}
+
+.post-tags {
+    margin-bottom: 10px;
+}
+
+.tag {
+    display: inline-block;
+    background: #ecf0f1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-right: 5px;
+    font-size: 0.85em;
+    color: #7f8c8d;
+}
+
+.post-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.copy-button, .edit-button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.copy-button {
+    background: #3498db;
+    color: white;
+}
+
+.copy-button:hover {
+    background: #2980b9;
+}
+
+.edit-button {
+    background: #2ecc71;
+    color: white;
+}
+
+.edit-button:hover {
+    background: #27ae60;
+}
+
+.video-container {
+    margin-top: 15px;
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+}
+
+.video-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+.tumblr-post-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin: 20px 0;
+    overflow: hidden;
+}
+
+.tumblr-iframe {
+    width: 100%;
+    height: 500px;
+    border: none;
+    border-bottom: 1px solid #eee;
+}
+
+.post-controls {
+    padding: 15px;
+    display: flex;
+    gap: 12px;
+    background: #f8f9fa;
+}
+
+.copy-button, .edit-button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.copy-button {
+    background: #3498db;
+    color: white;
+}
+
+.copy-button:hover {
+    background: #2980b9;
+    transform: translateY(-1px);
+}
+
+.edit-button {
+    background: #2ecc71;
+    color: white;
+}
+
+.edit-button:hover {
+    background: #27ae60;
+    transform: translateY(-1px);
+}
+.result-item {
+    max-width: 800px;
+    margin: 0 auto 20px;
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.post-image {
+    max-height: 500px;
+    object-fit: contain;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+
+.video-container video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+/* Контейнер результатов */
+.results-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 15px;
+}
+
+.result-item:hover {
+    transform: translateY(-2px);
+}
+
+/* Основные стили контейнера */
+.results-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Стили карточки */
+.result-item {
+    border: 1px solid #e1e1e1;
+    border-radius: 12px;
+    padding: 16px;
+    background: #fff;
+    height: 250px; /* Увеличили высоту */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .results-container {
+        grid-template-columns: 1fr;
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .result-item {
+        height: auto;
+        min-height: 200px;
+    }
+}
+
+/* Стили контента */
+.post-content {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #444;
+    flex-grow: 1;
+    overflow: hidden;
+    margin: 12px 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* Показываем 5 строк */
+    -webkit-box-orient: vertical;
+}
+
+/* Улучшенные стили кнопок */
+.post-controls {
+    margin-top: auto;
+    padding: 12px 0 0;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+.post-controls button {
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+}
+
+.copy-button {
+    background: #f8f9fa;
+    border: 2px solid #2d72d9;
+    color: #2d72d9;
+    font-weight: 500;
+}
+
+.edit-button {
+    background: #2d72d9;
+    border: 2px solid #2d72d9;
+    color: white;
+    font-weight: 500;
+}
+
+/* Ховер-эффекты */
+.copy-button:hover {
+    background: #e3f0ff;
+    transform: translateY(-1px);
+}
+
+.edit-button:hover {
+    background: #1a5ab5;
+    border-color: #1a5ab5;
+    transform: translateY(-1px);
+}
+
+/* Дополнительные улучшения */
+.post-title {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.post-date {
+    font-size: 12px;
+    color: #666;
+}
+@media (min-width: 769px) {
+    .result-item {
+        height: 300px; /* Увеличили высоту карточки */
+        padding: 15px; /* Больше внутреннего пространства */
+    }
+
+    .post-controls {
+        padding: 15px 0 5px; /* Верхний и нижний отступы */
+        gap: 12px; /* Расстояние между кнопками */
+    }
+
+
+    .post-content {
+        margin: 15px 0; /* Больше воздуха вокруг текста */
+        -webkit-line-clamp: 6; /* На десктопе показываем 6 строк */
+    }
+}
+/* Общие стили для всех разрешений */
+.post-controls {
+    margin-top: auto;
+    padding-top: 15px; /* Единый отступ сверху */
+}
+
+.result-item {
+    transition: all 0.3s ease; /* Плавные анимации */
+}

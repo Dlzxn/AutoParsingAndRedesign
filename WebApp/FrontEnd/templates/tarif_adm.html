@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block styles %}
+  <link rel="stylesheet" href="/WebApp/FrontEnd/styles/tarif_adm.css?v1.0">
+{% endblock %}
+
+{% block content %}
+<div class="pricing-container">
+  <h1>Управление тарифными планами</h1>
+
+  <div class="tariffs-grid" id="tariffsContainer">
+    <!-- Динамически загружаемые тарифы -->
+  </div>
+
+  <div class="controls">
+    <button class="btn-save-all" onclick="saveAllTariffs()">💾 Сохранить все изменения</button>
+    <button class="btn-reload" onclick="loadTariffs()">🔄 Загрузить текущие настройки</button>
+  </div>
+</div>
+
+<!-- Шаблон тарифа -->
+<template id="tariffTemplate">
+  <div class="tariff-card">
+    <h2 class="tariff-name"></h2>
+    <div class="tariff-body">
+      <div class="form-group">
+        <label>Базовая цена (руб):</label>
+        <input type="number" class="price-input" min="0">
+      </div>
+
+      <div class="form-group">
+        <label>Лимит токенов/день:</label>
+        <input type="number" class="tokens-input" min="0">
+      </div>
+
+      <div class="sale-group">
+        <label class="switch">
+          <input type="checkbox" class="sale-toggle">
+          <span class="slider"></span>
+        </label>
+        <span class="sale-label">Акция</span>
+        <input type="number" class="new-price-input" min="0" placeholder="Цена по акции">
+      </div>
+    </div>
+  </div>
+</template>
+{% endblock %}
+
+{% block extra_scripts %}
+  <script src="/WebApp/FrontEnd/scr/tarif_adm.js?v1.1"></script>
+{% endblock %}

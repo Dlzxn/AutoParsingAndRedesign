@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="WebApp/FrontEnd/styles/redditsearch.css?v1.36">
+{% endblock %}
+
+{% block content %}
+<section class="vk-platform">
+    <!-- Анимированный заголовок -->
+    <div class="platform-header">
+        <h1 class="platform-title slide-in-left">Reddit</h1>
+        <p class="platform-description slide-in-right">Поиск и анализ видео контента в Reddit</p>
+    </div>
+
+    <!-- Поисковая панель -->
+    <div class="search-wrapper">
+        <div class="search-container">
+            <input type="text"
+                   id="searchInput"
+                   class="search-input"
+                   placeholder="Введите хэштег..."
+                   autocomplete="off">
+            <button id="searchButton" class="search-button">
+                <span class="button-text">Найти видео</span>
+                <div class="button-loader"></div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Результаты поиска -->
+    <div class="results-container" id="results"></div>
+
+    <!-- Оверлей загрузки -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loader"></div>
+            <p class="loading-text">Сканируем Reddit...</p>
+        </div>
+    </div>
+
+    <!-- Шаблон ошибки -->
+    <template id="errorTemplate">
+        <div class="error-notification">
+            <div class="error-content">
+                <span class="error-message"></span>
+                <button class="retry-button">Попробовать снова</button>
+            </div>
+        </div>
+    </template>
+</section>
+<script src="WebApp/FrontEnd/scr/RedditApp.js?v1.41"></script>
+{% endblock %}

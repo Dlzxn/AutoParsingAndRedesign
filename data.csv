@@ -1,0 +1,4 @@
+id,email,password,is_admin,subscribe_status,date_start,date_end,token_today
+2,aleshamarichev09@gmail.com,Yamnovo2006,True,Free,None,None,0
+3,aleshamarichev09@gmail.com,Yamnovo2006,False,Free,None,None,0
+1,,Yamnovo2006,True,Premium,None,2025-05-29 00:00:00,3000
