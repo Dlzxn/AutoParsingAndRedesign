@@ -36,23 +36,16 @@ const showError = (message) => {
     }, 5000);
 };
 
-// Создает блок с видео
 const createResultItem = ({ title, url }) => {
     const item = document.createElement('div');
     item.className = 'result-item';
 
-    // Извлекаем ID видео из URL с учетом нового формата
     const match = url.match(/video(-?\d+)_(\d+)/);
     let embedUrl = '';
     if (match) {
         const ownerId = match[1];
         const videoId = match[2];
-
-        // Формируем URL для встраивания через iframe
         embedUrl = `https://vk.com/video_ext.php?oid=${ownerId}&id=${videoId}`;
-        console.log(`Embed URL: ${embedUrl}`); // Логируем embedUrl
-    } else {
-        console.warn(`Не удалось извлечь видео ID из URL: ${url}`); // Логируем ошибку
     }
 
     item.innerHTML = `
@@ -75,58 +68,51 @@ const createResultItem = ({ title, url }) => {
         </div>
     </div>
 `;
+
     item.addEventListener('click', (event) => {
-    const videoUrl = url; // Сохраняем URL
-
-    // Отправляем запрос на сервер при любом клике в контейнере
-    fetch(`/view?url=${encodeURIComponent(videoUrl)}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Ответ от сервера:', data);
-    })
-    .catch(error => {
-        console.error('Ошибка при отправке запроса:', error);
+        fetch(`/view?url=${encodeURIComponent(url)}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        })
+        .then(response => response.json())
+        .catch(error => console.error('Ошибка view:', error));
     });
-});
 
-
-
-    // Добавляем обработчик на кнопку "Скачать"
     const downloadButton = item.querySelector('.download-button');
-    downloadButton.addEventListener('click', () => {
-        const downloadUrl = `/download/vkvideo?url=${encodeURIComponent(url)}`;
-        window.location.href = downloadUrl;
+    downloadButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        window.location.href = `/download/vkvideo?url=${encodeURIComponent(url)}`;
     });
 
-    // Обработчик на кнопку "Редактировать" — пока просто вывод в консоль
     const editButton = item.querySelector('.edit-button');
-    editButton.addEventListener('click', () => {
-        console.log('Редактировать видео:', url);
-        // Здесь можно потом добавить открытие модалки или формы
+    editButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+        const modal = document.getElementById('editorModal');
+        const modalVideoUrl = document.getElementById('modalVideoUrl');
+        const modalStatus = document.getElementById('modalStatus');
+
+        if (modal && modalVideoUrl) {
+            modalVideoUrl.value = url;
+            modalStatus.innerText = "✅ Видео VK выбрано";
+            modalStatus.style.color = "#4CAF50";
+            modal.style.display = "flex";
+        }
     });
 
     return item;
 };
 
-
-// Отправка запроса
 const performSearch = async (query) => {
     toggleLoading(true);
     resultsContainer.innerHTML = '';
 
     try {
-        console.log(`Performing search for: ${query}`); // Логируем запрос
         const response = await fetch(`/search/Vk?tag=${encodeURIComponent(query)}`);
 
-        // Проверка на успешность ответа
         if (!response.ok) {
             const data = await response.json();
-            showError(data.error || 'Произошла ошибка при выполнении запроса');
+            showError(data.error || 'Ошибка запроса');
             return;
         }
 
@@ -137,25 +123,85 @@ const performSearch = async (query) => {
             return;
         }
 
-        // Добавляем результаты в контейнер
         data.forEach(item => {
             resultsContainer.appendChild(createResultItem(item));
         });
 
     } catch (err) {
-        console.error('Error during fetch: ', err); // Логируем ошибку при выполнении запроса
-        showError('Сервер не отвечает или возникла непредвиденная ошибка');
+        showError('Сервер не отвечает');
     } finally {
         toggleLoading(false);
     }
 };
 
-// Слушатель кнопки
 searchButton.addEventListener('click', () => {
     const query = searchInput.value.trim();
-    if (query.length > 2) {
-        performSearch(query);
-    } else {
-        showError('Введите хотя бы 3 символа для поиска');
+    if (query.length > 2) performSearch(query);
+    else showError('Введите хотя бы 3 символа');
+});
+
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        const query = searchInput.value.trim();
+        if (query.length > 2) performSearch(query);
     }
 });
+
+function initModalLogic() {
+    const modal = document.getElementById('editorModal');
+    const closeBtn = document.getElementById('closeModal');
+    const form = document.getElementById('modalEditorForm');
+    const renderBtn = document.getElementById('renderBtn');
+    const status = document.getElementById('modalStatus');
+
+    if (closeBtn) {
+        closeBtn.onclick = () => { modal.style.display = "none"; };
+    }
+
+    window.onclick = (e) => {
+        if (e.target == modal) modal.style.display = "none";
+    };
+
+    if (form) {
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            
+            renderBtn.disabled = true;
+            renderBtn.innerText = "Обработка...";
+            status.innerText = "⏳ Рендеринг запущен. Пожалуйста, подождите...";
+            status.style.color = "#ffa500";
+
+            try {
+                const response = await fetch('/process-video', {
+                    method: 'POST',
+                    body: new FormData(form)
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const dUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = dUrl;
+                    a.download = "edited_vk_video.mp4";
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    status.innerText = "✅ Видео успешно обработано!";
+                    status.style.color = "#4CAF50";
+                } else {
+                    const errData = await response.json();
+                    status.innerText = "❌ Ошибка: " + (errData.message || "сервер отклонил запрос");
+                    status.style.color = "#ff4444";
+                }
+            } catch (err) {
+                status.innerText = "❌ Ошибка связи с сервером";
+                status.style.color = "#ff4444";
+            } finally {
+                renderBtn.disabled = false;
+                renderBtn.innerText = "Редактировать";
+            }
+        };
+    }
+}
+
+initModalLogic();

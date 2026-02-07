@@ -2,24 +2,64 @@
 
 {% block styles %}
 <link rel="stylesheet" href="WebApp/FrontEnd/styles/imgursearch.css?v1.36">
+<style>
+    .modal-editor {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(8px);
+        align-items: center;
+        justify-content: center;
+        overflow-y: auto;
+    }
+    .modal-content {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 20px;
+        padding: 30px;
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+        margin: 20px;
+    }
+    .close-modal { position: absolute; top: 20px; right: 20px; color: #888; font-size: 28px; cursor: pointer; }
+    .editor-form { display: flex; flex-direction: column; gap: 15px; }
+    .form-row { display: flex; flex-direction: column; gap: 8px; }
+    .form-row label { color: #bbb; font-size: 0.9rem; }
+    .form-row input {
+        padding: 12px;
+        background: #252525;
+        border: 1px solid #444;
+        border-radius: 10px;
+        color: #fff;
+    }
+    .render-button {
+        margin-top: 15px;
+        padding: 15px;
+        background: #1bb76e; 
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    #modalStatus { text-align: center; margin-top: 15px; font-size: 0.85rem; }
+</style>
 {% endblock %}
 
 {% block content %}
 <section class="vk-platform">
-    <!-- Анимированный заголовок -->
     <div class="platform-header">
         <h1 class="platform-title slide-in-left">Imgur</h1>
         <p class="platform-description slide-in-right">Поиск и анализ видео контента в Imgur</p>
     </div>
 
-    <!-- Поисковая панель -->
     <div class="search-wrapper">
         <div class="search-container">
-            <input type="text"
-                   id="searchInput"
-                   class="search-input"
-                   placeholder="Введите хэштег..."
-                   autocomplete="off">
+            <input type="text" id="searchInput" class="search-input" placeholder="Введите хэштег..." autocomplete="off">
             <button id="searchButton" class="search-button">
                 <span class="button-text">Найти видео</span>
                 <div class="button-loader"></div>
@@ -27,10 +67,52 @@
         </div>
     </div>
 
-    <!-- Результаты поиска -->
     <div class="results-container" id="results"></div>
 
-    <!-- Оверлей загрузки -->
+    <div id="editorModal" class="modal-editor">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2 style="color: #fff; text-align: center; margin-bottom: 20px;">Настройки редактора</h2>
+            
+            <form id="modalEditorForm" class="editor-form">
+                <input type="hidden" id="modalVideoUrl" name="videoUrl">
+                
+                <div class="form-row">
+                    <label>Обрезка (сек):</label>
+                    <input type="text" name="trim" placeholder="0-10">
+                </div>
+
+                <div class="form-row">
+                    <label>Скорость:</label>
+                    <input type="number" name="speed" step="0.1" value="1.0">
+                </div>
+
+                <div class="form-row">
+                    <label>Громкость %:</label>
+                    <input type="number" name="volume" value="100">
+                </div>
+
+                <div class="form-row">
+                    <label>Текст:</label>
+                    <input type="text" name="text" placeholder="Текст на видео...">
+                </div>
+
+                <div class="form-row">
+                    <label>Музыка (mp3):</label>
+                    <input type="file" name="bg_audio" accept="audio/*">
+                </div>
+
+                <div class="form-row">
+                    <label>Логотип (png/jpg):</label>
+                    <input type="file" name="overlay" accept="image/*">
+                </div>
+
+                <button type="submit" id="renderBtn" class="render-button">Редактировать</button>
+                <div id="modalStatus"></div>
+            </form>
+        </div>
+    </div>
+
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="loader"></div>
@@ -38,7 +120,6 @@
         </div>
     </div>
 
-    <!-- Шаблон ошибки -->
     <template id="errorTemplate">
         <div class="error-notification">
             <div class="error-content">
@@ -48,5 +129,5 @@
         </div>
     </template>
 </section>
-<script src="WebApp/FrontEnd/scr/ImgurApp.js?v1.53"></script>
+<script src="WebApp/FrontEnd/scr/ImgurApp.js?v1.54"></script>
 {% endblock %}
