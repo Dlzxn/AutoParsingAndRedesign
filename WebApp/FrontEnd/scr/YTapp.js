@@ -3,123 +3,115 @@ const searchButton = document.getElementById('searchButton');
 const resultsContainer = document.getElementById('results');
 const loadingOverlay = document.getElementById('loadingOverlay');
 
+const modal = document.getElementById('editorModal');
+const closeModal = document.getElementById('closeModal');
+const modalForm = document.getElementById('modalEditorForm');
+const modalVideoUrl = document.getElementById('modalVideoUrl');
+const modalStatus = document.getElementById('modalStatus');
+const renderBtn = document.getElementById('renderBtn');
+
 const toggleLoading = (show) => {
     loadingOverlay.style.display = show ? 'flex' : 'none';
-    searchInput.disabled = show;
-    searchButton.disabled = show;
 };
 
-// Показывает уведомление об ошибке
-const showError = (message) => {
-    resultsContainer.innerHTML = `<div class="error-message">❌ ${message}</div>`;
-};
-
-// Создает блок с видео
 const createResultItem = ({ title, url }) => {
     const item = document.createElement('div');
     item.className = 'result-item';
 
-    // Вставляем iframe для видео
-    const videoId = url.split('v=')[1]; // Получаем videoId из ссылки
+    let videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : (url.includes('shorts/') ? url.split('shorts/')[1].split('?')[0] : url.split('/').pop());
     const iframeUrl = `https://www.youtube.com/embed/${videoId}`;
 
-    item.innerHTML = `<div class="video-box">
-    <h3><a href="${url}" target="_blank" rel="noopener noreferrer">${title || url}</a></h3>
-    <iframe width="560" height="315" 
-            src="${iframeUrl}" 
-            title="${title || 'YouTube video'}" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            allowfullscreen 
-            loading="lazy">
-    </iframe>
-    <div class="button-group" style="margin-top: 10px;">
-        <button class="download-button" data-url="${url}">Скачать</button>
-        <button class="edit-button" data-url="${url}">Редактировать</button>
-    </div>
-</div>
+    item.innerHTML = `
+    <div class="video-box">
+        <h3><a href="${url}" target="_blank">${title || url}</a></h3>
+        <iframe width="100%" height="315" src="${iframeUrl}" frameborder="0" allowfullscreen></iframe>
+        <div class="button-group" style="margin-top: 10px; display: flex; gap: 10px;">
+            <button class="download-button" style="padding: 8px 15px; cursor: pointer;">Скачать</button>
+            <button class="edit-button" style="padding: 8px 15px; cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 4px;">Редактировать</button>
+        </div>
+    </div>`;
 
-       
-           `;
-    item.addEventListener('click', (event) => {
-    const videoUrl = url; // Сохраняем URL
-
-    // Отправляем запрос на сервер при любом клике в контейнере
-    fetch(`/view?url=${encodeURIComponent(videoUrl)}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Ответ от сервера:', data);
-    })
-    .catch(error => {
-        console.error('Ошибка при отправке запроса:', error);
-    });
-});
-
-    // Добавляем обработчик на кнопку "Скачать"
-    const downloadButton = item.querySelector('.download-button');
-    downloadButton.addEventListener('click', () => {
-        const downloadUrl = `/download/yt?url=${encodeURIComponent(url)}`;
-        window.location.href = downloadUrl;
-    });
-
-    // Обработчик на кнопку "Редактировать" — пока просто вывод в консоль
-    // Обработчик на кнопку "Редактировать"
-    const editButton = item.querySelector('.edit-button');
-    editButton.addEventListener('click', (event) => {
-        event.stopPropagation(); // чтобы не срабатывал общий клик по item
-        const editUrl = `/VideoEditor/editor/${encodeURIComponent(url)}`;
-        console.log('Переход на страницу редактирования:', editUrl);
-        window.location.href = editUrl; // редирект
-    });
-
+    item.querySelector('.download-button').onclick = () => window.location.href = `/download/yt?url=${encodeURIComponent(url)}`;
+    
+    item.querySelector('.edit-button').onclick = () => {
+        modalVideoUrl.value = url;
+        modalStatus.innerText = "✅ Видео прикреплено";
+        modalStatus.style.color = "#4CAF50";
+        modal.style.display = "flex";
+    };
 
     return item;
 };
 
+closeModal.onclick = () => modal.style.display = "none";
+window.onclick = (e) => { if (e.target == modal) modal.style.display = "none"; };
 
-// Отправка запроса
+modalForm.onsubmit = async (e) => {
+    e.preventDefault();
+    renderBtn.disabled = true;
+    renderBtn.innerText = "Обработка...";
+    modalStatus.innerText = "⏳ Идет рендеринг видео...";
+    modalStatus.style.color = "#ffa500";
+
+    const formData = new FormData(modalForm);
+
+    try {
+        const response = await fetch('/process-video', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "edited_video.mp4";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            modalStatus.innerText = "✅ Готово!";
+            modalStatus.style.color = "#4CAF50";
+        } else {
+            const err = await response.json();
+            modalStatus.innerText = "❌ Ошибка: " + err.message;
+            modalStatus.style.color = "#ff4444";
+        }
+    } catch (err) {
+        modalStatus.innerText = "❌ Ошибка связи";
+        modalStatus.style.color = "#ff4444";
+    } finally {
+        renderBtn.disabled = false;
+        renderBtn.innerText = "Редактировать";
+    }
+};
+
 const performSearch = async (query) => {
     toggleLoading(true);
     resultsContainer.innerHTML = '';
-
     try {
         const response = await fetch(`/search/YT?tag=${encodeURIComponent(query)}`);
-
         const data = await response.json();
-
-        if (!response.ok) {
-            showError(data.error || 'Произошла ошибка при выполнении запроса');
-            return;
+        if (data && data.length > 0) {
+            data.forEach(item => resultsContainer.appendChild(createResultItem(item)));
+        } else {
+            resultsContainer.innerHTML = '<div class="no-results">Ничего не найдено</div>';
         }
-
-        if (!data.length) {
-            resultsContainer.innerHTML = `<div class="no-results">Ничего не найдено 😕</div>`;
-            return;
-        }
-
-        data.forEach(item => {
-            resultsContainer.appendChild(createResultItem(item));
-        });
-
     } catch (err) {
-        console.error(err);
-        showError('Сервер не отвечает или возникла непредвиденная ошибка');
+        resultsContainer.innerHTML = '<div class="error-message">Ошибка сервера</div>';
     } finally {
         toggleLoading(false);
     }
 };
 
-// Слушатель кнопки
-searchButton.addEventListener('click', () => {
+searchButton.onclick = () => {
     const query = searchInput.value.trim();
-    if (query.length > 2) {
-        performSearch(query);
-    } else {
-        showError('Введите хотя бы 3 символа для поиска');
+    if (query.length > 2) performSearch(query);
+};
+
+searchInput.onkeypress = (e) => {
+    if (e.key === 'Enter') {
+        const query = searchInput.value.trim();
+        if (query.length > 2) performSearch(query);
     }
-});
+};

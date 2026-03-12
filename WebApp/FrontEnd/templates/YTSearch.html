@@ -2,51 +2,142 @@
 
 {% block styles %}
 <link rel="stylesheet" href="WebApp/FrontEnd/styles/ytsearch.css?v1.3">
+<style>
+    .modal-editor {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(5px);
+        align-items: center;
+        justify-content: center;
+        overflow-y: auto;
+    }
+    .modal-content {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 15px;
+        padding: 25px;
+        width: 95%;
+        max-width: 550px;
+        position: relative;
+        margin: 20px auto;
+    }
+    .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        color: #888;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    .editor-form { display: flex; flex-direction: column; gap: 12px; }
+    .form-row { display: flex; flex-direction: column; gap: 5px; }
+    .form-row label { color: #bbb; font-size: 0.85rem; }
+    .form-row input {
+        padding: 10px;
+        background: #252525;
+        border: 1px solid #444;
+        border-radius: 8px;
+        color: #fff;
+    }
+    .render-button {
+        padding: 15px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    #modalStatus { text-align: center; margin-top: 10px; font-size: 0.9rem; }
+</style>
 {% endblock %}
 
 {% block content %}
 <section class="vk-platform">
-    <!-- Анимированный заголовок -->
     <div class="platform-header">
         <h1 class="platform-title slide-in-left">YT-shorts</h1>
         <p class="platform-description slide-in-right">Поиск и анализ видео контента в YouTube</p>
     </div>
 
-    <!-- Поисковая панель -->
     <div class="search-wrapper">
         <div class="search-container">
-            <input type="text"
-                   id="searchInput"
-                   class="search-input"
-                   placeholder="Введите хэштег..."
-                   autocomplete="off">
+            <input type="text" id="searchInput" class="search-input" placeholder="Введите хэштег..." autocomplete="off">
             <button id="searchButton" class="search-button">
                 <span class="button-text">Найти видео</span>
-                <div class="button-loader"></div>
             </button>
         </div>
     </div>
 
-    <!-- Результаты поиска -->
     <div class="results-container" id="results"></div>
 
-    <!-- Оверлей загрузки -->
+    <div id="editorModal" class="modal-editor">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2 style="color: #fff; margin-bottom: 20px; text-align: center;">Настройка видео</h2>
+            
+            <form id="modalEditorForm" class="editor-form">
+                <input type="hidden" id="modalVideoUrl" name="videoUrl">
+                
+                <div class="form-row">
+                    <label>Обрезка (секунды, например 10-60):</label>
+                    <input type="text" name="trim" placeholder="0-10">
+                </div>
+
+                <div class="form-row">
+                    <label>Скорость:</label>
+                    <input type="number" name="speed" step="0.1" value="1.0">
+                </div>
+
+                <div class="form-row">
+                    <label>Поворот (градусы):</label>
+                    <input type="number" name="rotate" value="0">
+                </div>
+
+                <div class="form-row">
+                    <label>Масштаб (%):</label>
+                    <input type="number" name="scale" value="100">
+                </div>
+
+                <div class="form-row">
+                    <label>Громкость (%):</label>
+                    <input type="number" name="volume" value="100">
+                </div>
+
+                <div class="form-row">
+                    <label>Текст на видео:</label>
+                    <input type="text" name="text" placeholder="Текст...">
+                </div>
+
+                <div class="form-row">
+                    <label>Фоновый звук (аудио):</label>
+                    <input type="file" name="bg_audio" accept="audio/*">
+                </div>
+
+                <div class="form-row">
+                    <label>Логотип (изображение):</label>
+                    <input type="file" name="overlay" accept="image/*">
+                </div>
+
+                <button type="submit" id="renderBtn" class="render-button">Редактировать</button>
+                <div id="modalStatus"></div>
+            </form>
+        </div>
+    </div>
+
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-content">
             <div class="loader"></div>
             <p class="loading-text">Сканируем YouTube...</p>
         </div>
     </div>
-
-    <!-- Шаблон ошибки -->
-    <template id="errorTemplate">
-        <div class="error-notification">
-            <div class="error-content">
-                <span class="error-message"></span>
-                <button class="retry-button">Попробовать снова</button>
-            </div>
-        </div>
-    </template>
 </section>
-<script src="WebApp/FrontEnd/scr/YTapp.js?v1.28"></script>
-{% endblock %}
+
+<script src="WebApp/FrontEnd/scr/YTapp.js?v1.30"></script>
+{% endblock %}  

@@ -11,13 +11,13 @@
         <p>Загрузите видео и настройте параметры редактирования</p>
     </div>
 
-<!-- Панель редактирования -->
 <form id="editorForm" class="editor-form">
-        <!-- Загрузка видео -->
+    <input type="hidden" id="videoUrl" name="videoUrl" value="{{ video_url if video_url else '' }}">
+
     <div class="upload-container">
-        <label class="upload-label">
+        <label class="upload-label" id="uploadLabel">
             <input type="file" id="videoFile" name="videoFile" accept="video/*">
-            <span>Выберите видео</span>
+            <span id="uploadText">{% if video_url %}✅ Видео прикреплено{% else %}Выберите видео{% endif %}</span>
         </label>
     </div>
 
@@ -28,7 +28,7 @@
 
     <div class="form-row">
         <label>Размер:</label>
-        <input type="text" name="resize" placeholder="например: 1280x7201">
+        <input type="text" name="resize" placeholder="например: 1280x720">
     </div>
 
     <div class="form-row">
@@ -70,7 +70,7 @@
         <button type="submit" class="edit-button">Редактировать</button>
     </div>
 </form>
-
+</section>
 
 <script src="/WebApp/FrontEnd/scr/VideoEditor.js?v1.34"></script>
 {% endblock %}

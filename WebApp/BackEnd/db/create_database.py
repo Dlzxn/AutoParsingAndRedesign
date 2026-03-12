@@ -3,6 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
 
 DATABASE_URL = "postgresql+asyncpg://myuser:mypassword@localhost:5432/dbname"
+# DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost:5432/autoparsing"
 
 engine = create_async_engine(DATABASE_URL, echo=True)
 
