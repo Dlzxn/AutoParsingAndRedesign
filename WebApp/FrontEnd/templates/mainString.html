@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="WebApp/FrontEnd/styles/main.css?v1.30">
+{% endblock %}
+
+{% block content %}
+<section class="parsing-options">
+    <div class="intro-text">
+    <h1>Выберите тип контента для работы</h1>
+    <p>Наш сервис поможет автоматизировать сбор вашего контента</p>
+</div>
+
+    <div class="options-container">
+<!--        <a href="/text" class="option-card appear delay-1">-->
+<!--            <div class="option-button">-->
+<!--                <img src="WebApp/FrontEnd/images/text.png" alt="Статьи">-->
+<!--            </div>-->
+<!--            <div class="option-info">-->
+<!--                <h2>Парсинг статей</h2>-->
+<!--                <p>Автоматический сбор текстового контента из различных источников</p>-->
+<!--            </div>-->
+<!--        </a>-->
+
+        <a href="/video" class="option-card appear delay-2">
+            <div class="option-button">
+                <img src="WebApp/FrontEnd/images/video.png" alt="Видео">
+            </div>
+            <div class="option-info">
+                <h2>Парсинг роликов</h2>
+                <p>Сбор видео контента и автоматическая публикация на ваших платформах</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<section class="pricing-section">
+    <div class="pricing-container" id="pricingContainer">
+        <!-- Динамически генерируемые карточки -->
+    </div>
+</section>
+
+<script src="WebApp/FrontEnd/scr/mainAnimation.js?v1.22"></script>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="/WebApp/FrontEnd/styles/adm_promo.css?v1.00">
+{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <h1>Управление промокодами</h1>
+    <button class="create-promo-btn" onclick="openModal()">+ Создать промокод</button>
+
+    <div class="table-container">
+        <table id="promoTable">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Тип</th>
+                    <th>Статус</th>
+                    <th>Активаций</th>
+                    <th>Бонус</th>
+                    <th>Дата окончания</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody id="promoBody">
+                <!-- Данные будут загружены через JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="promoModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modalTitle">Новый промокод</h2>
+        <form id="promoForm">
+            <input type="hidden" id="promoId">
+            <div class="form-group">
+                <label>Название:</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label>Тип:</label>
+                <select id="type" required>
+                    <option value="sale">скидка</option>
+                    <option value="standart">standart Подписка</option>
+                    <option value="pro">pro Подписка</option>
+                    <option value="premiun">premium Подписка</option>
+                    <!-- Добавьте другие варианты при необходимости -->
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Статус:</label>
+                <input type="checkbox" id="status">
+            </div>
+            <div class="form-group">
+                <label>Дата окончания:</label>
+                <input type="text" id="date_ended" class="datepicker">
+            </div>
+            <div class="form-group">
+                <label>Лимит активаций:</label>
+                <input type="number" id="count_activated" required>
+            </div>
+            <div class="form-group">
+                <label>Бонусное количество:</label>
+                <input type="number" id="bonus_count" required>
+            </div>
+            <div class="form-group">
+                <label>Описание:</label>
+                <textarea id="description"></textarea>
+            </div>
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="/WebApp/FrontEnd/scr/adm_promo.js?v1.00"></script>
+{% endblock %}

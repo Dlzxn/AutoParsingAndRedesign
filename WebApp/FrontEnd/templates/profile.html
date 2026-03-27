@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="/WebApp/FrontEnd/styles/profile.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <h2 class="profile-title">👤 Профиль</h2>
+            <div class="auth-status" id="authStatus">
+                <span class="status-dot"></span>
+                Не авторизован
+            </div>
+        </div>
+
+        <div class="social-auth-container">
+            <button class="social-btn facebook">
+                <span class="social-icon material-icons">facebook</span>
+                Продолжить через Facebook
+            </button>
+            <button class="social-btn google">
+                <span class="social-icon material-icons">mail</span>
+                Продолжить через Google
+            </button>
+            <button class="social-btn vk">
+                <span class="social-icon material-icons">group</span>
+                Продолжить через VK
+            </button>
+            <button class="social-btn github">
+                <span class="social-icon material-icons">code</span>
+                Продолжить через GitHub
+            </button>
+        </div>
+
+        <div class="profile-footer">
+            <button class="logout-btn" id="logoutBtn">
+                <span class="material-icons">logout</span>
+                Выйти из аккаунта
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

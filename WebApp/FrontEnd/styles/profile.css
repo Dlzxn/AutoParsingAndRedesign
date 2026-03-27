@@ -1,0 +1,153 @@
+:root {
+    --primary-color: #6366f1;
+    --primary-hover: #4f46e5;
+    --background: #f8fafc;
+    --text-color: #1e293b;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --danger-color: #ef4444;
+    --danger-hover: #dc2626;
+    --facebook-color: #1877f2;
+    --google-color: #ea4335;
+    --vk-color: #0077ff;
+    --github-color: #333333;
+}
+
+.profile-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--background);
+    padding: 2rem;
+}
+
+.profile-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.4s ease forwards;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.profile-title {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.auth-status {
+    display: flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+    transition: background 0.3s ease;
+}
+
+.social-auth-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+    color: white;
+    box-shadow: var(--shadow);
+}
+
+.social-btn span {
+    margin-right: 12px;
+    font-size: 1.25rem;
+}
+
+.social-btn.facebook { background: var(--facebook-color); }
+.social-btn.google { background: var(--google-color); }
+.social-btn.vk { background: var(--vk-color); }
+.social-btn.github { background: var(--github-color); }
+
+.social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.15);
+}
+
+.social-btn:active {
+    transform: translateY(0);
+}
+
+.profile-footer {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1.5rem;
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    background: #f1f5f9;
+    border: none;
+    border-radius: 12px;
+    color: var(--danger-color);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: #fee2e2;
+    color: var(--danger-hover);
+}
+
+.logout-btn span {
+    margin-right: 12px;
+    font-size: 1.25rem;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .profile-container {
+        padding: 1rem;
+    }
+
+    .profile-card {
+        border-radius: 16px;
+        padding: 1.5rem;
+    }
+
+    .social-btn {
+        font-size: 0.9rem;
+        padding: 0.75rem;
+    }
+}

@@ -1,0 +1,430 @@
+/* Options Section */
+.parsing-options {
+    padding: 80px 20px;
+    background: #f8f9fa;
+}
+
+.options-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin: 60px auto;
+    max-width: 1200px;
+}
+
+.option-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.option-card.appear {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.option-button {
+    width: 120px;
+    height: 120px;
+    background: #4CAF50;
+    border-radius: 50%;
+    margin: 0 auto 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.option-button img {
+    width: 60px;
+    height: 60px;
+    filter: brightness(0) invert(1);
+}
+
+.option-info h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.option-info p {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+}
+
+/* Pricing Section */
+.pricing-section {
+    padding: 100px 20px;
+    background: #ffffff;
+}
+
+.pricing-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pricing-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transform: translateY(50px);
+    opacity: 0;
+    transition: all 0.6s ease-out;
+}
+
+.pricing-card.slide-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.pricing-card.featured {
+    background: #4CAF50;
+    color: white;
+    transform: scale(1.05);
+}
+
+.pricing-card h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.price {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.pricing-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 25px 0;
+}
+
+.pricing-card ul li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 1.1rem;
+}
+
+.btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(76,175,80,0.3);
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.delay-1 { animation-delay: 0.3s; }
+.delay-2 { animation-delay: 0.6s; }
+/* Animated Header */
+.animated-header {
+    text-align: center;
+    margin: 80px 0;
+    overflow: hidden;
+}
+
+.title-part {
+    display: inline-block;
+    font-size: 3.5rem;
+    opacity: 0;
+    transform: translateY(50px);
+    animation: titleReveal 1s forwards cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.title-part.left { animation-delay: 0.3s; }
+.title-part.right { animation-delay: 0.6s; }
+
+@keyframes titleReveal {
+    from {
+        opacity: 0;
+        transform: translateY(50px) rotate(-5deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotate(0);
+    }
+}
+
+/* Type Selector */
+.selection-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 40px 0;
+}
+
+.type-selector {
+    padding: 20px 40px;
+    border-radius: 50px;
+    background: #f0f0f0;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(0.95);
+    opacity: 0.7;
+}
+
+.type-selector.active {
+    background: #4CAF50;
+    color: white;
+    transform: scale(1);
+    opacity: 1;
+    box-shadow: 0 10px 20px rgba(76,175,80,0.3);
+}
+
+/* Content Boxes */
+.content-container {
+    position: relative;
+    min-height: 400px;
+    margin: 50px auto;
+    max-width: 1200px;
+}
+
+.content-box {
+    position: absolute;
+    width: 100%;
+    padding: 40px;
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    pointer-events: none;
+}
+
+.content-box.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+/* Pricing Cards */
+.pricing-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.pricing-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(76,175,80,0);
+    transition: background 0.3s ease;
+}
+
+.pricing-card:hover {
+    transform: translateY(-10px);
+}
+
+.pricing-card:hover::before {
+    background: rgba(76,175,80,0.1);
+}
+
+.inner-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    height: 100%;
+}
+
+.pricing-card.featured .inner-card {
+    background: #4CAF50;
+    color: white;
+}
+
+/* Анимации появления */
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(50px) rotateX(-30deg);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+    }
+}
+
+.slide-in {
+    animation: cardAppear 1s forwards cubic-bezier(0.19, 1, 0.22, 1);
+}
+.intro-text {
+    text-align: center;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeInDown 0.8s forwards;
+}
+
+.intro-text h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.intro-text p {
+    font-size: 16px;
+    color: #666;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.pricing-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 40px 20px;
+}
+
+.pricing-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    width: 280px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    animation: slideIn 0.7s forwards;
+}
+
+.pricing-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.featured {
+    border: 2px solid #007BFF;
+}
+
+.price {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px 0 20px;
+}
+
+.btn {
+    margin-top: 20px;
+    padding: 10px 0;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Анимация появления */
+@keyframes slideIn {
+    from {
+        transform: translateY(120px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.small-icon {
+    width: 32px;
+    height: auto; /* или фиксированно: height: 32px */
+}
+/* Стили для ценовых карточек */
+.price-container {
+    margin: 1.5rem 0;
+}
+
+.price-discount {
+    position: relative;
+    display: inline-block;
+}
+
+.old-price {
+    color: #e74c3c;
+    text-decoration: line-through;
+    margin-right: 0.5rem;
+}
+
+.new-price {
+    color: #27ae60;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.discount-badge {
+    position: absolute;
+    top: -15px;
+    right: -25px;
+    background: #e67e22;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    transform: rotate(15deg);
+}
+
+.featured .discount-badge {
+    background: #c0392b;
+    font-size: 0.9rem;
+}
+
+.pricing-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.price {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2c3e50;
+}

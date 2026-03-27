@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="/WebApp/FrontEnd/styles/platforms.css?v1.00">
+{% endblock %}
+
+{% block content %}
+<div class="platforms-container">
+    <h1 class="platforms-title">Управление платформами</h1>
+    <div class="platforms-grid" id="platformsGrid">
+        <!-- Платформы будут загружены через JS -->
+    </div>
+</div>
+
+<div class="confirmation-modal" id="confirmationModal">
+    <div class="modal-content">
+        <h3>Подтвердите действие</h3>
+        <p id="modalMessage"></p>
+        <div class="modal-actions">
+            <button class="modal-cancel">Отмена</button>
+            <button class="modal-confirm">Подтвердить</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/WebApp/FrontEnd/scr/platforms_open.js?v1.01"></script>
+{% endblock %}

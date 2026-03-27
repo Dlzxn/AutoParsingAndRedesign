@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Найти клип - Онлайн-платформа для поиска контента</title>
+  <link rel="stylesheet" href="/WebApp/FrontEnd/styles/base.css?v1.31">
+  {% block styles %}{% endblock %}
+</head>
+<body>
+<!-- Прелоадер -->
+  <div class="preloader">
+    <div class="loader">
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+      <div class="circle"></div>
+    </div>
+  </div>
+  <!-- Заголовок (шапка) -->
+  <header class="header">
+    <div class="header-content">
+      <a href="/" class="logo">Parser Platform</a>
+
+      <nav class="nav-links">
+        <a href="/features" class="nav-link">Возможности</a>
+        <a href="/tariffs" class="nav-link">Тарифы</a>
+          <a href="/VideoEditor" class="nav-link">Редактор</a>
+      </nav>
+
+      <div class="profile" id="profileDropdown">
+        <div class="profile-info">
+            <span class="username">Гость</span>
+            <span class="plan">Неавторизован</span>
+        </div>
+        <div class="dropdown-menu">
+            <!-- Динамическое меню будет здесь -->
+        </div>
+        </div>
+    </div>
+  </header>
+
+  <!-- Основной контент -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block extra_scripts %}{% endblock %}
+  <script src="/WebApp/FrontEnd/scr/base.js?v1.15"></script>
+    <footer id="footer">
+        <div class="inner-wrapper">
+            <div class="navigation">
+                <nav class="useful">
+                    <div class="title">Полезные ссылки</div>
+                    <ul>
+                        <li><a href="#" onclick="return false">Техническая поддержка</a></li>
+                        <li><a href="/blog/">Блог платформы</a></li>
+                        <li><a href="/docs/">Документация API</a></li>
+                    </ul>
+                </nav>
+                <nav class="additionally">
+                    <div class="title">Правовая информация</div>
+                    <ul>
+                        <li><a href="/agreement.pdf" target="_blank">Пользовательское соглашение</a></li>
+                        <li><a href="/privacy">Конфиденциальность</a></li>
+                    </ul>
+                </nav>
+                <nav class="socials">
+                    <div class="title">Мы в соцсетях</div>
+                    <ul class="social-icons">
+  <li><img src="WebApp/FrontEnd/images/vk.png" alt="VK"><a href="https://vk.com/parser_platform">ВКонтакте</a></li>
+  <li><img src="WebApp/FrontEnd/images/tg.png" alt="Telegram"><a href="https://t.me/parser_news">Телеграм-канал</a></li>
+  <li><img src="WebApp/FrontEnd/images/yt.png" alt="YouTube"><a href="https://youtube.com/parser_tube">YouTube</a></li>
+</ul>
+
+                </nav>
+            </div>
+            <div class="about">
+                <nav class="contacts">
+                    <div class="title">Контакты</div>
+                    <ul>
+                        <li>ИП Иванов Алексей Петрович</li>
+                        <li>ОГРНИП: 321774635200154</li>
+                        <li>ИНН: 773456789012</li>
+                        <li style="margin-top:10px">г. Москва, БЦ «Скайлайн»</li>
+                        <li>ул. Тверская, д. 15, офис 305</li>
+                        <li><a href="mailto:support@parser.ru">support@parser.ru</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="payment-logos">
+                <img src="/static/pay/visa.svg" alt="VISA" width="60">
+                <img src="/static/pay/mastercard.svg" alt="Mastercard" width="60">
+                <img src="/static/pay/mir.svg" alt="МИР" width="60">
+            </div>
+            <div class="copyright">
+                Parser Platform © 2020 — 2024<br>
+                <a href="/privacy">Политика конфиденциальности</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

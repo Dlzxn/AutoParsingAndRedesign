@@ -1,0 +1,74 @@
+/* 404 Error Page Styles */
+.error-404 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 2rem;
+}
+
+.error-animation {
+    font-size: 8rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+.error-title {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+    animation-delay: 0.3s;
+}
+
+.error-text {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    max-width: 600px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
+
+.error-title,
+.error-text {
+    width: 100%; /* Занимаем всю ширину контейнера */
+    max-width: 800px; /* Ограничиваем максимальную ширину текста */
+    margin-left: auto;
+    margin-right: auto; /* Центрируем текстовые блоки */
+}
+
+.home-btn {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+    animation-delay: 0.7s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .error-animation { font-size: 5rem; }
+    .error-title { font-size: 2rem; }
+}

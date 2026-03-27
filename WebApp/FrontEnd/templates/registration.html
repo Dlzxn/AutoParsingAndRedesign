@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="WebApp/FrontEnd/styles/auth.css">
+</head>
+<body>
+    <div class="container">
+        <header>Регистрация</header>
+        <form id="registerForm">
+            <div class="input-box">
+                <label>Email или Телефон</label>
+                <input type="text" id="regIdentity" required>
+            </div>
+
+            <div class="input-box">
+                <label>Пароль</label>
+                <input type="password" id="regPassword" required>
+            </div>
+
+            <div class="input-box">
+                <label>Подтвердите пароль</label>
+                <input type="password" id="regConfirmPassword" required>
+            </div>
+
+            <div class="error-message" id="regError"></div>
+            <div class="success-message" id="regSuccess"></div>
+
+            <button type="submit" class="button">Зарегистрироваться</button>
+        </form>
+
+        <div class="switch-form">
+            Уже есть аккаунт? <a href="/login">Войти</a>
+        </div>
+    </div>
+    <script src="WebApp/FrontEnd/scr/register.js"></script>
+</body>
+</html>

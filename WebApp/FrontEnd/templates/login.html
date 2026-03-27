@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <link rel="stylesheet" href="WebApp/FrontEnd/styles/auth.css">
+</head>
+<body>
+    <div class="container">
+        <header>Вход</header>
+        <form id="loginForm">
+            <div class="input-box">
+                <label>Email или Телефон</label>
+                <input type="text" id="loginIdentity" required>
+            </div>
+
+            <div class="input-box">
+                <label>Пароль</label>
+                <input type="password" id="loginPassword" required>
+            </div>
+
+            <div class="error-message" id="loginError"></div>
+            <div class="success-message" id="loginSuccess"></div>
+
+            <button type="submit" class="button">Войти</button>
+        </form>
+        <div class="switch-form">
+            Нет аккаунта? <a href="/registration">Зарегистрироваться</a>
+        </div>
+    </div>
+</body>
+<script src="WebApp/FrontEnd/scr/login.js"></script>
+</html>

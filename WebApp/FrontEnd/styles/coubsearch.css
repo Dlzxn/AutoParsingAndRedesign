@@ -1,0 +1,521 @@
+/* Основные стили */
+
+.wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #ff0000; /* основной красный */
+  background: -webkit-linear-gradient(to bottom, #ff0000, #cc0000); /* для старых браузеров */
+  background: linear-gradient(to bottom, #ff0000, #cc0000); /* основной градиент */
+}
+.sidebar {
+    background: #1e2a33; /* Тёмно-серый с холодным оттенком для контраста с красным */
+    color: #000; /* Белый текст для хорошей видимости */
+}
+.video-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 10px; /* Расстояние между видео */
+}
+
+.video-container {
+    flex: 1 1 48%; /* Два видео в ряду, и они будут адаптироваться по ширине */
+    max-width: 48%;
+}
+
+.video-iframe {
+    width: 100%; /* Видео будет адаптироваться по ширине контейнера */
+    height: auto;
+    max-height: 200px; /* Ограничение по высоте */
+}
+
+
+
+/* Анимации */
+@keyframes slideInLeft {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    50% { opacity: 0.5; }
+}
+
+/* Заголовок платформы */
+.platform-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.platform-title {
+    font-size: 2.5rem;
+    color: #008bdb;
+    margin-bottom: 1rem;
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.platform-description {
+    font-size: 1.1rem;
+    color: #000000;
+    animation: slideInRight 0.6s ease-out;
+}
+
+/* Поисковая панель */
+.search-wrapper {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+}
+
+.search-container {
+    display: flex;
+    gap: 1rem;
+    background: #fff;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 0.5rem;
+}
+
+.search-input {
+    flex: 1;
+    padding: 1rem 2rem;
+    border: none;
+    background: transparent;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+.search-button {
+    position: relative;
+    padding: 1rem 3rem;
+    border: none;
+    border-radius: 40px;
+    background: linear-gradient(135deg, #2787F5 0%, #1A5DAB 100%);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.search-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 135, 245, 0.3);
+}
+
+.button-loader {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Результаты поиска */
+.results-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.video-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+}
+
+.video-iframe {
+    width: 100%;
+    height: 200px;
+    border: none;
+}
+
+.video-info {
+    padding: 1rem;
+}
+
+.video-title {
+    font-size: 1rem;
+    margin: 0 0 1rem;
+    color: #333;
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.download-btn {
+    background: #27ae60;
+    color: white;
+}
+
+.retry-button {
+    background: #2787F5;
+    color: white;
+}
+
+/* Загрузка */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255,255,255,0.9);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #2787F5;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+.loading-text {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* Ошибки */
+.error-notification {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #ff4757;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.error-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.retry-button {
+    background: none;
+    border: 1px solid white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.retry-button:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .search-container {
+        flex-direction: column;
+        border-radius: 25px;
+        padding: 1rem;
+    }
+
+    .search-button {
+        width: 100%;
+        border-radius: 25px;
+    }
+
+    .results-container {
+        grid-template-columns: 1fr;
+    }
+}
+.video-box {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.video-container {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.video-iframe {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.video-info {
+    text-align: center;
+}
+
+.video-title {
+    font-size: 20px;
+    margin: 10px 0;
+    color: #333;
+}
+
+.video-title a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.video-title a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.actions {
+    margin-top: 10px;
+}
+
+.download-button, .edit-button {
+    padding: 8px 15px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.download-button:hover, .edit-button:hover {
+    background-color: #005bb5;
+}
+.results-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    margin: 0 auto;
+    width: 100%;
+    scroll-behavior: smooth;
+}
+
+/* Кастомный скроллбар */
+.results-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.results-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.results-container::-webkit-scrollbar-thumb {
+    background: #2787F5;
+    border-radius: 4px;
+}
+
+.results-container::-webkit-scrollbar-thumb:hover {
+    background: #1A5DAB;
+}
+
+/* Фикс для мобильных устройств */
+@media (max-width: 768px) {
+    .results-container {
+        max-height: calc(100vh - 300px);
+        grid-template-columns: 1fr;
+    }
+}
+/* Основные стили */
+.vk-platform {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    min-height: 100vh; /* Используем min-height для корректного отображения */
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 6rem;
+}
+
+/* Анимации */
+@keyframes slideInLeft {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    50% { opacity: 0.5; }
+}
+
+/* Заголовок платформы */
+.platform-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+
+
+
+/* Поисковая панель */
+.search-wrapper {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    flex-shrink: 0;
+}
+
+.search-container {
+    display: flex;
+    gap: 1rem;
+    background: #fff;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 0.5rem;
+}
+
+.search-input {
+    flex: 1;
+    padding: 1rem 2rem;
+    border: none;
+    background: transparent;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.search-input::placeholder {
+    color: #999;
+}
+
+.search-button {
+    position: relative;
+    padding: 1rem 3rem;
+    border: none;
+    border-radius: 40px;
+    background: linear-gradient(135deg, #2787F5 0%, #1A5DAB 100%);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.search-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(39, 135, 245, 0.3);
+}
+
+/* Результаты поиска */
+.results-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+    flex-grow: 1; /* Используем flex-grow для растяжения контейнера */
+    max-height: calc(100vh - 300px); /* Обеспечиваем корректную высоту */
+}
+
+/* Фикс для мобильных устройств */
+@media (max-width: 768px) {
+    .search-container {
+        flex-direction: column;
+        border-radius: 25px;
+        padding: 1rem;
+    }
+
+    .search-button {
+        width: 100%;
+        border-radius: 25px;
+    }
+
+    .results-container {
+        grid-template-columns: 1fr;
+    }
+
+    .video-card {
+        margin-bottom: 1rem;
+    }
+}
+.results-container {
+    background-color: transparent; /* Прозрачный фон, чтобы не было белого квадрата */
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+    flex-grow: 1;
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+}
+
+.results-container {
+    position: relative; /* Обеспечиваем возможность использовать z-index */
+    z-index: 10; /* Поднимем контейнер с результатами */
+}
+.result-item {
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.video-box {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.video-box iframe,
+.video-box video {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-height: 400px;
+    border-radius: 10px;
+}
+.video-title {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
