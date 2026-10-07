@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Найти клип — онлайн-платформа для поиска и монтажа коротких видео{% endblock %}</title>
+  <link rel="icon" href="{{ static('img/video.png') }}">
+  <link rel="stylesheet" href="{{ static('css/base.css') }}">
+  <link rel="stylesheet" href="{{ static('css/app.css') }}">
+  {% block styles %}{% endblock %}
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <a href="/" class="logo">Parser Platform</a>
+
+      <nav class="nav-links">
+        <a href="/video" class="nav-link">Поиск клипов</a>
+        <a href="/editor" class="nav-link">Редактор</a>
+        <a href="/tariffs" class="nav-link">Тарифы</a>
+        <a href="/features" class="nav-link">Возможности</a>
+      </nav>
+
+      <div class="profile" id="profileDropdown">
+        <div class="profile-info">
+          {% if current_user %}
+            <span class="username">{{ current_user.email }}</span>
+            {% set plan = 'Administrator' if current_user.is_admin else current_user.subscribe_status %}
+            <span class="plan {{ plan|lower }}">{{ plan }}</span>
+          {% else %}
+            <span class="username">Гость</span>
+            <span class="plan">Войдите в аккаунт</span>
+          {% endif %}
+        </div>
+        <div class="dropdown-menu">
+          {% if current_user %}
+            <a href="/profile" class="dropdown-item">Профиль</a>
+            <a href="/editor" class="dropdown-item">Мои ролики</a>
+            {% if current_user.is_admin %}<a href="/admin" class="dropdown-item">Админ-панель</a>{% endif %}
+            <a href="/tariffs" class="dropdown-item">Тарифы</a>
+            <a href="/logout" class="dropdown-item logout-btn">Выйти</a>
+          {% else %}
+            <a href="/login" class="dropdown-item">Войти</a>
+            <a href="/registration" class="dropdown-item">Зарегистрироваться</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer id="footer">
+    <div class="inner-wrapper">
+      <div class="navigation">
+        <nav class="useful">
+          <div class="title">Полезные ссылки</div>
+          <ul>
+            <li><a href="mailto:support@parser.ru">Техническая поддержка</a></li>
+            <li><a href="/video">Поиск клипов</a></li>
+            <li><a href="/editor">Редактор клипов</a></li>
+          </ul>
+        </nav>
+        <nav class="socials">
+          <div class="title">Мы в соцсетях</div>
+          <ul class="social-icons">
+            <li><img src="{{ static('img/vk.png') }}" alt=""><a href="https://vk.com/parser_platform">ВКонтакте</a></li>
+            <li><img src="{{ static('img/tg.png') }}" alt=""><a href="https://t.me/parser_news">Телеграм-канал</a></li>
+            <li><img src="{{ static('img/yt.png') }}" alt=""><a href="https://youtube.com/parser_tube">YouTube</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="about">
+        <nav class="contacts">
+          <div class="title">Контакты</div>
+          <ul>
+            <li>ИП Иванов Алексей Петрович</li>
+            <li>ОГРНИП: 321774635200154</li>
+            <li>ИНН: 773456789012</li>
+            <li style="margin-top:10px">г. Москва, БЦ «Скайлайн»</li>
+            <li>ул. Тверская, д. 15, офис 305</li>
+            <li><a href="mailto:support@parser.ru">support@parser.ru</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="copyright">Parser Platform © 2020 — {{ now_year }}</div>
+    </div>
+  </footer>
+
+  <script src="{{ static('js/api.js') }}"></script>
+  <script src="{{ static('js/base.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

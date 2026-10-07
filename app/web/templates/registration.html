@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация — Parser Platform</title>
+    <link rel="stylesheet" href="{{ static('css/auth.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>Регистрация</header>
+        <form id="authForm" data-endpoint="/api/registration" data-next="{{ next_url }}" novalidate>
+            <div class="input-box">
+                <label for="identity">Email или телефон</label>
+                <input type="text" id="identity" name="identity" autocomplete="username" required>
+            </div>
+
+            <div class="input-box">
+                <label for="password">Пароль (минимум 6 символов)</label>
+                <input type="password" id="password" name="password" autocomplete="new-password" required>
+            </div>
+
+            <div class="input-box">
+                <label for="passwordConfirm">Подтвердите пароль</label>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" autocomplete="new-password" required>
+            </div>
+
+            <div class="error-message" id="authError" role="alert"></div>
+            <div class="success-message" id="authSuccess"></div>
+
+            <button type="submit" class="button">Зарегистрироваться</button>
+        </form>
+
+        <div class="switch-form">
+            Уже есть аккаунт? <a href="/login{% if next_url != '/' %}?next={{ next_url|urlencode }}{% endif %}">Войти</a>
+        </div>
+    </div>
+    <script src="{{ static('js/auth.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+{# Редактор клипов. Подключается на странице /editor и в модальном окне на страницах поиска. #}
+<div class="clip-editor" data-clip-editor>
+  <div class="ce-stage">
+    <div class="ce-picker" data-ce-picker hidden>
+      <label class="ce-drop" data-ce-drop>
+        <input type="file" accept="video/*" data-ce-file hidden>
+        <span class="ce-drop-icon">⬆</span>
+        <span class="ce-drop-title">Перетащите видео сюда или нажмите, чтобы выбрать</span>
+        <span class="ce-drop-hint">MP4, MOV, WEBM, MKV · до {{ max_upload_mb|default(500) }} МБ</span>
+      </label>
+      <div class="ce-or">или</div>
+      <form class="ce-url-form" data-ce-url-form>
+        <input type="url" class="ce-input" data-ce-url placeholder="Ссылка на ролик VK, YouTube, Coub, Reddit, Imgur" required>
+        <button type="submit" class="ce-btn ce-btn-primary">Загрузить</button>
+      </form>
+    </div>
+
+    <div class="ce-loading" data-ce-loading hidden>
+      <div class="ce-spinner"></div>
+      <p data-ce-loading-text>Загружаем видео…</p>
+      <div class="ce-progress ce-progress-small" data-ce-upload-progress hidden><div class="ce-progress-bar"></div></div>
+    </div>
+
+    <div class="ce-workspace" data-ce-workspace hidden>
+      <div class="ce-preview-wrap">
+        <div class="ce-frame" data-ce-frame>
+          <video class="ce-video-bg" data-ce-video-bg muted playsinline preload="auto" aria-hidden="true"></video>
+          <video class="ce-video" data-ce-video playsinline preload="auto"></video>
+          <img class="ce-logo" data-ce-logo-preview alt="" hidden>
+          <div class="ce-text" data-ce-text-preview hidden></div>
+        </div>
+      </div>
+
+      <div class="ce-player">
+        <button type="button" class="ce-play" data-ce-play aria-label="Воспроизвести">▶</button>
+        <div class="ce-timeline" data-ce-timeline>
+          <div class="ce-timeline-selection" data-ce-selection></div>
+          <div class="ce-timeline-cursor" data-ce-cursor></div>
+          <input type="range" class="ce-range ce-range-start" data-ce-range-start min="0" step="0.05" aria-label="Начало фрагмента">
+          <input type="range" class="ce-range ce-range-end" data-ce-range-end min="0" step="0.05" aria-label="Конец фрагмента">
+        </div>
+        <span class="ce-time" data-ce-time>0:00.0</span>
+      </div>
+      <div class="ce-summary" data-ce-summary></div>
+    </div>
+  </div>
+
+  <form class="ce-panel" data-ce-form novalidate>
+    <nav class="ce-tabs" role="tablist">
+      <button type="button" class="ce-tab active" data-tab="time">Время</button>
+      <button type="button" class="ce-tab" data-tab="frame">Кадр</button>
+      <button type="button" class="ce-tab" data-tab="color">Цвет</button>
+      <button type="button" class="ce-tab" data-tab="text">Текст</button>
+      <button type="button" class="ce-tab" data-tab="audio">Звук</button>
+      <button type="button" class="ce-tab" data-tab="export">Экспорт</button>
+    </nav>
+
+    <section class="ce-section active" data-section="time">
+      <div class="ce-row ce-row-2">
+        <label class="ce-field">Начало, сек
+          <input type="number" class="ce-input" name="trim_start" min="0" step="0.1" value="0">
+        </label>
+        <label class="ce-field">Конец, сек
+          <input type="number" class="ce-input" name="trim_end" min="0" step="0.1">
+        </label>
+      </div>
+      <div class="ce-row ce-row-2">
+        <button type="button" class="ce-btn" data-ce-set-start>⇤ Начало = сейчас</button>
+        <button type="button" class="ce-btn" data-ce-set-end>Конец = сейчас ⇥</button>
+      </div>
+      <label class="ce-field">Скорость: <output data-out="speed">1×</output>
+        <input type="range" name="speed" min="0.25" max="4" step="0.05" value="1">
+      </label>
+      <div class="ce-chips" data-chips-for="speed">
+        <button type="button" data-value="0.5">0.5×</button>
+        <button type="button" data-value="1">1×</button>
+        <button type="button" data-value="1.5">1.5×</button>
+        <button type="button" data-value="2">2×</button>
+      </div>
+      <div class="ce-row ce-row-2">
+        <label class="ce-field">Плавное появление, сек
+          <input type="number" class="ce-input" name="fade_in" min="0" max="5" step="0.1" value="0">
+        </label>
+        <label class="ce-field">Плавное затухание, сек
+          <input type="number" class="ce-input" name="fade_out" min="0" max="5" step="0.1" value="0">
+        </label>
+      </div>
+    </section>
+
+    <section class="ce-section" data-section="frame">
+      <div class="ce-field">Формат кадра
+        <div class="ce-segmented" data-segmented="aspect">
+          <button type="button" data-value="original" class="active">Исходный</button>
+          <button type="button" data-value="9:16">9:16</button>
+          <button type="button" data-value="1:1">1:1</button>
+          <button type="button" data-value="4:5">4:5</button>
+          <button type="button" data-value="16:9">16:9</button>
+        </div>
+        <input type="hidden" name="aspect" value="original">
+      </div>
+      <div class="ce-field" data-ce-fit-field hidden>Как заполнить кадр
+        <div class="ce-segmented" data-segmented="fit">
+          <button type="button" data-value="crop" class="active">Обрезать</button>
+          <button type="button" data-value="blur">Размытый фон</button>
+          <button type="button" data-value="pad">Чёрные поля</button>
+        </div>
+        <input type="hidden" name="fit" value="crop">
+      </div>
+      <label class="ce-field">Разрешение
+        <select class="ce-input" name="resolution">
+          <option value="original">Как у исходника</option>
+          <option value="480">480p</option>
+          <option value="720">720p</option>
+          <option value="1080">1080p (Full HD)</option>
+        </select>
+      </label>
+      <div class="ce-field">Поворот и отражение
+        <div class="ce-row ce-row-4">
+          <button type="button" class="ce-btn" data-ce-rotate="-90" title="Повернуть влево">⟲ 90°</button>
+          <button type="button" class="ce-btn" data-ce-rotate="90" title="Повернуть вправо">⟳ 90°</button>
+          <label class="ce-toggle"><input type="checkbox" name="flip_h"> ⇋</label>
+          <label class="ce-toggle"><input type="checkbox" name="flip_v"> ⇵</label>
+        </div>
+        <input type="hidden" name="rotate" value="0">
+      </div>
+    </section>
+
+    <section class="ce-section" data-section="color">
+      <label class="ce-field">Яркость: <output data-out="brightness">0</output>
+        <input type="range" name="brightness" min="-0.5" max="0.5" step="0.01" value="0">
+      </label>
+      <label class="ce-field">Контраст: <output data-out="contrast">1</output>
+        <input type="range" name="contrast" min="0.5" max="2" step="0.01" value="1">
+      </label>
+      <label class="ce-field">Насыщенность: <output data-out="saturation">1</output>
+        <input type="range" name="saturation" min="0" max="3" step="0.01" value="1">
+      </label>
+      <label class="ce-toggle"><input type="checkbox" name="grayscale"> Чёрно-белое</label>
+    </section>
+
+    <section class="ce-section" data-section="text">
+      <label class="ce-field">Текст на видео
+        <textarea class="ce-input" name="text" rows="3" maxlength="300" placeholder="Например: Подпишись на канал!"></textarea>
+      </label>
+      <div class="ce-field">Положение
+        <div class="ce-segmented" data-segmented="text_position">
+          <button type="button" data-value="top">Сверху</button>
+          <button type="button" data-value="center">По центру</button>
+          <button type="button" data-value="bottom" class="active">Снизу</button>
+        </div>
+        <input type="hidden" name="text_position" value="bottom">
+      </div>
+      <div class="ce-row ce-row-3">
+        <label class="ce-field">Размер
+          <select class="ce-input" name="text_size">
+            <option value="small">Мелкий</option>
+            <option value="medium" selected>Средний</option>
+            <option value="large">Крупный</option>
+          </select>
+        </label>
+        <label class="ce-field">Цвет
+          <input type="color" class="ce-color" name="text_color" value="#ffffff">
+        </label>
+        <label class="ce-toggle ce-toggle-tall"><input type="checkbox" name="text_background" checked> Подложка</label>
+      </div>
+      <hr class="ce-sep">
+      <label class="ce-field">Логотип / водяной знак (PNG, JPG, WEBP)
+        <input type="file" class="ce-input" name="logo" accept="image/png,image/jpeg,image/webp" data-ce-logo-input>
+      </label>
+      <div data-ce-logo-settings hidden>
+        <label class="ce-field">Положение логотипа
+          <select class="ce-input" name="logo_position">
+            <option value="top-left">Слева сверху</option>
+            <option value="top-right" selected>Справа сверху</option>
+            <option value="bottom-left">Слева снизу</option>
+            <option value="bottom-right">Справа снизу</option>
+            <option value="center">По центру</option>
+          </select>
+        </label>
+        <div class="ce-row ce-row-2">
+          <label class="ce-field">Размер: <output data-out="logo_scale">20%</output>
+            <input type="range" name="logo_scale" min="5" max="60" step="1" value="20">
+          </label>
+          <label class="ce-field">Непрозрачность: <output data-out="logo_opacity">100%</output>
+            <input type="range" name="logo_opacity" min="0.1" max="1" step="0.05" value="1">
+          </label>
+        </div>
+        <button type="button" class="ce-link" data-ce-clear="logo">Убрать логотип</button>
+      </div>
+      <hr class="ce-sep">
+      <label class="ce-field">Субтитры (.srt) — таймкоды относительно готового ролика
+        <input type="file" class="ce-input" name="subtitles" accept=".srt">
+      </label>
+    </section>
+
+    <section class="ce-section" data-section="audio">
+      <label class="ce-field">Громкость оригинала: <output data-out="volume">100%</output>
+        <input type="range" name="volume" min="0" max="300" step="5" value="100">
+      </label>
+      <label class="ce-toggle"><input type="checkbox" name="mute"> Убрать оригинальный звук</label>
+      <hr class="ce-sep">
+      <label class="ce-field">Фоновая музыка (MP3, M4A, WAV, OGG)
+        <input type="file" class="ce-input" name="music" accept="audio/*" data-ce-music-input>
+      </label>
+      <div data-ce-music-settings hidden>
+        <label class="ce-field">Громкость музыки: <output data-out="music_volume">60%</output>
+          <input type="range" name="music_volume" min="0" max="300" step="5" value="60">
+        </label>
+        <label class="ce-toggle"><input type="checkbox" name="music_replace"> Заменить оригинальный звук музыкой</label>
+        <button type="button" class="ce-link" data-ce-clear="music">Убрать музыку</button>
+      </div>
+      <audio data-ce-music-preview preload="auto"></audio>
+    </section>
+
+    <section class="ce-section" data-section="export">
+      <div class="ce-field">Качество
+        <div class="ce-segmented" data-segmented="quality">
+          <button type="button" data-value="draft">Быстро</button>
+          <button type="button" data-value="standard" class="active">Стандарт</button>
+          <button type="button" data-value="high">Максимум</button>
+        </div>
+        <input type="hidden" name="quality" value="standard">
+      </div>
+      <p class="ce-hint">«Быстро» — для черновика, «Максимум» — лучшее качество, но рендер дольше.</p>
+      <button type="button" class="ce-link" data-ce-reset>Сбросить все настройки</button>
+    </section>
+
+    <div class="ce-footer">
+      <div class="ce-progress" data-ce-progress hidden><div class="ce-progress-bar"></div></div>
+      <div class="ce-status" data-ce-status aria-live="polite"></div>
+      <button type="submit" class="ce-btn ce-btn-primary ce-btn-big" data-ce-render disabled>Создать клип</button>
+    </div>
+
+    <div class="ce-result" data-ce-result hidden>
+      <video class="ce-result-video" data-ce-result-video controls playsinline></video>
+      <div class="ce-row ce-row-2">
+        <a class="ce-btn ce-btn-primary" data-ce-download href="#">⬇ Скачать</a>
+        <button type="button" class="ce-btn" data-ce-back>Изменить ещё раз</button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,223 @@
+{
+ "kind": "Listing",
+ "data": {
+  "modhash": "",
+  "dist": 50,
+  "facets": {},
+  "after": null,
+  "geo_filter": "",
+  "children": [
+   {
+    "kind": "t3",
+    "data": {
+     "id": "1x04ekd",
+     "title": "My Desktop Cat is out: a free Windows companion that naps while you work",
+     "permalink": "/r/IndieDev/comments/1x04ekd/my_desktop_cat_is_out_a_free_windows_companion/",
+     "url": "https://v.redd.it/x9gfhl5x93uh1",
+     "thumbnail": "https://external-preview.redd.it/dmZqZWp3YXg5M3VoMbFjewpnVj-qkR-3x15VGJp9O3NSLhRNGWPLWU_CueOO.png?width=140&height=140&crop=1:1,smart&format=jpg&auto=webp&s=70e1cda71f65dc8d081483f563614c99aadd7f6b",
+     "is_video": true,
+     "over_18": false,
+     "media": {
+      "reddit_video": {
+       "bitrate_kbps": 5000,
+       "fallback_url": "https://v.redd.it/x9gfhl5x93uh1/CMAF_1080.mp4?source=fallback",
+       "has_audio": true,
+       "height": 1920,
+       "width": 1080,
+       "scrubber_media_url": "https://v.redd.it/x9gfhl5x93uh1/CMAF_96.mp4",
+       "dash_url": "https://v.redd.it/x9gfhl5x93uh1/DASHPlaylist.mpd?a=1793990334%2CZDYwZjA3MmMyMjI5YmI5NTJiNDRmMjU2YzA2ZGY2NDMzNDFhODhjZWVkMmU0YTIwZDY5ODBkYjM2ODdlNmIzYQ%3D%3D&v=1&f=sd",
+       "duration": 16,
+       "hls_url": "https://v.redd.it/x9gfhl5x93uh1/HLSPlaylist.m3u8?a=1793990334%2CZWI3YWYwYTM0YTY1MmU2NTU2YmFkNjg3M2U2MDRlMzcwN2QyOTg4OTA4ZTAwZjJiODFiMjI5NzM1NWFhMTZjOQ%3D%3D&v=1&f=sd",
+       "is_gif": false,
+       "transcoding_status": "completed"
+      }
+     },
+     "secure_media": {
+      "reddit_video": {
+       "bitrate_kbps": 5000,
+       "fallback_url": "https://v.redd.it/x9gfhl5x93uh1/CMAF_1080.mp4?source=fallback",
+       "has_audio": true,
+       "height": 1920,
+       "width": 1080,
+       "scrubber_media_url": "https://v.redd.it/x9gfhl5x93uh1/CMAF_96.mp4",
+       "dash_url": "https://v.redd.it/x9gfhl5x93uh1/DASHPlaylist.mpd?a=1793990334%2CZDYwZjA3MmMyMjI5YmI5NTJiNDRmMjU2YzA2ZGY2NDMzNDFhODhjZWVkMmU0YTIwZDY5ODBkYjM2ODdlNmIzYQ%3D%3D&v=1&f=sd",
+       "duration": 16,
+       "hls_url": "https://v.redd.it/x9gfhl5x93uh1/HLSPlaylist.m3u8?a=1793990334%2CZWI3YWYwYTM0YTY1MmU2NTU2YmFkNjg3M2U2MDRlMzcwN2QyOTg4OTA4ZTAwZjJiODFiMjI5NzM1NWFhMTZjOQ%3D%3D&v=1&f=sd",
+       "is_gif": false,
+       "transcoding_status": "completed"
+      }
+     },
+     "subreddit_name_prefixed": "r/IndieDev",
+     "preview": {
+      "images": [
+       {
+        "source": {
+         "url": "https://external-preview.redd.it/dmZqZWp3YXg5M3VoMbFjewpnVj-qkR-3x15VGJp9O3NSLhRNGWPLWU_CueOO.png?format=pjpg&auto=webp&s=444146c8f5112627cf1802d95667c55bc4f8dad7",
+         "width": 1080,
+         "height": 1920
+        },
+        "resolutions": [
+         {
+          "url": "https://external-preview.redd.it/dmZqZWp3YXg5M3VoMbFjewpnVj-qkR-3x15VGJp9O3NSLhRNGWPLWU_CueOO.png?width=108&crop=smart&format=pjpg&auto=webp&s=f1e0ebb1ff634de0cdfe9db3f60a5465ad820346",
+          "width": 108,
+          "height": 192
+         },
+         {
+          "url": "https://external-preview.redd.it/dmZqZWp3YXg5M3VoMbFjewpnVj-qkR-3x15VGJp9O3NSLhRNGWPLWU_CueOO.png?width=216&crop=smart&format=pjpg&auto=webp&s=fad2545666f121aa3fcc4f82092588b9bf7d5cf1",
+          "width": 216,
+          "height": 384
+         },
+         {
+          "url": "https://external-preview.redd.it/dmZqZWp3YXg5M3VoMbFjewpnVj-qkR-3x15VGJp9O3NSLhRNGWPLWU_CueOO.png?width=320&crop=smart&format=pjpg&auto=webp&s=65869febaaba5710a0a17ac603745bdec2391403",
+          "width": 320,
+          "height": 568
+         },
+         {
+          "url": "https://external-preview.redd.it/dmZqZWp3YXg5M3VoMbFjewpnVj-qkR-3x15VGJp9O3NSLhRNGWPLWU_CueOO.png?width=640&crop=smart&format=pjpg&auto=webp&s=1e354383ccbdf4689a9efb1087976b9bc6c58a19",
+          "width": 640,
+          "height": 1137
+         },
+         {
+          "url": "https://external-preview.redd.it/dmZqZWp3YXg5M3VoMbFjewpnVj-qkR-3x15VGJp9O3NSLhRNGWPLWU_CueOO.png?width=960&crop=smart&format=pjpg&auto=webp&s=22c42d3c3d971950c9af1393976b605aee8a526a",
+          "width": 960,
+          "height": 1706
+         },
+         {
+          "url": "https://external-preview.redd.it/dmZqZWp3YXg5M3VoMbFjewpnVj-qkR-3x15VGJp9O3NSLhRNGWPLWU_CueOO.png?width=1080&crop=smart&format=pjpg&auto=webp&s=703f9394c1626dab754eebdec200e7266a4ff1aa",
+          "width": 1080,
+          "height": 1920
+         }
+        ],
+        "variants": {},
+        "id": "dmZqZWp3YXg5M3VoMbFjewpnVj-qkR-3x15VGJp9O3NSLhRNGWPLWU_CueOO"
+       }
+      ],
+      "enabled": false
+     }
+    }
+   },
+   {
+    "kind": "t3",
+    "data": {
+     "id": "1x049mh",
+     "title": "My Desktop Cat : un petit chat sur le bureau Windows, gratuit sur Steam",
+     "permalink": "/r/JeuVideal/comments/1x049mh/my_desktop_cat_un_petit_chat_sur_le_bureau/",
+     "url": "https://v.redd.it/v11txboy83uh1",
+     "thumbnail": "https://external-preview.redd.it/azUzNGkydHk4M3VoMaGMV0E52q-RrGJ_89xJHaR93lRfTbPKsirULGsNGxAm.png?width=140&height=140&crop=1:1,smart&format=jpg&auto=webp&s=6516ba0618f07a902b6807251ac0fae87902ae62",
+     "is_video": true,
+     "over_18": false,
+     "media": {
+      "reddit_video": {
+       "bitrate_kbps": 5000,
+       "fallback_url": "https://v.redd.it/v11txboy83uh1/CMAF_1080.mp4?source=fallback",
+       "has_audio": true,
+       "height": 1920,
+       "width": 1080,
+       "scrubber_media_url": "https://v.redd.it/v11txboy83uh1/CMAF_96.mp4",
+       "dash_url": "https://v.redd.it/v11txboy83uh1/DASHPlaylist.mpd?a=1793990334%2CMzExYzAyMDlkMDBkYmMwMGZmZTdmZWU5NjM0ZWFjYjA3ODBkNmQxODllZjE3YmQ3M2MwNDQ2NzJhM2M3YzQ1Ng%3D%3D&v=1&f=sd",
+       "duration": 16,
+       "hls_url": "https://v.redd.it/v11txboy83uh1/HLSPlaylist.m3u8?a=1793990334%2CYWVjYzllMzY0NjhkZDY2NDgzODZhNjVjNDIzOGI3ZGY1ZDE4NjNmOWZjN2Q1ZTk2MzhhZjFhOWE3MWZkNGM5Mw%3D%3D&v=1&f=sd",
+       "is_gif": false,
+       "transcoding_status": "completed"
+      }
+     },
+     "secure_media": {
+      "reddit_video": {
+       "bitrate_kbps": 5000,
+       "fallback_url": "https://v.redd.it/v11txboy83uh1/CMAF_1080.mp4?source=fallback",
+       "has_audio": true,
+       "height": 1920,
+       "width": 1080,
+       "scrubber_media_url": "https://v.redd.it/v11txboy83uh1/CMAF_96.mp4",
+       "dash_url": "https://v.redd.it/v11txboy83uh1/DASHPlaylist.mpd?a=1793990334%2CMzExYzAyMDlkMDBkYmMwMGZmZTdmZWU5NjM0ZWFjYjA3ODBkNmQxODllZjE3YmQ3M2MwNDQ2NzJhM2M3YzQ1Ng%3D%3D&v=1&f=sd",
+       "duration": 16,
+       "hls_url": "https://v.redd.it/v11txboy83uh1/HLSPlaylist.m3u8?a=1793990334%2CYWVjYzllMzY0NjhkZDY2NDgzODZhNjVjNDIzOGI3ZGY1ZDE4NjNmOWZjN2Q1ZTk2MzhhZjFhOWE3MWZkNGM5Mw%3D%3D&v=1&f=sd",
+       "is_gif": false,
+       "transcoding_status": "completed"
+      }
+     },
+     "subreddit_name_prefixed": "r/JeuVideal",
+     "preview": {
+      "images": [
+       {
+        "source": {
+         "url": "https://external-preview.redd.it/azUzNGkydHk4M3VoMaGMV0E52q-RrGJ_89xJHaR93lRfTbPKsirULGsNGxAm.png?format=pjpg&auto=webp&s=c2a0652cfd1aa81485ef90685cf5180a814da0d4",
+         "width": 1080,
+         "height": 1920
+        },
+        "resolutions": [
+         {
+          "url": "https://external-preview.redd.it/azUzNGkydHk4M3VoMaGMV0E52q-RrGJ_89xJHaR93lRfTbPKsirULGsNGxAm.png?width=108&crop=smart&format=pjpg&auto=webp&s=6e6c4ecb614f73e9f2eb8e6e29a44786d563581b",
+          "width": 108,
+          "height": 192
+         },
+         {
+          "url": "https://external-preview.redd.it/azUzNGkydHk4M3VoMaGMV0E52q-RrGJ_89xJHaR93lRfTbPKsirULGsNGxAm.png?width=216&crop=smart&format=pjpg&auto=webp&s=041277da9fe8bb42ddeae8a23950ecd9f0b995ae",
+          "width": 216,
+          "height": 384
+         },
+         {
+          "url": "https://external-preview.redd.it/azUzNGkydHk4M3VoMaGMV0E52q-RrGJ_89xJHaR93lRfTbPKsirULGsNGxAm.png?width=320&crop=smart&format=pjpg&auto=webp&s=8431fccda742e7ea58a64688eb4f33de396bdb64",
+          "width": 320,
+          "height": 568
+         },
+         {
+          "url": "https://external-preview.redd.it/azUzNGkydHk4M3VoMaGMV0E52q-RrGJ_89xJHaR93lRfTbPKsirULGsNGxAm.png?width=640&crop=smart&format=pjpg&auto=webp&s=abfe97ba11f650170a3279af7a589ddcfbfb70fa",
+          "width": 640,
+          "height": 1137
+         },
+         {
+          "url": "https://external-preview.redd.it/azUzNGkydHk4M3VoMaGMV0E52q-RrGJ_89xJHaR93lRfTbPKsirULGsNGxAm.png?width=960&crop=smart&format=pjpg&auto=webp&s=115946a320830136be1957aec5dda395f58a6f16",
+          "width": 960,
+          "height": 1706
+         },
+         {
+          "url": "https://external-preview.redd.it/azUzNGkydHk4M3VoMaGMV0E52q-RrGJ_89xJHaR93lRfTbPKsirULGsNGxAm.png?width=1080&crop=smart&format=pjpg&auto=webp&s=c8a380e6dbce1457d984162d69b6ac848f85228d",
+          "width": 1080,
+          "height": 1920
+         }
+        ],
+        "variants": {},
+        "id": "azUzNGkydHk4M3VoMaGMV0E52q-RrGJ_89xJHaR93lRfTbPKsirULGsNGxAm"
+       }
+      ],
+      "enabled": false
+     }
+    }
+   },
+   {
+    "kind": "t3",
+    "data": {
+     "id": "1x04hqo",
+     "title": "Cat’s fur suddenly getting clumpy",
+     "permalink": "/r/CATHELP/comments/1x04hqo/cats_fur_suddenly_getting_clumpy/",
+     "url": "https://www.reddit.com/gallery/1x04hqo",
+     "thumbnail": "default",
+     "is_video": false,
+     "over_18": false,
+     "media": null,
+     "secure_media": null,
+     "subreddit_name_prefixed": "r/CATHELP",
+     "preview": null
+    }
+   },
+   {
+    "kind": "t3",
+    "data": {
+     "id": "1x04hlf",
+     "title": "Newest family member",
+     "permalink": "/r/AustralianCattleDog/comments/1x04hlf/newest_family_member/",
+     "url": "https://www.reddit.com/gallery/1x04hlf",
+     "thumbnail": "https://preview.redd.it/eh5hko7ka3uh1.jpg?width=140&height=140&crop=1:1,smart&auto=webp&s=a9b0bbc9abd8cf8b80d94e4a085a9b83ca97ab4a",
+     "is_video": false,
+     "over_18": false,
+     "media": null,
+     "secure_media": null,
+     "subreddit_name_prefixed": "r/AustralianCattleDog",
+     "preview": null
+    }
+   }
+  ],
+  "before": null
+ }
+}

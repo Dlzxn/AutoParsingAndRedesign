@@ -1,0 +1,72 @@
+{
+ "data": [
+  {
+   "id": "Ir4zCCO",
+   "title": "\"They seem to tolerate you, your grace.\"",
+   "link": "https://imgur.com/a/Ir4zCCO",
+   "is_album": true,
+   "nsfw": false,
+   "type": null,
+   "width": null,
+   "height": null,
+   "mp4": null,
+   "images": [
+    {
+     "id": "Rvy4M2D",
+     "title": null,
+     "type": "video/mp4",
+     "width": 480,
+     "height": 854,
+     "mp4": "https://i.imgur.com/Rvy4M2D.mp4",
+     "link": "https://i.imgur.com/Rvy4M2D.mp4"
+    }
+   ]
+  },
+  {
+   "id": "drPQ8gi",
+   "title": "This could be you and me, if only we were Snow Leopards.",
+   "link": "https://imgur.com/a/drPQ8gi",
+   "is_album": true,
+   "nsfw": false,
+   "type": null,
+   "width": null,
+   "height": null,
+   "mp4": null,
+   "images": [
+    {
+     "id": "IftarnF",
+     "title": null,
+     "type": "video/mp4",
+     "width": 480,
+     "height": 854,
+     "mp4": "https://i.imgur.com/IftarnF.mp4",
+     "link": "https://i.imgur.com/IftarnF.mp4"
+    }
+   ]
+  },
+  {
+   "id": "eh212ja",
+   "title": "Human I promise you that it was the dog",
+   "link": "https://imgur.com/a/eh212ja",
+   "is_album": true,
+   "nsfw": false,
+   "type": null,
+   "width": null,
+   "height": null,
+   "mp4": null,
+   "images": [
+    {
+     "id": "193NDSe",
+     "title": null,
+     "type": "image/png",
+     "width": 944,
+     "height": 1553,
+     "mp4": null,
+     "link": "https://i.imgur.com/193NDSe.png"
+    }
+   ]
+  }
+ ],
+ "success": true,
+ "status": 200
+}

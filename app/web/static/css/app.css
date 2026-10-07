@@ -1,0 +1,64 @@
+/* Общие компоненты: уведомления, пустые состояния, кнопки. Подключается на всех страницах. */
+[hidden] { display: none !important; }
+
+:root {
+  --accent: #2787f5;
+  --accent-dark: #1a5dab;
+  --text: #1f2933;
+  --muted: #6b7785;
+  --border: #e3e8ef;
+  --surface: #ffffff;
+  --surface-alt: #f5f7fa;
+  --danger: #e5484d;
+  --success: #2f9e44;
+  --radius: 14px;
+}
+
+.toast-stack {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 20000;
+  max-width: min(420px, calc(100vw - 40px));
+}
+
+.toast {
+  padding: 14px 18px;
+  border-radius: 12px;
+  color: #fff;
+  background: var(--text);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  cursor: pointer;
+  animation: toast-in 0.25s ease-out;
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.toast-error { background: var(--danger); }
+.toast-success { background: var(--success); }
+.toast-info { background: var(--accent); }
+.toast-hide { opacity: 0; transform: translateY(10px); }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.empty-state strong {
+  display: block;
+  color: var(--text);
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}

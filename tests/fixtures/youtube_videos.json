@@ -1,0 +1,52 @@
+{
+ "kind": "youtube#videoListResponse",
+ "etag": "Vl2cU3VfDjg8p7prsj_zZxY6DDQ",
+ "items": [
+  {
+   "kind": "youtube#video",
+   "etag": "-iNmOEWHtMhzqUeyZgBKs6_WGP0",
+   "id": "py0bE1Wo5SQ",
+   "contentDetails": {
+    "duration": "PT10S",
+    "dimension": "2d",
+    "definition": "hd",
+    "caption": "false",
+    "licensedContent": true,
+    "contentRating": {},
+    "projection": "rectangular"
+   }
+  },
+  {
+   "kind": "youtube#video",
+   "etag": "y6mA_vrJI7Xy-I96XiYq5mg4f_w",
+   "id": "odPXcj2id8k",
+   "contentDetails": {
+    "duration": "PT5S",
+    "dimension": "2d",
+    "definition": "hd",
+    "caption": "false",
+    "licensedContent": true,
+    "contentRating": {},
+    "projection": "rectangular"
+   }
+  },
+  {
+   "kind": "youtube#video",
+   "etag": "1dBVhtJeTY7Lhz-dUSc4Xt4hBIQ",
+   "id": "XPUw4uC772A",
+   "contentDetails": {
+    "duration": "PT12S",
+    "dimension": "2d",
+    "definition": "hd",
+    "caption": "false",
+    "licensedContent": false,
+    "contentRating": {},
+    "projection": "rectangular"
+   }
+  }
+ ],
+ "pageInfo": {
+  "totalResults": 4,
+  "resultsPerPage": 4
+ }
+}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Возможности платформы{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ static('css/tariffs.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="capabilities-container">
+  <h1 class="capabilities-title">Возможности платформы</h1>
+  <div class="capabilities-grid">
+    {% for icon, name, text, link in [
+      ('🔎', 'Поиск клипов', 'Короткие ролики по тегу из VK, YouTube Shorts, Coub, Reddit и Imgur в одном окне.', '/video'),
+      ('🙈', 'Без повторов', 'Просмотренные и скачанные ролики больше не попадают в выдачу — только свежий контент.', '/video'),
+      ('⬇', 'Скачивание в MP4', 'Ролик со звуком в один клик — готов к публикации на ваших площадках.', '/video'),
+      ('✂', 'Редактор клипов', 'Обрезка, скорость, формат 9:16 / 1:1 / 4:5 с размытым фоном, поворот и отражение.', '/editor'),
+      ('🅣', 'Текст и логотип', 'Подписи на кириллице, водяной знак, субтитры из .srt — всё прямо в браузере.', '/editor'),
+      ('🎵', 'Музыка и звук', 'Фоновая музыка, громкость, плавное появление и затухание.', '/editor'),
+      ('📝', 'Тексты Tumblr', 'Поиск текстовых постов по тегу и встроенный текстовый редактор.', '/tumblr'),
+    ] %}
+    <a class="capability-card" href="{{ link }}">
+      <div class="capability-icon">{{ icon }}</div>
+      <h3 class="capability-name">{{ name }}</h3>
+      <p class="capability-description">{{ text }}</p>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

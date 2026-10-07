@@ -1,0 +1,10 @@
+.git
+.venv
+.env
+var
+legacy_data
+tests
+**/__pycache__
+.pytest_cache
+.idea
+.vscode

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ static('css/tex_platform.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="maintenance-container">
+    <div class="starry-bg"></div>
+
+    <div class="content-wrapper">
+        <div class="astronaut">
+            <div class="helmet"></div>
+            <div class="body"></div>
+            <div class="toolbox"></div>
+        </div>
+
+        <div class="message-box">
+            <h1 class="animated-title">🚧 Технические работы 🚧</h1>
+            <p class="animated-text">Мы улучшаем платформу для вашего комфорта!</p>
+            <div class="animated-details">
+                <p>Приносим извинения за временные неудобства</p>
+                <p>Уже скоро все вновь заработает!</p>
+            </div>
+            <a class="notify-btn" href="/video">Выбрать другую платформу</a>
+        </div>
+
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ static('js/tex_platform.js') }}"></script>
+{% endblock %}

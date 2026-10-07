@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ static('css/videos.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="platforms">
+    <section class="service-description">
+    <div class="intro-text">
+        <h1>Выберите платформу для сбора текстов</h1>
+        <p>Наш сервис поможет быстро находить клипы в соцсетях и публиковать их на ваших площадках.</p>
+    </div>
+
+
+    <div class="platforms-container">
+        <div class="platform-card appear delay-1 align-left">
+            <a href="/tumblr" class="platform-button">
+                <img src="{{ static('img/tumblr.png') }}" alt="Tumblr">
+            </a>
+            <div class="platform-info">
+                <h2>Tumblr</h2>
+                <p>Автопоиск постов для ваших групп</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script src="{{ static('js/videos.js') }}"></script>
+{% endblock %}

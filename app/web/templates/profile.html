@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ static('css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="avatar">{{ current_user.email[:1]|upper }}</div>
+      <div>
+        <h2 class="profile-title">{{ current_user.email }}</h2>
+        <div class="auth-status"><span class="status-dot"></span> В сети</div>
+      </div>
+    </div>
+
+    <dl class="profile-facts">
+      <div>
+        <dt>Тариф</dt>
+        <dd>{{ 'Администратор' if current_user.is_admin else current_user.subscribe_status }}</dd>
+      </div>
+      <div>
+        <dt>Подписка до</dt>
+        <dd>{{ current_user.date_end.strftime('%d.%m.%Y') if current_user.date_end else '—' }}</dd>
+      </div>
+      {% if current_user.created_at %}
+      <div>
+        <dt>С нами с</dt>
+        <dd>{{ current_user.created_at.strftime('%d.%m.%Y') }}</dd>
+      </div>
+      {% endif %}
+    </dl>
+
+    <div class="profile-links">
+      <a class="profile-link" href="/video">🔎 Найти клипы</a>
+      <a class="profile-link" href="/editor">✂ Редактор и мои ролики</a>
+      <a class="profile-link" href="/tariffs">💳 Тарифы</a>
+      {% if current_user.is_admin %}<a class="profile-link" href="/admin">⚙ Админ-панель</a>{% endif %}
+    </div>
+
+    <div class="profile-footer">
+      <a class="logout-btn" href="/logout">Выйти из аккаунта</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

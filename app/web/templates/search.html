@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} — поиск клипов{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ static('css/search.css') }}">
+{% if page.kind == 'video' %}<link rel="stylesheet" href="{{ static('css/editor.css') }}">{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="search-page" data-search-page data-platform="{{ page.key }}" data-kind="{{ page.kind }}">
+  <div class="platform-header">
+    <h1 class="platform-title">{{ page.title }}</h1>
+    <p class="platform-description">{{ page.description }}</p>
+  </div>
+
+  <form class="search-container" data-search-form role="search">
+    <input type="search" name="q" class="search-input" placeholder="Введите тег или тему, например: котики"
+           autocomplete="off" minlength="2" maxlength="100" required data-search-input>
+    <button type="submit" class="search-button" data-search-button>
+      <span class="button-text">{% if page.kind == 'text' %}Найти посты{% else %}Найти видео{% endif %}</span>
+      <span class="button-loader"></span>
+    </button>
+  </form>
+  <p class="search-hint">Просмотренные и скачанные ролики больше не появятся в выдаче.</p>
+
+  <div class="results-meta" data-results-meta hidden></div>
+  <div class="results-container" data-results></div>
+
+  <div class="loading-overlay" data-loading hidden>
+    <div class="loading-content">
+      <div class="loader"></div>
+      <p class="loading-text">{{ page.loading }}</p>
+    </div>
+  </div>
+</section>
+
+{% if page.kind == 'video' %}
+<div class="ce-modal" data-ce-modal hidden>
+  <div class="ce-modal-dialog" role="dialog" aria-modal="true">
+    <div class="ce-modal-head">
+      <h2 data-ce-modal-title>Редактор клипа</h2>
+      <button type="button" class="ce-close" data-ce-close aria-label="Закрыть">&times;</button>
+    </div>
+    {% include "_clip_editor.html" %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+{% if page.kind == 'video' %}<script src="{{ static('js/clip-editor.js') }}"></script>{% endif %}
+<script src="{{ static('js/search.js') }}"></script>
+{% endblock %}

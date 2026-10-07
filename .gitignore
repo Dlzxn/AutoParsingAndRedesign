@@ -1,70 +1,27 @@
-# === VIDEO EDITOR SPECIFIC ===
-uploads/
-processed/
-temp_*
-*.mp4
-*.m4a
-*.avi
-*.mov
-*.mkv
+# Секреты и локальные данные
+.env
+var/
+legacy_data/
 
-# === PYTHON CORE ===
+# Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-
-# === ENVIRONMENTS ===
-.env
-.venv
-env/
+.venv/
 venv/
-ENV/
-env.bak/
-venv.bak/
-
-# === DISTRIBUTION / PACKAGING ===
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-
-# === IDE & TOOLS ===
-.idea/
-.vscode/
-.spyderproject
-.spyproject
-.ropeproject
-*.manifest
-*.spec
-
-# === LOGS & CACHE ===
-pip-log.txt
-pip-delete-this-directory.txt
-*.log
-.cache
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+*.egg-info/
+build/
+dist/
 
-# === DATABASE ===
-db.sqlite3
-db.sqlite3-journal
+# IDE
+.idea/
+.vscode/
 
-# === OTHERS ===
-__pypackages__/
-.ipynb_checkpoints
+# Медиа (на случай запуска из корня)
+*.mp4
+*.m4a
+*.mov
+*.mkv
+!tests/fixtures/**

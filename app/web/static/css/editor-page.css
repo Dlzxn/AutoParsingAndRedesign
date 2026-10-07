@@ -1,0 +1,48 @@
+.editor-page {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+.editor-page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.editor-page-head h1 { font-size: 2rem; color: var(--text); margin-bottom: 0.4rem; }
+.editor-page-head p { color: var(--muted); }
+
+.my-clips { margin-top: 2.5rem; }
+.my-clips h2 { font-size: 1.3rem; margin-bottom: 1rem; color: var(--text); }
+.my-clips-hint { font-size: 0.85rem; color: var(--muted); font-weight: 400; margin-left: 8px; }
+
+.my-clips-list { display: flex; flex-direction: column; gap: 10px; }
+
+.my-clip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.my-clip-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.my-clip-info strong { color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.my-clip-info span { color: var(--muted); font-size: 0.88rem; }
+.my-clip-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+.job-status { font-weight: 600; font-size: 0.9rem; color: var(--muted); }
+.job-processing, .job-queued { color: var(--accent); }
+.job-failed { color: var(--danger); }
+
+@media (max-width: 640px) {
+  .editor-page-head { flex-direction: column; align-items: flex-start; }
+  .my-clip { flex-direction: column; align-items: stretch; }
+}

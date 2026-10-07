@@ -1,0 +1,72 @@
+.profile-container {
+  display: flex;
+  justify-content: center;
+  padding: 3rem 1rem;
+  width: 100%;
+}
+
+.profile-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  animation: profile-in 0.3s ease both;
+}
+
+@keyframes profile-in { from { opacity: 0; transform: translateY(10px); } }
+
+.profile-header { display: flex; align-items: center; gap: 16px; margin-bottom: 1.5rem; }
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-title { font-size: 1.2rem; color: var(--text); word-break: break-all; }
+.auth-status { display: flex; align-items: center; gap: 6px; color: var(--success); font-size: 0.9rem; margin-top: 4px; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+
+.profile-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+.profile-facts div { background: var(--surface-alt); border-radius: 12px; padding: 12px; }
+.profile-facts dt { color: var(--muted); font-size: 0.8rem; margin-bottom: 4px; }
+.profile-facts dd { color: var(--text); font-weight: 700; }
+
+.profile-links { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
+
+.profile-link {
+  display: block;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.profile-link:hover { border-color: var(--accent); background: rgba(39, 135, 245, 0.05); }
+
+.logout-btn {
+  display: block;
+  text-align: center;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(229, 72, 77, 0.1);
+  color: var(--danger);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.logout-btn:hover { background: rgba(229, 72, 77, 0.18); }

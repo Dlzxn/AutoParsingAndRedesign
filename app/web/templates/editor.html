@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Редактор клипов{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ static('css/editor.css') }}">
+<link rel="stylesheet" href="{{ static('css/editor-page.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="editor-page" data-editor-page data-initial-url="{{ initial_url }}">
+  <div class="editor-page-head">
+    <div>
+      <h1>Редактор клипов</h1>
+      <p>Обрежьте ролик, переведите в вертикальный формат, добавьте текст, логотип и музыку.</p>
+    </div>
+    <button type="button" class="ce-btn" data-new-video hidden>+ Другое видео</button>
+  </div>
+
+  {% include "_clip_editor.html" %}
+
+  <div class="my-clips" data-my-clips hidden>
+    <h2>Мои ролики <span class="my-clips-hint">хранятся 24 часа</span></h2>
+    <div class="my-clips-list" data-my-clips-list></div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ static('js/clip-editor.js') }}"></script>
+<script src="{{ static('js/editor-page.js') }}"></script>
+{% endblock %}
