@@ -5,12 +5,12 @@
 .auth-card { width: 100%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
 .auth-card .stack { margin-top: 14px; }
 .auth-switch { text-align: center; margin-top: 6px; }
-.auth-switch a { color: #c4b5fd; font-weight: 600; }
+.auth-switch a { color: var(--accent-text); font-weight: 600; }
 .auth-switch a:hover { text-decoration: underline; }
 
 .auth-message { padding: 12px 14px; border-radius: 12px; font-size: 0.9rem; }
-.auth-error { background: rgba(251, 113, 133, 0.1); border: 1px solid rgba(251, 113, 133, 0.3); color: #fecdd3; }
-.auth-success { background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); color: #a7f3d0; }
+.auth-error { background: rgba(251, 113, 133, 0.1); border: 1px solid rgba(251, 113, 133, 0.3); color: var(--danger); }
+.auth-success { background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); color: var(--success); }
 
 .auth-showcase {
   position: relative;
@@ -31,7 +31,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-image: linear-gradient(var(--tint-3) 1px, transparent 1px), linear-gradient(90deg, var(--tint-3) 1px, transparent 1px);
   background-size: 44px 44px;
   mask-image: radial-gradient(circle at 60% 30%, #000, transparent 70%);
 }
@@ -47,3 +47,4 @@
   .auth-form-side { padding: 24px 20px; }
 }
 .auth-showcase .eyebrow { align-self: flex-start; }
+.auth-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }

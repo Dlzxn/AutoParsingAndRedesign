@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#07080c">
+  <meta name="theme-color" content="#f6f6f9">
+  <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')})()</script>
   <title>{% block title %}Parser Platform — клипы для ваших площадок за минуты{% endblock %}</title>
   <meta name="description" content="{% block description %}Находите короткие ролики на VK, YouTube, Coub, Reddit и Imgur и превращайте их в готовые клипы в онлайн-редакторе.{% endblock %}">
   <link rel="icon" type="image/svg+xml" href="{{ static('img/logo.svg') }}">
@@ -29,6 +30,7 @@
       </nav>
 
       <div class="header-actions">
+        <button type="button" class="btn btn-ghost btn-icon theme-toggle" data-theme-toggle aria-label="Сменить тему" title="Сменить тему">{{ icon('moon', 'theme-icon-moon') }}{{ icon('sun', 'theme-icon-sun') }}</button>
         {% if current_user %}
           {% set plan = 'Администратор' if current_user.is_admin else current_user.subscribe_status %}
           <div class="account" data-account>
@@ -110,6 +112,7 @@
 
   <script>window.__ICONS__ = {{ icons_json() }};</script>
   <script src="{{ static('js/api.js') }}"></script>
+  <script src="{{ static('js/theme.js') }}"></script>
   <script src="{{ static('js/base.js') }}"></script>
   {% block extra_scripts %}{% endblock %}
 </body>

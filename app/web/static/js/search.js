@@ -93,7 +93,7 @@
       : '<div class="clip-thumb-empty"></div>';
     const duration = item.duration ? `<span class="clip-duration">${formatTime(item.duration, 0)}</span>` : '';
     el.innerHTML = `
-      <div class="clip-media ${item.height > item.width ? 'is-vertical' : ''}">
+      <div class="clip-media force-dark ${item.height > item.width ? 'is-vertical' : ''}">
         <button type="button" class="clip-thumb" aria-label="Смотреть">
           ${thumb}<span class="clip-play">${icon('play')}</span>${duration}
         </button>

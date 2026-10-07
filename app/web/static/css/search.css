@@ -11,7 +11,7 @@
   padding: 7px;
   border-radius: 18px;
   border: 1px solid var(--border-strong);
-  background: rgba(255, 255, 255, 0.035);
+  background: var(--tint-2);
   box-shadow: var(--shadow);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -38,7 +38,7 @@
 
 .platform-switch a img { border-radius: 5px; }
 .platform-switch a:hover { color: var(--text); border-color: var(--border-strong); }
-.platform-switch a.active { color: var(--text); background: rgba(255, 255, 255, 0.06); border-color: var(--border-strong); }
+.platform-switch a.active { color: var(--text); background: var(--tint-4); border-color: var(--border-strong); }
 
 .search-hint { display: inline-flex; align-items: center; gap: 7px; color: var(--faint); font-size: 0.84rem; }
 .results-meta { color: var(--muted); font-weight: 600; margin-bottom: 16px; font-size: 0.92rem; }
@@ -83,9 +83,9 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, 0.16);
+  background: var(--tint-5);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--tint-6);
   color: #fff;
   transition: transform 0.25s var(--ease), background 0.25s;
 }
@@ -115,10 +115,10 @@
 .post { padding: 20px; gap: 12px; }
 .post-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
 .post-head a { font-weight: 700; font-size: 1rem; }
-.post-head a:hover { color: #c4b5fd; }
+.post-head a:hover { color: var(--accent-text); }
 .post-text { color: var(--muted); line-height: 1.6; font-size: 0.93rem; white-space: pre-line; display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag { padding: 3px 9px; border-radius: 999px; background: rgba(255, 255, 255, 0.05); color: var(--muted); font-size: 0.78rem; }
+.tag { padding: 3px 9px; border-radius: 999px; background: var(--tint-3); color: var(--muted); font-size: 0.78rem; }
 .post .clip-actions { grid-template-columns: 1fr 1fr; }
 
 /* Скелетоны загрузки */
@@ -126,7 +126,7 @@
 .skeleton .sk-media { aspect-ratio: 16 / 10; }
 .skeleton .sk-line { height: 12px; margin: 14px 14px 0; border-radius: 6px; }
 .skeleton .sk-line.short { width: 55%; margin-bottom: 16px; }
-.sk-media, .sk-line { background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 100%); background-size: 200% 100%; animation: shimmer 1.3s linear infinite; }
+.sk-media, .sk-line { background: linear-gradient(90deg, var(--tint-3) 0%, var(--tint-4) 50%, var(--tint-3) 100%); background-size: 200% 100%; animation: shimmer 1.3s linear infinite; }
 @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
 
 @media (max-width: 560px) {

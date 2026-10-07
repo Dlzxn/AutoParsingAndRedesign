@@ -21,7 +21,7 @@
   padding: 10px;
   border-radius: 44px;
   background: linear-gradient(160deg, #2a2d3a, #12141b);
-  box-shadow: 0 50px 120px -30px rgba(139, 92, 246, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+  box-shadow: 0 50px 120px -30px rgba(139, 92, 246, 0.55), 0 0 0 1px var(--tint-4) inset;
   animation: float 7s ease-in-out infinite;
 }
 
@@ -72,9 +72,9 @@
 
 .mock-tabs { display: flex; gap: 6px; margin-bottom: 4px; }
 .mock-tabs span { padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; color: var(--faint); }
-.mock-tabs span.on { background: var(--accent-soft); color: #c4b5fd; }
+.mock-tabs span.on { background: var(--accent-soft); color: var(--accent-text); }
 .mock-label { font-size: 11px; font-weight: 600; color: var(--faint); }
-.mock-seg { display: flex; gap: 3px; padding: 3px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); }
+.mock-seg { display: flex; gap: 3px; padding: 3px; border-radius: 10px; background: var(--tint-3); }
 .mock-seg span { flex: 1; padding: 6px 4px; border-radius: 7px; text-align: center; font-size: 11px; font-weight: 600; color: var(--faint); white-space: nowrap; }
 .mock-seg span.on { background: var(--surface-3); color: var(--text); }
 .mock-range { height: 4px; border-radius: 4px; background: var(--surface-3); position: relative; }
@@ -99,7 +99,7 @@
   animation: float 6s ease-in-out infinite;
 }
 
-.mock-chip .icon { color: #c4b5fd; }
+.mock-chip .icon { color: var(--accent-text); }
 .chip-a { right: 0; top: 64px; animation-delay: -1s; }
 .chip-b { right: 44%; bottom: 76px; animation-delay: -3s; }
 .chip-c { right: -2%; bottom: 150px; animation-delay: -4.5s; }
@@ -120,7 +120,7 @@
   padding: 10px 16px 10px 10px;
   border-radius: 14px;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--card-bg);
   color: var(--muted);
   font-weight: 600;
   font-size: 0.92rem;
@@ -141,16 +141,16 @@
   place-items: center;
   border-radius: 14px;
   background: var(--accent-soft);
-  color: #c4b5fd;
+  color: var(--accent-text);
   border: 1px solid rgba(139, 92, 246, 0.25);
   margin-bottom: 6px;
 }
 
-.section-alt { background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.015), transparent); }
+.section-alt { background: linear-gradient(180deg, transparent, var(--tint-1), transparent); }
 
 /* Шаги */
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; counter-reset: step; }
-.step { position: relative; padding: 28px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: rgba(255, 255, 255, 0.015); display: flex; flex-direction: column; gap: 10px; }
+.step { position: relative; padding: 28px; border-radius: var(--radius-lg); border: 1px solid var(--border); background: var(--card-bg); display: flex; flex-direction: column; gap: 10px; }
 .step-num {
   width: 40px;
   height: 40px;
@@ -159,6 +159,7 @@
   border-radius: 12px;
   background: var(--gradient);
   font-weight: 800;
+  color: #fff;
   margin-bottom: 8px;
   box-shadow: var(--shadow-glow);
 }
@@ -173,7 +174,7 @@
   padding: 30px;
   border-radius: var(--radius-xl);
   border: 1px solid var(--border);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01));
+  background: var(--card-bg);
   transition: transform 0.25s var(--ease), border-color 0.25s;
 }
 
@@ -212,6 +213,7 @@
 }
 
 .cta-band .lead { color: rgba(255, 255, 255, 0.85); }
+.cta-band .h2 { color: #fff; }
 .cta-band .hero-cta { margin-top: 8px; }
 
 @media (max-width: 1000px) {
