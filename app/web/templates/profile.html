@@ -1,48 +1,55 @@
 {% extends "base.html" %}
 
-{% block title %}Профиль{% endblock %}
-
-{% block styles %}
-<link rel="stylesheet" href="{{ static('css/profile.css') }}">
-{% endblock %}
+{% block title %}Профиль — Parser Platform{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ static('css/pages.css') }}">{% endblock %}
 
 {% block content %}
-<div class="profile-container">
-  <div class="profile-card">
-    <div class="profile-header">
-      <div class="avatar">{{ current_user.email[:1]|upper }}</div>
+<div class="page">
+  <div class="container">
+    <div class="page-head">
       <div>
-        <h2 class="profile-title">{{ current_user.email }}</h2>
-        <div class="auth-status"><span class="status-dot"></span> В сети</div>
+        <span class="badge">{{ icon('user', 'icon-sm') }} Аккаунт</span>
+        <h1 class="h1">Профиль</h1>
       </div>
     </div>
+    <div class="profile-layout">
+      <aside class="card profile-card">
+        <div class="profile-id">
+          <span class="avatar">{{ current_user.email[:1]|upper }}</span>
+          <div>
+            <strong>{{ current_user.email }}</strong>
+            <span class="badge badge-success" style="margin-top:6px">В сети</span>
+          </div>
+        </div>
+        <dl class="facts">
+          <div class="fact"><dt>Тариф</dt><dd>{{ 'Администратор' if current_user.is_admin else current_user.subscribe_status }}</dd></div>
+          <div class="fact"><dt>Подписка до</dt><dd>{{ current_user.date_end.strftime('%d.%m.%Y') if current_user.date_end else '—' }}</dd></div>
+          {% if current_user.created_at %}
+          <div class="fact"><dt>С нами с</dt><dd>{{ current_user.created_at.strftime('%d.%m.%Y') }}</dd></div>
+          {% endif %}
+        </dl>
+        <a class="btn btn-danger btn-block" href="/logout">{{ icon('logout') }} Выйти из аккаунта</a>
+      </aside>
 
-    <dl class="profile-facts">
-      <div>
-        <dt>Тариф</dt>
-        <dd>{{ 'Администратор' if current_user.is_admin else current_user.subscribe_status }}</dd>
-      </div>
-      <div>
-        <dt>Подписка до</dt>
-        <dd>{{ current_user.date_end.strftime('%d.%m.%Y') if current_user.date_end else '—' }}</dd>
-      </div>
-      {% if current_user.created_at %}
-      <div>
-        <dt>С нами с</dt>
-        <dd>{{ current_user.created_at.strftime('%d.%m.%Y') }}</dd>
-      </div>
-      {% endif %}
-    </dl>
-
-    <div class="profile-links">
-      <a class="profile-link" href="/video">🔎 Найти клипы</a>
-      <a class="profile-link" href="/editor">✂ Редактор и мои ролики</a>
-      <a class="profile-link" href="/tariffs">💳 Тарифы</a>
-      {% if current_user.is_admin %}<a class="profile-link" href="/admin">⚙ Админ-панель</a>{% endif %}
-    </div>
-
-    <div class="profile-footer">
-      <a class="logout-btn" href="/logout">Выйти из аккаунта</a>
+      <section class="quick-links">
+        {% for ic, url, title, text in [
+          ('search', '/video', 'Найти клипы', 'VK, YouTube, Coub, Reddit, Imgur'),
+          ('scissors', '/editor', 'Редактор', 'Монтаж и «Мои ролики»'),
+          ('file-text', '/text', 'Тексты', 'Посты Tumblr по тегу'),
+          ('card', '/tariffs', 'Тарифы', 'Сравнить планы и подключить'),
+        ] %}
+        <a class="quick-link" href="{{ url }}">
+          <span class="feature-icon">{{ icon(ic) }}</span>
+          <span><strong>{{ title }}</strong><span>{{ text }}</span></span>
+        </a>
+        {% endfor %}
+        {% if current_user.is_admin %}
+        <a class="quick-link" href="/admin">
+          <span class="feature-icon">{{ icon('shield') }}</span>
+          <span><strong>Админ-панель</strong><span>Пользователи, тарифы, платформы</span></span>
+        </a>
+        {% endif %}
+      </section>
     </div>
   </div>
 </div>

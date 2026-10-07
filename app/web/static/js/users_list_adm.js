@@ -5,7 +5,7 @@ const esc = (v) => App.escapeHtml(v);
 
 async function loadUsers() {
   const loader = document.getElementById('loader');
-  loader.style.display = 'block';
+  loader.hidden = false;
   try {
     state.perPage = Number(document.getElementById('perPage').value);
     const params = new URLSearchParams({
@@ -24,31 +24,31 @@ async function loadUsers() {
   } catch (err) {
     App.toast(err.message);
   } finally {
-    loader.style.display = 'none';
+    loader.hidden = true;
   }
 }
 
 function renderUsers(users) {
   const tbody = document.getElementById('usersBody');
   if (!users.length) {
-    tbody.innerHTML = '<tr><td colspan="7" class="empty-row">Пользователи не найдены</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="table-loader">Пользователи не найдены</td></tr>';
     return;
   }
   tbody.innerHTML = users.map((u) => `
     <tr data-id="${u.id}">
       <td>${u.id}</td>
-      <td><input class="cell-input" data-field="email" value="${esc(u.email)}"></td>
+      <td><input class="input" data-field="email" value="${esc(u.email)}" style="min-width:220px"></td>
       <td>
-        <select class="cell-select" data-field="subscribe_status">
+        <select class="select" data-field="subscribe_status">
           ${STATUSES.map((s) => `<option value="${s}" ${s === u.subscribe_status ? 'selected' : ''}>${s}</option>`).join('')}
         </select>
       </td>
-      <td><input type="date" class="cell-date" data-field="date_end" value="${u.date_end ? esc(u.date_end.slice(0, 10)) : ''}"></td>
-      <td><input type="number" class="cell-number" data-field="token_today" min="0" value="${u.token_today}"></td>
-      <td><input type="checkbox" class="cell-checkbox" data-field="is_admin" ${u.is_admin ? 'checked' : ''}></td>
+      <td><input type="date" class="input" data-field="date_end" value="${u.date_end ? esc(u.date_end.slice(0, 10)) : ''}"></td>
+      <td><input type="number" class="input" data-field="token_today" min="0" value="${u.token_today}" style="min-width:80px;width:90px"></td>
+      <td><label class="check"><input type="checkbox" data-field="is_admin" ${u.is_admin ? 'checked' : ''}><span class="switch"></span></label></td>
       <td class="row-actions">
-        <button class="btn-save" title="Сохранить" data-action="save">💾</button>
-        <button class="btn-delete" title="Удалить" data-action="delete">🗑️</button>
+        <button class="btn btn-sm" title="Сохранить" data-action="save">${App.icon('save', 'icon-sm')} Сохранить</button>
+        <button class="btn btn-sm btn-icon btn-danger" title="Удалить" data-action="delete">${App.icon('trash', 'icon-sm')}</button>
       </td>
     </tr>`).join('');
 }
@@ -121,11 +121,11 @@ function updatePagination(total) {
   document.getElementById('prevPage').disabled = state.page <= 1;
   document.getElementById('nextPage').disabled = state.page >= state.totalPages;
   const counter = document.getElementById('totalUsers');
-  if (counter) counter.textContent = `Всего: ${total}`;
+  if (counter) counter.textContent = `Всего пользователей: ${total}.`;
 }
 
-function showModal(id) { document.getElementById(id).style.display = 'block'; }
-function hideModal(id) { document.getElementById(id).style.display = 'none'; }
+function showModal(id) { document.getElementById(id).hidden = false; }
+function hideModal(id) { document.getElementById(id).hidden = true; }
 function openCreateModal() { document.getElementById('createForm').reset(); showModal('createModal'); }
 function closeCreateModal() { hideModal('createModal'); }
 function exportCSV() { location.href = '/admin/export'; }
@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (button.dataset.action === 'delete') askDelete(Number(row.dataset.id));
   });
   window.addEventListener('click', (e) => {
-    if (e.target.classList && e.target.classList.contains('modal')) e.target.style.display = 'none';
+    if (e.target.classList && e.target.classList.contains('modal')) e.target.hidden = true;
   });
   loadUsers();
 });

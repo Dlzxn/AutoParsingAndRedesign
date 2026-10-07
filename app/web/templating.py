@@ -6,6 +6,7 @@ from fastapi import Request
 from fastapi.templating import Jinja2Templates
 
 from app.config import WEB_DIR
+from app.web.icons import icon, icons_json
 
 STATIC_DIR = WEB_DIR / "static"
 templates = Jinja2Templates(directory=str(WEB_DIR / "templates"))
@@ -27,6 +28,8 @@ def static_url(path: str) -> str:
 
 templates.env.globals["static"] = static_url
 templates.env.globals["now_year"] = datetime.now().year
+templates.env.globals["icon"] = icon
+templates.env.globals["icons_json"] = icons_json
 
 
 def render(request: Request, name: str, status_code: int = 200, **context):

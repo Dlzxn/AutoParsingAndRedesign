@@ -8,7 +8,7 @@ from app.auth.deps import CurrentUser, DbSession, FeatureUser
 from app.catalog.service import ensure_platform_enabled
 from app.history.service import mark_seen
 from app.media.fetch import platform_for_url, validate_url
-from app.media.service import MediaService
+from app.media.service import MediaService, safe_filename
 from app.media.storage import Storage
 
 log = logging.getLogger(__name__)
@@ -37,7 +37,7 @@ async def download_clip(url: str, request: Request, background: BackgroundTasks,
     storage: Storage = request.app.state.storage
     tmp_dir = storage.new_tmp_dir()
     try:
-        path, _ = await media.ingest_url(url, tmp_dir)
+        path, _, title = await media.ingest_url(url, tmp_dir)
     except BaseException:
         storage.remove_dir(tmp_dir)
         raise
@@ -46,4 +46,4 @@ async def download_clip(url: str, request: Request, background: BackgroundTasks,
     background.add_task(storage.remove_dir, tmp_dir)
     if not path.exists():
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Видео недоступно")
-    return FileResponse(path, media_type="video/mp4", filename=f"{platform}_clip{path.suffix}")
+    return FileResponse(path, media_type="video/mp4", filename=f"{safe_filename(title, f'{platform}_clip')}{path.suffix}")

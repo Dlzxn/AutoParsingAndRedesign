@@ -1,7 +1,9 @@
 """Получение исходных видео: загрузка файла пользователем или скачивание по ссылке."""
 import asyncio
 import logging
+import re
 import shutil
+from collections.abc import Callable
 from pathlib import Path
 
 from fastapi import UploadFile
@@ -74,11 +76,20 @@ class MediaService:
         path = await self.save_upload(upload, dest_dir / "source", self.max_upload_bytes, VIDEO_EXTENSIONS)
         return path, await self.inspect_video(path)
 
-    async def ingest_url(self, url: str, dest_dir: Path) -> tuple[Path, MediaInfo]:
+    async def ingest_url(
+        self, url: str, dest_dir: Path, on_progress: Callable[[float], None] | None = None
+    ) -> tuple[Path, MediaInfo, str | None]:
         async with self._downloads:
-            path = await asyncio.to_thread(fetch.download, url, dest_dir, self.fetch_options())
-        return path, await self.inspect_video(path)
+            result = await asyncio.to_thread(fetch.download, url, dest_dir, self.fetch_options(), on_progress)
+        return result.path, await self.inspect_video(result.path), result.title
 
     @staticmethod
     def discard(path: Path) -> None:
         shutil.rmtree(path, ignore_errors=True)
+
+
+def safe_filename(title: str | None, fallback: str = "clip", max_length: int = 60) -> str:
+    """Имя файла из названия ролика: буквы (в т.ч. кириллица), цифры, дефис и подчёркивание."""
+    cleaned = re.sub(r"[^\w\s-]", "", title or "", flags=re.UNICODE)
+    cleaned = re.sub(r"[\s_]+", "_", cleaned).strip("_-")[:max_length].rstrip("_-")
+    return cleaned or fallback

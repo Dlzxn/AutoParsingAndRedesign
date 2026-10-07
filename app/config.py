@@ -59,7 +59,8 @@ class Settings(BaseSettings):
     render_workers: int = 2
     render_timeout_factor: float = 8.0  # таймаут рендера = длительность * фактор (не меньше 120 с)
     media_ttl_hours: int = 24
-    font_path: Path = WEB_DIR / "static" / "fonts" / "DejaVuSans-Bold.ttf"
+    font_path: Path = WEB_DIR / "static" / "fonts" / "InterDisplay-ExtraBold.ttf"
+    emoji_font_path: str = ""  # пусто — поиск системного (Noto Color Emoji / Segoe UI Emoji)
 
     @property
     def tumblr_keys(self) -> list[str]:

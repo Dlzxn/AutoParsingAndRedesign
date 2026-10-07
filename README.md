@@ -10,7 +10,7 @@
 
 ## Стек
 
-FastAPI · SQLAlchemy 2 (async) · Alembic · PostgreSQL (SQLite для разработки) · ffmpeg · yt-dlp · aiohttp · Jinja2 + чистый JS.
+FastAPI · SQLAlchemy 2 (async) · Alembic · PostgreSQL (SQLite для разработки) · ffmpeg · Pillow · yt-dlp · aiohttp · Jinja2 + чистый JS (без сборки).
 
 ## Структура
 
@@ -21,12 +21,12 @@ app/
   auth/              регистрация, вход, сессии в БД
   search/            сервис поиска (кэш, таймауты) и провайдеры платформ
   media/             ffmpeg/ffprobe, скачивание через yt-dlp, файловое хранилище
-  editor/            параметры монтажа, сборка команды ffmpeg, очередь рендера, API
+  editor/            параметры монтажа, сборка команды ffmpeg, рендер текста (Pillow), очередь, API
   history/           история просмотренных клипов, скачивание
   admin/             админ-панель и её API
   catalog/           справочники: платформы, тарифы
   db/                модели, подключение, начальные данные
-  web/               шаблоны и статика
+  web/               шаблоны, статика, дизайн-система (static/css/app.css), иконки
 migrations/          миграции Alembic
 tests/               тесты (pytest)
 ```
@@ -34,6 +34,8 @@ tests/               тесты (pytest)
 ## Быстрый старт (разработка)
 
 Нужны Python 3.12+, ffmpeg (вместе с ffprobe) и Node.js или Deno (yt-dlp использует их для YouTube).
+Для цветных эмодзи в подписях нужен системный шрифт эмодзи (Windows — есть по умолчанию; Linux — пакет
+`fonts-noto-color-emoji`; в Docker-образе ставится автоматически). Без него эмодзи просто не рисуются.
 
 ```bash
 python -m venv .venv

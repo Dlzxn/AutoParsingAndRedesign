@@ -5,13 +5,11 @@ import pytest
 from pydantic import ValidationError
 
 from app.editor.pipeline import (
-    FONT_FILE,
-    MAX_TEXT_LINES,
+    TEXT_IMAGE,
     RenderInputs,
     atempo_chain,
     output_size,
     plan_render,
-    wrap_text,
 )
 from app.editor.schemas import EditParams
 from app.media.ffmpeg import MediaError, MediaInfo
@@ -41,7 +39,7 @@ def test_defaults_do_not_change_video():
     assert plan.output_duration == pytest.approx(10.0)
     assert "[0:v]null[vpre]" in graph(plan)
     assert "[vpre]null,setsar=1[vfit]" in graph(plan)
-    assert plan.text_files == {} and plan.needs_font is False
+    assert plan.needs_font is False
 
 
 @pytest.mark.parametrize(
@@ -177,33 +175,27 @@ def test_high_fps_is_capped():
 
 # ---------- Текст ----------
 
-def test_text_uses_files_and_font_from_workdir():
-    plan = plan_render(P(text="Привет: 100% 'кавычки' и \\слэш", text_position="top", text_color="#FF0000"),
-                       LANDSCAPE, INPUTS)
+def test_text_is_overlaid_as_image():
+    inputs = RenderInputs(source="/s.mp4", output="o.mp4", text_image=True)
+    plan = plan_render(P(text="Привет: 100% 'кавычки' и \слэш"), LANDSCAPE, inputs)
     g = graph(plan)
-    assert plan.needs_font is True
-    assert plan.text_files == {"text_0.txt": "Привет: 100% 'кавычки' и \\слэш"}
-    assert f"fontfile={FONT_FILE}:textfile=text_0.txt:expansion=none" in g
-    assert "fontcolor=0xFF0000" in g
+    i = plan.args.index(TEXT_IMAGE)
+    assert plan.args[i - 5: i] == ["-loop", "1", "-t", "10.000", "-i"]
+    assert "[vfit][1:v]overlay=0:0" in g
     assert "Привет" not in g  # текст не попадает в граф фильтров — нечего экранировать
+    assert plan.needs_font is False
 
 
-def test_long_text_is_wrapped_and_limited():
-    lines = wrap_text("слово " * 200, width=720, font_size=54)
-    assert len(lines) == MAX_TEXT_LINES
-    assert lines[-1].endswith("…")
-    assert all(len(line) <= 30 for line in lines)
+def test_text_image_ignored_without_text():
+    inputs = RenderInputs(source="/s.mp4", output="o.mp4", text_image=True)
+    assert TEXT_IMAGE not in plan_render(P(), LANDSCAPE, inputs).args
 
 
-def test_multiline_text_positions():
-    plan = plan_render(P(text="Раз\nДва", text_position="bottom"), LANDSCAPE, INPUTS)
-    ys = [int(part.split(":")[0]) for part in graph(plan).split(":y=")[1:]]
-    assert len(plan.text_files) == 2 and ys[0] < ys[1] < 1080
-
-
-def test_text_style_without_background():
-    g = graph(plan_render(P(text="Hi", text_background=False), LANDSCAPE, INPUTS))
-    assert "borderw=" in g and "box=1" not in g
+def test_fades_applied_after_overlays():
+    inputs = RenderInputs(source="/s.mp4", output="o.mp4", logo="logo.png", text_image=True, subtitles=True)
+    g = graph(plan_render(P(text="x", fade_in=1, fade_out=1), LANDSCAPE, inputs))
+    assert g.index("subtitles=") < g.index("overlay=0:0") < g.index("[logo]overlay") < g.index("fade=t=in")
+    assert "[vlogo]fade=t=in:st=0:d=1.000,fade=t=out:st=9.000:d=1.000,format=yuv420p[vout]" in g
 
 
 # ---------- Логотип, звук, субтитры ----------
@@ -252,7 +244,7 @@ def test_source_without_audio_gets_silent_track():
 def test_subtitles_use_relative_file():
     inputs = RenderInputs(source="/s.mp4", output="o.mp4", subtitles=True)
     plan = plan_render(P(), SILENT_VERTICAL, inputs)
-    assert "subtitles=subs.srt:fontsdir=." in graph(plan)
+    assert "subtitles=subs.srt:fontsdir=.:force_style='FontName=Inter Display" in graph(plan)
     assert "FontSize=11" in graph(plan)  # вертикальное видео
     assert plan.needs_font is True
 

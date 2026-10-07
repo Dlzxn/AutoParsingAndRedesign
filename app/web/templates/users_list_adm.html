@@ -1,118 +1,86 @@
-{% extends "base.html" %}
+{% extends "_admin_layout.html" %}
 
-{% block styles %}
-  <link rel="stylesheet" href="{{ static('css/users_list_adm.css') }}">
-{% endblock %}
+{% block title %}Пользователи — админ-панель{% endblock %}
 
-{% block content %}
-<div class="admin-users-container">
-  <h1>Управление пользователями</h1>
-  <p class="hint">Отредактируйте поля в строке и нажмите 💾, чтобы сохранить.</p>
+{% block admin_content %}
+<div class="admin-head">
+  <div>
+    <h1 class="h1">Пользователи</h1>
+    <p>Отредактируйте поля в строке и нажмите «Сохранить». <span id="totalUsers" class="faint"></span></p>
+  </div>
+  <div class="admin-toolbar">
+    <input type="search" class="input" id="searchInput" placeholder="Поиск по email или тарифу">
+    <select class="select" id="perPage">
+      <option value="10">10 на странице</option>
+      <option value="25">25 на странице</option>
+      <option value="50">50 на странице</option>
+    </select>
+    <button type="button" class="btn btn-primary" onclick="openCreateModal()">{{ icon('plus') }} Пользователь</button>
+  </div>
+</div>
 
-  <div class="controls-header">
-    <div class="left-controls">
-      <button class="btn-create" onclick="openCreateModal()">+ Создать пользователя</button>
-      <button class="btn-export" onclick="exportCSV()">📁 Экспорт CSV</button>
+<div class="table-wrap">
+  <div class="table-loader" id="loader">Загрузка…</div>
+  <table class="table" id="usersTable">
+    <thead>
+      <tr>
+        <th data-column="id" onclick="sortTable('id')">ID</th>
+        <th data-column="email" onclick="sortTable('email')">Email</th>
+        <th data-column="subscribe_status" onclick="sortTable('subscribe_status')">Тариф</th>
+        <th data-column="date_end" onclick="sortTable('date_end')">Подписка до</th>
+        <th data-column="token_today" onclick="sortTable('token_today')">Токены</th>
+        <th data-column="is_admin" onclick="sortTable('is_admin')">Админ</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="usersBody"></tbody>
+  </table>
+</div>
+
+<div class="pagination">
+  <button class="btn btn-sm" id="prevPage" onclick="changePage(-1)">{{ icon('arrow-left', 'icon-sm') }} Назад</button>
+  <span><span id="currentPage">1</span> / <span id="totalPages">1</span></span>
+  <button class="btn btn-sm" id="nextPage" onclick="changePage(1)">Вперёд {{ icon('arrow-right', 'icon-sm') }}</button>
+</div>
+
+<div id="createModal" class="modal" hidden>
+  <div class="modal-dialog">
+    <div class="modal-head">
+      <h3>Новый пользователь</h3>
+      <button type="button" class="btn btn-ghost btn-icon" onclick="closeCreateModal()" aria-label="Закрыть">{{ icon('x') }}</button>
     </div>
-
-    <div class="right-controls">
-      <input type="text" id="searchInput" placeholder="Поиск...">
-      <span id="totalUsers" class="total-users"></span>
-      <select id="perPage">
-        <option value="10">10 на страницу</option>
-        <option value="25">25 на страницу</option>
-        <option value="50">50 на страницу</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="table-container">
-    <div class="loader" id="loader">Загрузка...</div>
-    <table id="usersTable">
-      <thead>
-        <tr>
-          <th data-column="id" onclick="sortTable('id')">ID ▲</th>
-          <th data-column="email" onclick="sortTable('email')">Email</th>
-          <th data-column="subscribe_status" onclick="sortTable('subscribe_status')">Статус</th>
-          <th data-column="date_end" onclick="sortTable('date_end')">Подписка до</th>
-          <th data-column="token_today" onclick="sortTable('token_today')">Токены</th>
-          <th data-column="is_admin" onclick="sortTable('is_admin')">Админ</th>
-          <th>Действия</th>
-        </tr>
-      </thead>
-      <tbody id="usersBody"></tbody>
-    </table>
-  </div>
-
-  <div class="pagination">
-    <button id="prevPage" onclick="changePage(-1)">← Назад</button>
-    <span id="currentPage">1</span>/<span id="totalPages">1</span>
-    <button id="nextPage" onclick="changePage(1)">Вперед →</button>
-  </div>
-
-  <!-- Модальные окна -->
-  <div id="createModal" class="modal">
-  <div class="modal-content">
-    <span class="close" onclick="closeCreateModal()">&times;</span>
-    <h2>Создать нового пользователя</h2>
     <form id="createForm" onsubmit="createUser(event)">
-      <div class="form-group">
-        <label>Email:</label>
-        <input type="text" id="createEmail" placeholder="email или телефон" required>
+      <div class="modal-body form-grid">
+        <label class="field full"><span class="label">Email или телефон</span><input class="input" type="text" id="createEmail" required></label>
+        <label class="field full"><span class="label">Пароль</span><input class="input" type="password" id="createPassword" minlength="6" required></label>
+        <label class="field"><span class="label">Тариф</span>
+          <select class="select" id="createSubscribeStatus">
+            <option value="Free">Free</option><option value="Standart">Standart</option>
+            <option value="Pro">Pro</option><option value="Premium">Premium</option>
+          </select>
+        </label>
+        <label class="field"><span class="label">Подписка до</span><input class="input" type="date" id="createDateEnd"></label>
+        <label class="field"><span class="label">Токены</span><input class="input" type="number" id="createTokenToday" min="0" value="0"></label>
+        <label class="check" style="align-self:end;height:44px"><input type="checkbox" id="createIsAdmin"><span class="switch"></span>Администратор</label>
       </div>
-
-      <div class="form-group">
-        <label>Пароль:</label>
-        <input type="password" id="createPassword" minlength="6" required>
-      </div>
-
-      <div class="form-group">
-        <label>Статус подписки:</label>
-        <select id="createSubscribeStatus">
-          <option value="Free">Free</option>
-          <option value="Standart">Standart</option>
-          <option value="Pro">Pro</option>
-          <option value="Premium">Premium</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Дата окончания подписки:</label>
-        <input type="date" id="createDateEnd">
-      </div>
-
-      <div class="form-group">
-        <label>Лимит токенов:</label>
-        <input type="number" id="createTokenToday" min="0" value="0">
-      </div>
-
-      <div class="form-group checkbox-group">
-        <input type="checkbox" id="createIsAdmin">
-        <label>Администратор</label>
-      </div>
-
-      <div class="form-actions">
-        <button type="submit" class="btn-save">Создать</button>
-        <button type="button" class="btn-cancel" onclick="closeCreateModal()">Отмена</button>
+      <div class="modal-foot">
+        <button type="button" class="btn" onclick="closeCreateModal()">Отмена</button>
+        <button type="submit" class="btn btn-primary">Создать</button>
       </div>
     </form>
   </div>
 </div>
 
-  <div id="confirmModal" class="modal">
-    <div class="modal-content">
-      <h2>Подтвердите действие</h2>
-      <p id="confirmMessage"></p>
-      <div class="modal-actions">
-        <button class="btn-confirm" onclick="confirmAction()">Подтвердить</button>
-        <button class="btn-cancel" onclick="closeConfirmModal()">Отмена</button>
-      </div>
+<div id="confirmModal" class="modal" hidden>
+  <div class="modal-dialog">
+    <div class="modal-head"><h3>Подтвердите действие</h3></div>
+    <div class="modal-body"><p id="confirmMessage" class="muted"></p></div>
+    <div class="modal-foot">
+      <button type="button" class="btn" onclick="closeConfirmModal()">Отмена</button>
+      <button type="button" class="btn btn-danger" onclick="confirmAction()">{{ icon('trash', 'icon-sm') }} Удалить</button>
     </div>
   </div>
 </div>
-
 {% endblock %}
 
-{% block extra_scripts %}
-  <script src="{{ static('js/users_list_adm.js') }}"></script>
-{% endblock %}
+{% block extra_scripts %}<script src="{{ static('js/users_list_adm.js') }}"></script>{% endblock %}

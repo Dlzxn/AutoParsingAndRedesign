@@ -1,24 +1,15 @@
-{% extends "base.html" %}
+{% extends "_admin_layout.html" %}
 
 {% block title %}Статистика — админ-панель{% endblock %}
 
-{% block styles %}
-<link rel="stylesheet" href="{{ static('css/admin_panel.css') }}">
-<style>
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
-  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; }
-  .stat-value { font-size: 2rem; font-weight: 700; color: var(--accent); }
-  .stat-label { color: var(--muted); margin-top: 4px; }
-  .stat-list { list-style: none; margin-top: 10px; }
-  .stat-list li { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px solid var(--border); }
-</style>
-{% endblock %}
-
-{% block content %}
-<div class="admin-container">
-  <h1 class="admin-title">Статистика</h1>
-  <div class="stats-grid" data-stats><p>Загрузка…</p></div>
+{% block admin_content %}
+<div class="admin-head">
+  <div>
+    <h1 class="h1">Статистика</h1>
+    <p>Пользователи, монтаж и площадки.</p>
+  </div>
 </div>
+<div class="stats-grid" data-stats><div class="table-loader">Загрузка…</div></div>
 {% endblock %}
 
 {% block extra_scripts %}
@@ -26,17 +17,19 @@
   (async () => {
     const box = document.querySelector('[data-stats]');
     const STATUS = { queued: 'В очереди', processing: 'В работе', done: 'Готово', failed: 'Ошибки' };
+    const PLATFORMS = { yt: 'YouTube', vk: 'VK', coub: 'Coub', reddit: 'Reddit', imgur: 'Imgur', tumblr: 'Tumblr', unknown: 'Другое' };
     try {
       const s = await App.request('/api/admin/stats');
       const list = (obj, names = {}) => `<ul class="stat-list">${Object.entries(obj).map(([k, v]) =>
         `<li><span>${App.escapeHtml(names[k] || k)}</span><b>${v}</b></li>`).join('') || '<li>—</li>'}</ul>`;
+      const total = Object.values(s.clips_by_platform).reduce((a, b) => a + b, 0);
       box.innerHTML = `
-        <div class="stat"><div class="stat-value">${s.users_total}</div><div class="stat-label">Пользователей (из них админов: ${s.admins})</div>${list(s.users_by_plan)}</div>
-        <div class="stat"><div class="stat-value">${s.renders_last_24h}</div><div class="stat-label">Роликов смонтировано за 24 часа</div>${list(s.renders_by_status, STATUS)}</div>
-        <div class="stat"><div class="stat-value">${s.render_queue}</div><div class="stat-label">Задач в очереди рендера сейчас</div></div>
-        <div class="stat"><div class="stat-value">${Object.values(s.clips_by_platform).reduce((a, b) => a + b, 0)}</div><div class="stat-label">Клипов просмотрено/скачано</div>${list(s.clips_by_platform)}</div>`;
+        <div class="stat"><div class="stat-value gradient-text">${s.users_total}</div><div class="stat-label">Пользователей · админов: ${s.admins}</div>${list(s.users_by_plan)}</div>
+        <div class="stat"><div class="stat-value gradient-text">${s.renders_last_24h}</div><div class="stat-label">Клипов смонтировано за 24 часа</div>${list(s.renders_by_status, STATUS)}</div>
+        <div class="stat"><div class="stat-value gradient-text">${s.render_queue}</div><div class="stat-label">Задач в очереди рендера</div></div>
+        <div class="stat"><div class="stat-value gradient-text">${total}</div><div class="stat-label">Клипов просмотрено и скачано</div>${list(s.clips_by_platform, PLATFORMS)}</div>`;
     } catch (err) {
-      box.innerHTML = `<p>${App.escapeHtml(err.message)}</p>`;
+      box.innerHTML = `<div class="empty"><strong>Не удалось загрузить</strong><span>${App.escapeHtml(err.message)}</span></div>`;
     }
   })();
 </script>

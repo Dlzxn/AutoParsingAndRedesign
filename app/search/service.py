@@ -22,7 +22,7 @@ class TTLCache:
         if entry is None:
             return None
         stored_at, value = entry
-        if time.monotonic() - stored_at > self.ttl:
+        if time.monotonic() - stored_at >= self.ttl:
             del self._data[key]
             return None
         self._data.move_to_end(key)

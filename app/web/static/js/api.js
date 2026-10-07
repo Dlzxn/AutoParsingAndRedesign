@@ -1,4 +1,4 @@
-/* Общие утилиты фронтенда: запросы к API, уведомления, экранирование. */
+/* Общие утилиты фронтенда: запросы к API, уведомления, иконки, форматирование. */
 (function () {
   'use strict';
 
@@ -35,8 +35,7 @@
     }
     if (response.status === 204) return null;
     let data = null;
-    const type = response.headers.get('content-type') || '';
-    if (type.includes('application/json')) {
+    if ((response.headers.get('content-type') || '').includes('application/json')) {
       data = await response.json().catch(() => null);
     }
     if (!response.ok) {
@@ -53,6 +52,14 @@
     }[ch]));
   }
 
+  function icon(name, cls = '') {
+    const body = (window.__ICONS__ || {})[name] || '';
+    return `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" ` +
+      `stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
+  }
+
+  const TOAST_ICONS = { error: 'alert', success: 'check', info: 'sparkles' };
+
   function toast(message, type = 'error', timeout = 5000) {
     let box = document.querySelector('.toast-stack');
     if (!box) {
@@ -63,18 +70,34 @@
     const item = document.createElement('div');
     item.className = `toast toast-${type}`;
     item.setAttribute('role', type === 'error' ? 'alert' : 'status');
-    item.textContent = message;
+    item.innerHTML = `${icon(TOAST_ICONS[type] || 'alert')}<span>${escapeHtml(message)}</span>`;
     item.addEventListener('click', () => item.remove());
     box.appendChild(item);
     setTimeout(() => item.classList.add('toast-hide'), timeout);
     setTimeout(() => item.remove(), timeout + 400);
   }
 
-  function formatTime(seconds) {
+  /* 75.5 -> "1:15.5" */
+  function formatTime(seconds, digits = 1) {
     if (!Number.isFinite(seconds)) return '—';
-    const m = Math.floor(seconds / 60);
-    const s = seconds - m * 60;
-    return `${m}:${s.toFixed(1).padStart(4, '0')}`;
+    const sign = seconds < 0 ? '-' : '';
+    const value = Math.abs(seconds);
+    const m = Math.floor(value / 60);
+    const s = value - m * 60;
+    const sec = digits ? s.toFixed(digits).padStart(3 + digits, '0') : String(Math.floor(s)).padStart(2, '0');
+    return `${sign}${m}:${sec}`;
+  }
+
+  /* "1:15.5", "75,5", "75" -> 75.5; NaN при ошибке */
+  function parseTime(text) {
+    const value = String(text || '').trim().replace(',', '.');
+    if (!value) return NaN;
+    if (value.includes(':')) {
+      const [m, s] = value.split(':');
+      if (!/^\d+$/.test(m) || !/^\d+(\.\d+)?$/.test(s)) return NaN;
+      return Number(m) * 60 + Number(s);
+    }
+    return /^\d+(\.\d+)?$/.test(value) ? Number(value) : NaN;
   }
 
   function formatSize(bytes) {
@@ -82,5 +105,14 @@
     return bytes > 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} МБ` : `${Math.round(bytes / 1024)} КБ`;
   }
 
-  window.App = { request, ApiError, escapeHtml, toast, formatTime, formatSize, goToLogin };
+  /* Заливка ползунков до текущего значения (WebKit) */
+  function paintRange(input) {
+    const min = Number(input.min || 0), max = Number(input.max || 100);
+    input.style.setProperty('--fill', `${((Number(input.value) - min) / (max - min || 1)) * 100}%`);
+  }
+  document.addEventListener('input', (e) => { if (e.target.type === 'range') paintRange(e.target); });
+  const paintAll = () => document.querySelectorAll('input[type="range"]').forEach(paintRange);
+  document.addEventListener('DOMContentLoaded', paintAll);
+
+  window.App = { request, ApiError, escapeHtml, icon, toast, formatTime, parseTime, formatSize, goToLogin, paintAll };
 })();

@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try { sessionStorage.setItem('textEditorContent', editor.innerText); } catch (_) { /* ignore */ }
   });
 
-  document.querySelectorAll('.toolbar button').forEach((button) => {
+  document.querySelectorAll('.text-toolbar button').forEach((button) => {
     button.addEventListener('click', async () => {
       const command = button.dataset.command;
       if (command === 'copy') {

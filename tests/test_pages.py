@@ -41,7 +41,7 @@ async def test_all_static_assets_exist(user_client):
 
 async def test_static_urls_are_versioned(client):
     html = (await client.get("/")).text
-    assert re.search(r'/static/css/base\.css\?v=[0-9a-f]{10}', html)
+    assert re.search(r'/static/css/app\.css\?v=[0-9a-f]{10}', html)
 
 
 async def test_search_page_config(user_client):

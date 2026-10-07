@@ -1,77 +1,58 @@
-{% extends "base.html" %}
+{% extends "_admin_layout.html" %}
 
-{% block styles %}
+{% block title %}Промокоды — админ-панель{% endblock %}
+{% block admin_styles %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" href="{{ static('css/adm_promo.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
 {% endblock %}
 
-{% block content %}
-<div class="admin-container">
-    <h1>Управление промокодами</h1>
-    <button class="create-promo-btn" onclick="openModal()">+ Создать промокод</button>
-
-    <div class="table-container">
-        <table id="promoTable">
-            <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Тип</th>
-                    <th>Статус</th>
-                    <th>Активаций</th>
-                    <th>Бонус</th>
-                    <th>Дата окончания</th>
-                    <th>Действия</th>
-                </tr>
-            </thead>
-            <tbody id="promoBody">
-                <!-- Данные будут загружены через JS -->
-            </tbody>
-        </table>
-    </div>
+{% block admin_content %}
+<div class="admin-head">
+  <div>
+    <h1 class="h1">Промокоды</h1>
+    <p>Промо-предложения и их лимиты.</p>
+  </div>
+  <button type="button" class="btn btn-primary" onclick="openModal()">{{ icon('plus') }} Промокод</button>
 </div>
 
-<div id="promoModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2 id="modalTitle">Новый промокод</h2>
-        <form id="promoForm">
-            <input type="hidden" id="promoId">
-            <div class="form-group">
-                <label>Название:</label>
-                <input type="text" id="name" maxlength="100" required>
-            </div>
-            <div class="form-group">
-                <label>Тип:</label>
-                <select id="type" required>
-                    <option value="sale">скидка</option>
-                    <option value="standart">standart Подписка</option>
-                    <option value="pro">pro Подписка</option>
-                    <option value="premium">premium Подписка</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Статус:</label>
-                <input type="checkbox" id="status">
-            </div>
-            <div class="form-group">
-                <label>Дата окончания:</label>
-                <input type="text" id="date_ended" class="datepicker">
-            </div>
-            <div class="form-group">
-                <label>Лимит активаций:</label>
-                <input type="number" id="count_activated" min="0" value="0" required>
-            </div>
-            <div class="form-group">
-                <label>Бонусное количество:</label>
-                <input type="number" id="bonus_count" min="0" value="0" required>
-            </div>
-            <div class="form-group">
-                <label>Описание:</label>
-                <textarea id="description"></textarea>
-            </div>
-            <button type="submit">Сохранить</button>
-        </form>
+<div class="table-wrap">
+  <table class="table" id="promoTable">
+    <thead>
+      <tr><th>Название</th><th>Тип</th><th>Статус</th><th>Активаций</th><th>Бонус</th><th>Действует до</th><th></th></tr>
+    </thead>
+    <tbody id="promoBody"></tbody>
+  </table>
+</div>
+
+<div id="promoModal" class="modal" hidden>
+  <div class="modal-dialog">
+    <div class="modal-head">
+      <h3 id="modalTitle">Новый промокод</h3>
+      <button type="button" class="btn btn-ghost btn-icon close" aria-label="Закрыть">{{ icon('x') }}</button>
     </div>
+    <form id="promoForm">
+      <input type="hidden" id="promoId">
+      <div class="modal-body form-grid">
+        <label class="field full"><span class="label">Название</span><input class="input" type="text" id="name" maxlength="100" required></label>
+        <label class="field"><span class="label">Тип</span>
+          <select class="select" id="type" required>
+            <option value="sale">Скидка</option>
+            <option value="standart">Подписка Standart</option>
+            <option value="pro">Подписка Pro</option>
+            <option value="premium">Подписка Premium</option>
+          </select>
+        </label>
+        <label class="field"><span class="label">Действует до</span><input class="input datepicker" type="text" id="date_ended" placeholder="Без срока"></label>
+        <label class="field"><span class="label">Лимит активаций</span><input class="input" type="number" id="count_activated" min="0" value="0" required></label>
+        <label class="field"><span class="label">Бонус</span><input class="input" type="number" id="bonus_count" min="0" value="0" required></label>
+        <label class="field full"><span class="label">Описание</span><textarea class="textarea" id="description"></textarea></label>
+        <label class="check full"><input type="checkbox" id="status"><span class="switch"></span>Активен</label>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary">{{ icon('save', 'icon-sm') }} Сохранить</button>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}
 

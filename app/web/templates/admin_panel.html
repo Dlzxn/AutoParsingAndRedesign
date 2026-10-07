@@ -1,54 +1,28 @@
-{% extends "base.html" %}
+{% extends "_admin_layout.html" %}
 
-{% block styles %}
-  <link rel="stylesheet" href="{{ static('css/admin_panel.css') }}">
-{% endblock %}
+{% block title %}Админ-панель — Parser Platform{% endblock %}
 
-{% block content %}
-<div class="admin-container">
-  <h1 class="admin-title">Административная панель</h1>
-  
-  <div class="admin-grid">
-    <div class="admin-card" data-action="promocode">
-      <div class="card-icon">🎁</div>
-      <h3>Промокоды</h3>
-      <p>Создание и редактирование промо-предложений</p>
-    </div>
-
-    <div class="admin-card" data-action="users">
-      <div class="card-icon">👥</div>
-      <h3>Управление пользователями</h3>
-      <p>Просмотр и редактирование аккаунтов</p>
-    </div>
-
-    <div class="admin-card" data-action="export">
-      <div class="card-icon">💾</div>
-      <h3>Выгрузить пользователей</h3>
-      <p>Экспорт в CSV (открывается в Excel)</p>
-    </div>
-
-    <div class="admin-card" data-action="pricing">
-      <div class="card-icon">💰</div>
-      <h3>Изменить цены</h3>
-      <p>Настройка тарифных планов</p>
-    </div>
-
-    <div class="admin-card danger" data-action="shutdown">
-      <div class="card-icon">⛔</div>
-      <h3>Платформы</h3>
-      <p>Включение и отключение источников</p>
-    </div>
-
-    <div class="admin-card" data-action="stats">
-      <div class="card-icon">📊</div>
-      <h3>Просмотр статистики</h3>
-      <p>Аналитика использования сервиса</p>
-    </div>
+{% block admin_content %}
+<div class="admin-head">
+  <div>
+    <h1 class="h1">Обзор</h1>
+    <p>Управление пользователями, тарифами и площадками.</p>
   </div>
 </div>
-
-{% endblock %}
-
-{% block extra_scripts %}
-  <script src="{{ static('js/admin_panel.js') }}"></script>
+<div class="admin-cards">
+  {% for url, ic, title, text in [
+    ('/admin/users', 'users', 'Пользователи', 'Тарифы, сроки подписки, права администратора'),
+    ('/admin/promocode', 'tag', 'Промокоды', 'Создание и редактирование промо-предложений'),
+    ('/admin/pricing', 'card', 'Тарифы', 'Цены, скидки и лимиты скачиваний'),
+    ('/admin/platforms', 'power', 'Платформы', 'Включение и отключение площадок'),
+    ('/admin/stats', 'chart', 'Статистика', 'Пользователи, рендеры, площадки'),
+    ('/admin/export', 'download', 'Экспорт', 'Выгрузка пользователей в CSV для Excel'),
+  ] %}
+  <a class="admin-card" href="{{ url }}">
+    <span class="feature-icon">{{ icon(ic) }}</span>
+    <h3 class="h3">{{ title }}</h3>
+    <p>{{ text }}</p>
+  </a>
+  {% endfor %}
+</div>
 {% endblock %}

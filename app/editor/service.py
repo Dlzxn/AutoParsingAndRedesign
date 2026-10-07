@@ -10,7 +10,7 @@ from app.editor.pipeline import SUBTITLES_FILE
 from app.editor.schemas import EditParams, JobOut, SourceOut
 from app.editor.worker import ACTIVE_STATUSES, RenderQueue
 from app.history.service import mark_seen
-from app.media.fetch import platform_for_url
+from app.media.fetch import platform_for_url, validate_url
 from app.media.ffmpeg import MediaError, MediaInfo
 from app.media.service import AUDIO_EXTENSIONS, IMAGE_EXTENSIONS, MediaService
 from app.media.storage import Storage
@@ -58,6 +58,7 @@ class EditorService:
         self.media = media
         self.storage = storage
         self.queue = queue
+        self.download_progress: dict[str, float] = {}  # "user_id:token" -> 0..1
 
     async def _save_source(
         self, db: AsyncSession, user: User, source_id: str, path: Path, info: MediaInfo, **extra
@@ -88,17 +89,46 @@ class EditorService:
             self.storage.remove_dir(directory)
             raise
 
-    async def create_source_from_url(self, db: AsyncSession, user: User, url: str) -> MediaSource:
+    async def create_source_from_url(
+        self, db: AsyncSession, user: User, url: str, progress_token: str | None = None
+    ) -> MediaSource:
+        url = validate_url(url)
+        # Тот же ролик уже скачан этим пользователем и ещё хранится — отдаём сразу
+        existing = await db.scalar(
+            select(MediaSource)
+            .where(MediaSource.user_id == user.id, MediaSource.origin_url == url)
+            .order_by(MediaSource.created_at.desc())
+            .limit(1)
+        )
+        if existing is not None and self.storage.absolute(existing.path).exists():
+            return existing
+
+        key = f"{user.id}:{progress_token}" if progress_token else None
+
+        def on_progress(value: float) -> None:
+            if key:  # прогресс только растёт (видео и звук качаются отдельными файлами)
+                self.download_progress[key] = max(self.download_progress.get(key, 0.0), value)
+
         source_id = self.storage.new_id()
         directory = self.storage.source_dir(source_id)
         try:
-            path, info = await self.media.ingest_url(url, directory)
-            source = await self._save_source(db, user, source_id, path, info, origin_url=url.strip())
+            if key:
+                self.download_progress[key] = 0.0
+            path, info, title = await self.media.ingest_url(url, directory, on_progress)
+            source = await self._save_source(
+                db, user, source_id, path, info, origin_url=url, original_name=(title or "")[:255] or None
+            )
         except BaseException:
             self.storage.remove_dir(directory)
             raise
+        finally:
+            if key:
+                self.download_progress.pop(key, None)
         await mark_seen(db, user.id, url, platform_for_url(url))
         return source
+
+    def get_download_progress(self, user: User, token: str) -> float | None:
+        return self.download_progress.get(f"{user.id}:{token}")
 
     async def get_source(self, db: AsyncSession, user: User, source_id: str) -> MediaSource:
         source = await db.get(MediaSource, source_id)

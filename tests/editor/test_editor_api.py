@@ -87,11 +87,11 @@ async def test_failed_upload_leaves_no_files(user_client, media_dir, settings):
 
 
 async def test_source_from_url_marks_history(user_client, media_dir, monkeypatch, app):
-    def fake_download(url, dest_dir, options):
+    def fake_download(url, dest_dir, options, on_progress=None):
         dest_dir.mkdir(parents=True, exist_ok=True)
         target = dest_dir / "source.mp4"
         shutil.copy(media_dir / "landscape.mp4", target)
-        return target
+        return fetch.DownloadResult(target, "Смешные котики: подборка!")
 
     monkeypatch.setattr(fetch, "download", fake_download)
     url = "https://www.youtube.com/watch?v=abc"
@@ -246,17 +246,17 @@ async def test_unfinished_jobs_resume_after_restart(user_client, source, app, db
 # ---------- Скачивание клипов ----------
 
 async def test_download_endpoint(user_client, media_dir, monkeypatch):
-    def fake_download(url, dest_dir, options):
+    def fake_download(url, dest_dir, options, on_progress=None):
         dest_dir.mkdir(parents=True, exist_ok=True)
         target = dest_dir / "source.mp4"
         shutil.copy(media_dir / "landscape.mp4", target)
-        return target
+        return fetch.DownloadResult(target, "Смешные котики: подборка!")
 
     monkeypatch.setattr(fetch, "download", fake_download)
     response = await user_client.get("/api/download", params={"url": "https://coub.com/view/abc"})
     assert response.status_code == 200
     assert response.headers["content-type"] == "video/mp4"
-    assert 'filename="coub_clip.mp4"' in response.headers["content-disposition"]
+    assert "coub_clip.mp4" not in response.headers["content-disposition"]  # имя по названию ролика
     assert response.content == (media_dir / "landscape.mp4").read_bytes()
 
 
@@ -297,3 +297,61 @@ async def test_cleanup_removes_expired_media(user_client, source, app, db, setti
     assert not storage.source_dir(source["id"]).exists()
     assert not storage.job_dir(job["id"]).exists()
     assert (await user_client.get(f"/api/editor/sources/{source['id']}")).status_code == 404
+
+
+# ---------- Повторное использование исходника, прогресс, имена файлов ----------
+
+async def test_same_url_is_downloaded_once(user_client, other_client, media_dir, monkeypatch):
+    calls = []
+
+    def fake_download(url, dest_dir, options, on_progress=None):
+        calls.append(url)
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy(media_dir / "landscape.mp4", dest_dir / "source.mp4")
+        return fetch.DownloadResult(dest_dir / "source.mp4", "Ролик")
+
+    monkeypatch.setattr(fetch, "download", fake_download)
+    url = "https://coub.com/view/abc"
+    first = (await user_client.post("/api/editor/sources/url", json={"url": url})).json()
+    second = (await user_client.post("/api/editor/sources/url", json={"url": f"  {url} "})).json()
+    assert first["id"] == second["id"] and len(calls) == 1
+    theirs = (await other_client.post("/api/editor/sources/url", json={"url": url})).json()
+    assert theirs["id"] != first["id"] and len(calls) == 2  # исходники пользователей не смешиваются
+
+
+async def test_download_progress_is_reported(user_client, app, media_dir, monkeypatch):
+    seen: list = []
+
+    def fake_download(url, dest_dir, options, on_progress=None):
+        on_progress(0.5)
+        seen.append(app.state.editor.download_progress.copy())
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy(media_dir / "landscape.mp4", dest_dir / "source.mp4")
+        return fetch.DownloadResult(dest_dir / "source.mp4", None)
+
+    monkeypatch.setattr(fetch, "download", fake_download)
+    response = await user_client.post("/api/editor/sources/url", json={"url": "https://coub.com/view/p", "token": "tok_1"})
+    assert response.status_code == 201
+    assert list(seen[0].values()) == [0.5]
+    assert (await user_client.get("/api/editor/downloads/tok_1")).json() == {"progress": None}  # закончено
+    bad = await user_client.post("/api/editor/sources/url", json={"url": "https://coub.com/view/p", "token": "../x"})
+    assert bad.status_code == 422
+
+
+async def test_result_filename_uses_source_title(user_client, media_dir, monkeypatch):
+    def fake_download(url, dest_dir, options, on_progress=None):
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy(media_dir / "landscape.mp4", dest_dir / "source.mp4")
+        return fetch.DownloadResult(dest_dir / "source.mp4", "Смешные котики: подборка!")
+
+    monkeypatch.setattr(fetch, "download", fake_download)
+    source = (await user_client.post("/api/editor/sources/url", json={"url": "https://coub.com/view/t"})).json()
+    assert source["original_name"] == "Смешные котики: подборка!"
+    job = await wait_job(user_client, (await create_job(user_client, source["id"], {"quality": "draft"})).json()["id"])
+    disposition = (await user_client.get(job["download_url"])).headers["content-disposition"]
+    assert "%D0%A1%D0%BC%D0%B5%D1%88%D0%BD%D1%8B%D0%B5_%D0%BA%D0%BE%D1%82%D0%B8%D0%BA%D0%B8_%D0%BF%D0%BE%D0%B4%D0%B1%D0%BE%D1%80%D0%BA%D0%B0_edit.mp4" in disposition
+
+
+async def test_render_with_emoji_text(user_client, source):
+    job = await wait_job(user_client, (await create_job(user_client, source["id"], {"text": "Огонь 🔥", "quality": "draft"})).json()["id"])
+    assert job["status"] == "done", job

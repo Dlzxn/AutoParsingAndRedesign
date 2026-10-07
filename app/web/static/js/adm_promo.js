@@ -13,20 +13,20 @@ async function loadPromoCodes() {
 function renderPromocodes(items) {
   const tbody = document.getElementById('promoBody');
   if (!items.length) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#6b7785;padding:2rem">Промокодов пока нет</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="table-loader">Промокодов пока нет</td></tr>';
     return;
   }
   tbody.innerHTML = items.map((p) => `
     <tr data-id="${p.id}">
       <td>${esc(p.name)}</td>
       <td>${esc(p.type)}</td>
-      <td>${p.status ? 'Активен' : 'Неактивен'}</td>
+      <td>${p.status ? '<span class="badge badge-success">Активен</span>' : '<span class="badge badge-muted">Выключен</span>'}</td>
       <td>${p.count_activated}</td>
       <td>${p.bonus_count}</td>
-      <td>${p.date_ended ? new Date(p.date_ended).toLocaleString('ru-RU') : 'Нет'}</td>
-      <td>
-        <button class="action-btn edit-btn" data-action="edit" title="Изменить">✏️</button>
-        <button class="action-btn delete-btn" data-action="delete" title="Удалить">🗑️</button>
+      <td>${p.date_ended ? new Date(p.date_ended).toLocaleString('ru-RU') : 'Без срока'}</td>
+      <td class="row-actions">
+        <button class="btn btn-sm btn-icon" data-action="edit" title="Изменить">${App.icon('edit', 'icon-sm')}</button>
+        <button class="btn btn-sm btn-icon btn-danger" data-action="delete" title="Удалить">${App.icon('trash', 'icon-sm')}</button>
       </td>
     </tr>`).join('');
 }
@@ -36,11 +36,11 @@ function openModal() {
   document.getElementById('modalTitle').textContent = 'Новый промокод';
   document.getElementById('promoForm').reset();
   document.getElementById('status').checked = true;
-  document.getElementById('promoModal').style.display = 'block';
+  document.getElementById('promoModal').hidden = false;
 }
 
 function closeModal() {
-  document.getElementById('promoModal').style.display = 'none';
+  document.getElementById('promoModal').hidden = true;
 }
 
 async function editPromo(id) {
@@ -56,7 +56,7 @@ async function editPromo(id) {
     document.getElementById('count_activated').value = promo.count_activated;
     document.getElementById('bonus_count').value = promo.bonus_count;
     document.getElementById('description').value = promo.description || '';
-    document.getElementById('promoModal').style.display = 'block';
+    document.getElementById('promoModal').hidden = false;
   } catch (err) {
     App.toast(err.message);
   }

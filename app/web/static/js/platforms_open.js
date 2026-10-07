@@ -13,23 +13,18 @@ async function loadPlatforms() {
 function renderPlatforms(platforms) {
   const grid = document.getElementById('platformsGrid');
   grid.innerHTML = platforms.map((p) => `
-    <div class="platform-card" data-key="${App.escapeHtml(p.key)}" data-title="${App.escapeHtml(p.title)}">
-      <div class="platform-header">
-        <img src="/static/img/${ICONS[p.key] || 'video'}.png" alt="" class="platform-icon">
-        <span class="platform-name">${App.escapeHtml(p.title)}</span>
+    <div class="platform-admin platform-card" data-key="${App.escapeHtml(p.key)}" data-title="${App.escapeHtml(p.title)}">
+      <img src="/static/img/platforms/${ICONS[p.key] || 'yt'}.svg" alt="">
+      <div class="meta">
+        <strong>${App.escapeHtml(p.title)}</strong>
+        ${p.enabled ? '<span class="badge badge-success">Работает</span>' : '<span class="badge badge-danger">Отключена</span>'}
       </div>
-      <div class="status-switch">
-        <span class="status-label">${p.enabled ? 'Активна' : 'Отключена'}</span>
-        <label class="switch">
-          <input type="checkbox" ${p.enabled ? 'checked' : ''}>
-          <span class="slider"></span>
-        </label>
-      </div>
+      <label class="check"><input type="checkbox" ${p.enabled ? 'checked' : ''}><span class="switch"></span></label>
     </div>`).join('');
 }
 
 function closeConfirm(revert) {
-  document.getElementById('confirmationModal').style.display = 'none';
+  document.getElementById('confirmationModal').hidden = true;
   if (revert && pending) pending.input.checked = !pending.enabled;
   pending = null;
 }
@@ -42,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('modalMessage').textContent =
       `${pending.enabled ? 'Включить' : 'Отключить'} платформу «${card.dataset.title}»?` +
       (pending.enabled ? '' : ' Пользователи увидят страницу «Технические работы».');
-    document.getElementById('confirmationModal').style.display = 'block';
+    document.getElementById('confirmationModal').hidden = false;
   });
 
   document.querySelector('.modal-cancel').addEventListener('click', () => closeConfirm(true));

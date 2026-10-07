@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#07080c">
+  <title>{% block title %}{% endblock %} — Parser Platform</title>
+  <link rel="icon" type="image/svg+xml" href="{{ static('img/logo.svg') }}">
+  <link rel="stylesheet" href="{{ static('css/app.css') }}">
+  <link rel="stylesheet" href="{{ static('css/auth.css') }}">
+</head>
+<body class="auth-body">
+  <div class="auth">
+    <div class="auth-form-side">
+      <a href="/" class="brand"><img src="{{ static('img/logo.svg') }}" alt="" width="30" height="30"><span>Parser Platform</span></a>
+      <div class="auth-card">
+        {% block form %}{% endblock %}
+      </div>
+      <p class="faint small">© {{ now_year }} Parser Platform · <a href="mailto:support@parser.ru">support@parser.ru</a></p>
+    </div>
+    <aside class="auth-showcase" aria-hidden="true">
+      <div class="auth-showcase-inner">
+        <span class="eyebrow"><span class="dot"></span>Поиск и монтаж клипов</span>
+        <h2 class="h1">Клипы для ваших площадок — <span class="gradient-text">за минуты</span></h2>
+        <ul class="auth-points">
+          <li>{{ icon('search') }} Ролики с VK, YouTube, Coub, Reddit и Imgur</li>
+          <li>{{ icon('crop') }} Формат 9:16 с размытым фоном в один клик</li>
+          <li>{{ icon('type') }} Подписи с эмодзи, логотип и музыка</li>
+          <li>{{ icon('download') }} Готовый MP4 за секунды</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+  <script src="{{ static('js/auth.js') }}"></script>
+</body>
+</html>

@@ -1,51 +1,30 @@
-{% extends "base.html" %}
+{% extends "_admin_layout.html" %}
 
-{% block styles %}
-  <link rel="stylesheet" href="{{ static('css/tarif_adm.css') }}">
-{% endblock %}
+{% block title %}Тарифы — админ-панель{% endblock %}
 
-{% block content %}
-<div class="pricing-container">
-  <h1>Управление тарифными планами</h1>
-
-  <div class="tariffs-grid" id="tariffsContainer">
-    <!-- Динамически загружаемые тарифы -->
+{% block admin_content %}
+<div class="admin-head">
+  <div>
+    <h1 class="h1">Тарифы</h1>
+    <p>Цены и скидки сразу отображаются на сайте.</p>
   </div>
-
-  <div class="controls">
-    <button class="btn-save-all" onclick="saveAllTariffs()">💾 Сохранить все изменения</button>
-    <button class="btn-reload" onclick="loadTariffs()">🔄 Загрузить текущие настройки</button>
+  <div class="admin-toolbar">
+    <button type="button" class="btn" onclick="loadTariffs()">{{ icon('rotate-cw', 'icon-sm') }} Отменить изменения</button>
+    <button type="button" class="btn btn-primary" onclick="saveAllTariffs()">{{ icon('save', 'icon-sm') }} Сохранить</button>
   </div>
 </div>
 
-<!-- Шаблон тарифа -->
+<div class="tariffs-grid" id="tariffsContainer"></div>
+
 <template id="tariffTemplate">
   <div class="tariff-card">
-    <h2 class="tariff-name"></h2>
-    <div class="tariff-body">
-      <div class="form-group">
-        <label>Базовая цена (руб):</label>
-        <input type="number" class="price-input" min="0">
-      </div>
-
-      <div class="form-group">
-        <label>Скачиваний в день (пусто — без лимита):</label>
-        <input type="number" class="tokens-input" min="0">
-      </div>
-
-      <div class="sale-group">
-        <label class="switch">
-          <input type="checkbox" class="sale-toggle">
-          <span class="slider"></span>
-        </label>
-        <span class="sale-label">Акция</span>
-        <input type="number" class="new-price-input" min="0" placeholder="Цена по акции">
-      </div>
-    </div>
+    <div class="tariff-name"></div>
+    <label class="field"><span class="label">Цена, ₽</span><input type="number" class="input price-input" min="0"></label>
+    <label class="field"><span class="label">Скачиваний в день</span><input type="number" class="input tokens-input" min="0"></label>
+    <label class="check"><input type="checkbox" class="sale-toggle"><span class="switch"></span>Акция</label>
+    <label class="field"><span class="label">Цена по акции, ₽</span><input type="number" class="input new-price-input" min="0"></label>
   </div>
 </template>
 {% endblock %}
 
-{% block extra_scripts %}
-  <script src="{{ static('js/tarif_adm.js') }}"></script>
-{% endblock %}
+{% block extra_scripts %}<script src="{{ static('js/tarif_adm.js') }}"></script>{% endblock %}

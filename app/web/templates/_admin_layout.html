@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block styles %}<link rel="stylesheet" href="{{ static('css/admin.css') }}">{% block admin_styles %}{% endblock %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% set admin_nav = [
+  ('/admin', 'grid', 'Обзор'),
+  ('/admin/users', 'users', 'Пользователи'),
+  ('/admin/promocode', 'tag', 'Промокоды'),
+  ('/admin/pricing', 'card', 'Тарифы'),
+  ('/admin/platforms', 'power', 'Платформы'),
+  ('/admin/stats', 'chart', 'Статистика'),
+] %}
+
+{% block content %}
+<div class="admin">
+  <aside class="admin-side">
+    <div class="admin-side-title">{{ icon('shield', 'icon-sm') }} Админ-панель</div>
+    <nav>
+      {% for url, ic, title in admin_nav %}
+      <a href="{{ url }}" class="{{ 'active' if request.url.path.rstrip('/') == url }}">{{ icon(ic) }} {{ title }}</a>
+      {% endfor %}
+      <a href="/admin/export">{{ icon('download') }} Экспорт CSV</a>
+    </nav>
+  </aside>
+  <section class="admin-main">
+    {% block admin_content %}{% endblock %}
+  </section>
+</div>
+{% endblock %}

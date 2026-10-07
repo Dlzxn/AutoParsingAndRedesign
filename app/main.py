@@ -152,7 +152,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/favicon.ico", include_in_schema=False)
     async def favicon():
-        return RedirectResponse("/static/img/video.png", status.HTTP_301_MOVED_PERMANENTLY)
+        return RedirectResponse("/static/img/logo.svg", status.HTTP_301_MOVED_PERMANENTLY)
 
     @app.get("/healthz", include_in_schema=False)
     async def healthz():

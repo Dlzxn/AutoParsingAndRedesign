@@ -3,12 +3,14 @@ from typing import Annotated
 
 from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile, status
 from fastapi.responses import FileResponse, RedirectResponse
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, Field, ValidationError
 
 from app.auth.deps import CurrentUser, DbSession, PageUser
 from app.core.errors import humanize_validation_error
 from app.editor.schemas import EditParams, JobOut, SourceOut
+from app.db.models import MediaSource
 from app.editor.service import EditorService, job_out, source_out
+from app.media.service import safe_filename
 from app.web.templating import render
 
 router = APIRouter(tags=["editor"])
@@ -19,7 +21,8 @@ def get_editor(request: Request) -> EditorService:
 
 
 class SourceUrl(BaseModel):
-    url: str
+    url: str = Field(max_length=2048)
+    token: str | None = Field(None, max_length=64, pattern=r"^[A-Za-z0-9_-]+$")  # для отслеживания прогресса
 
 
 @router.get("/editor", include_in_schema=False)
@@ -45,7 +48,13 @@ async def upload_source(request: Request, db: DbSession, user: CurrentUser, file
 
 @router.post("/api/editor/sources/url", response_model=SourceOut, status_code=status.HTTP_201_CREATED)
 async def source_from_url(data: SourceUrl, request: Request, db: DbSession, user: CurrentUser):
-    return source_out(await get_editor(request).create_source_from_url(db, user, data.url))
+    return source_out(await get_editor(request).create_source_from_url(db, user, data.url, data.token))
+
+
+@router.get("/api/editor/downloads/{token}")
+async def download_progress(token: str, request: Request, user: CurrentUser):
+    """Прогресс скачивания исходника по ссылке (0..1); null — скачивание не идёт."""
+    return {"progress": get_editor(request).get_download_progress(user, token)}
 
 
 @router.get("/api/editor/sources/{source_id}", response_model=SourceOut)
@@ -107,9 +116,11 @@ async def job_result(job_id: str, request: Request, db: DbSession, user: Current
     path = editor.storage.absolute(job.output_path)
     if not path.exists():
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Срок хранения результата истёк")
+    source = await db.get(MediaSource, job.source_id)
+    base = safe_filename(source.original_name.rsplit(".", 1)[0] if source and source.original_name else None)
     return FileResponse(
         path,
         media_type="video/mp4",
-        filename=f"clip_{job.id[:8]}.mp4",
+        filename=f"{base}_edit.mp4" if base != "clip" else f"clip_{job.id[:8]}.mp4",
         content_disposition_type="attachment" if download else "inline",
     )

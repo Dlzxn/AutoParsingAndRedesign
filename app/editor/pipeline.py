@@ -2,20 +2,20 @@
 
 Модуль не выполняет ffmpeg и не трогает диск — только рассчитывает граф фильтров, поэтому
 полностью покрывается unit-тестами. ffmpeg запускается с рабочим каталогом задачи (cwd),
-а вспомогательные файлы (шрифт, текст, субтитры) лежат в нём под фиксированными именами —
-так не нужно экранировать пути в графе фильтров (особенно важно для путей Windows).
+а вспомогательные файлы (шрифт, картинка с текстом, субтитры) лежат в нём под фиксированными
+именами — так не нужно экранировать пути в графе фильтров (особенно важно для путей Windows).
+Текст рисуется заранее в PNG (app.editor.textrender) и накладывается как картинка.
 """
-import textwrap
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from app.editor.schemas import EditParams
 from app.media.ffmpeg import MediaError, MediaInfo
 
 FONT_FILE = "font.ttf"
 SUBTITLES_FILE = "subs.srt"
+TEXT_IMAGE = "text.png"
 MIN_DURATION = 0.3
 MAX_SIDE = 3840
-MAX_TEXT_LINES = 6
 
 ASPECTS = {"9:16": 9 / 16, "1:1": 1.0, "4:5": 4 / 5, "16:9": 16 / 9}
 QUALITY = {
@@ -23,7 +23,6 @@ QUALITY = {
     "standard": ("faster", 22, "160k"),
     "high": ("medium", 19, "192k"),
 }
-TEXT_SCALE = {"small": 0.055, "medium": 0.075, "large": 0.10}
 
 
 @dataclass
@@ -33,6 +32,7 @@ class RenderInputs:
     logo: str | None = None
     music: str | None = None
     subtitles: bool = False  # файл SUBTITLES_FILE лежит в рабочем каталоге
+    text_image: bool = False  # файл TEXT_IMAGE (размером с кадр) лежит в рабочем каталоге
 
 
 @dataclass
@@ -41,8 +41,7 @@ class RenderPlan:
     output_duration: float
     width: int
     height: int
-    text_files: dict[str, str] = field(default_factory=dict)  # имя файла -> содержимое
-    needs_font: bool = False
+    needs_font: bool = False  # нужен FONT_FILE в рабочем каталоге (для субтитров)
 
 
 def _even(value: float) -> int:
@@ -86,19 +85,6 @@ def atempo_chain(speed: float) -> list[str]:
     return filters
 
 
-def wrap_text(text: str, width: int, font_size: int) -> list[str]:
-    max_chars = max(8, int(width * 0.9 / (font_size * 0.56)))
-    lines: list[str] = []
-    for paragraph in text.split("\n"):
-        lines.extend(textwrap.wrap(paragraph, max_chars, break_long_words=True) or [""])
-    while lines and not lines[-1]:
-        lines.pop()
-    if len(lines) > MAX_TEXT_LINES:
-        lines = lines[:MAX_TEXT_LINES]
-        lines[-1] = lines[-1][: max(1, max_chars - 1)].rstrip() + "…"
-    return lines
-
-
 def _fit_filters(p: EditParams, w: int, h: int, out_w: int, out_h: int, src: str, dst: str) -> list[str]:
     """Цепочки, приводящие кадр [src] к размеру out_w x out_h, результат в [dst]."""
     if p.aspect == "original" or p.fit == "crop":
@@ -118,38 +104,6 @@ def _fit_filters(p: EditParams, w: int, h: int, out_w: int, out_h: int, src: str
         f"[fitfg]{fg}[fitfgs]",
         f"[fitbgb][fitfgs]overlay=(W-w)/2:(H-h)/2,setsar=1[{dst}]",
     ]
-
-
-def _text_filters(p: EditParams, out_w: int, out_h: int) -> tuple[list[str], dict[str, str]]:
-    font_size = max(14, int(min(out_w, out_h) * TEXT_SCALE[p.text_size]))
-    lines = wrap_text(p.text, out_w, font_size)
-    if not lines:
-        return [], {}
-    line_height = int(font_size * 1.3)
-    block = line_height * len(lines)
-    if p.text_position == "top":
-        y0 = int(out_h * 0.08)
-    elif p.text_position == "center":
-        y0 = (out_h - block) // 2
-    else:
-        y0 = int(out_h * 0.88) - block
-    color = p.text_color.lstrip("#")
-    style = (
-        f"box=1:boxcolor=black@0.55:boxborderw={max(4, font_size // 4)}"
-        if p.text_background
-        else f"borderw={max(2, font_size // 16)}:bordercolor=black@0.85:shadowcolor=black@0.5:shadowx=2:shadowy=2"
-    )
-    filters, files = [], {}
-    for i, line in enumerate(lines):
-        if not line.strip():
-            continue
-        name = f"text_{i}.txt"
-        files[name] = line
-        filters.append(
-            f"drawtext=fontfile={FONT_FILE}:textfile={name}:expansion=none:fontsize={font_size}"
-            f":fontcolor=0x{color}:x=(w-text_w)/2:y={y0 + i * line_height}:{style}"
-        )
-    return filters, files
 
 
 def plan_render(p: EditParams, info: MediaInfo, inputs: RenderInputs) -> RenderPlan:
@@ -173,6 +127,10 @@ def plan_render(p: EditParams, info: MediaInfo, inputs: RenderInputs) -> RenderP
     if inputs.music:
         args += ["-stream_loop", "-1", "-i", inputs.music]
         music_index, next_index = next_index, next_index + 1
+    text_index = None
+    if inputs.text_image and p.text:
+        args += ["-loop", "1", "-t", f"{out_duration:.3f}", "-i", TEXT_IMAGE]
+        text_index, next_index = next_index, next_index + 1
 
     use_source_audio = info.has_audio and not p.mute and not (inputs.music and p.music_replace)
     if not use_source_audio and not inputs.music:
@@ -207,26 +165,19 @@ def plan_render(p: EditParams, info: MediaInfo, inputs: RenderInputs) -> RenderP
     out_w, out_h = output_size(w, h, p)
     graph += _fit_filters(p, w, h, out_w, out_h, "vpre", "vfit")
 
-    post: list[str] = []
     fade_in = min(p.fade_in, out_duration / 2)
     fade_out = min(p.fade_out, out_duration / 2)
-    if fade_in > 0:
-        post.append(f"fade=t=in:st=0:d={fade_in:.3f}")
-    if fade_out > 0:
-        post.append(f"fade=t=out:st={out_duration - fade_out:.3f}:d={fade_out:.3f}")
+    last = "vfit"
     if inputs.subtitles:
         font_size = 11 if out_h > out_w else 16
-        post.append(
-            f"subtitles={SUBTITLES_FILE}:fontsdir=.:force_style='FontName=DejaVu Sans,Bold=1,"
-            f"FontSize={font_size},Outline=2,Shadow=1,MarginV=25'"
+        graph.append(
+            f"[{last}]subtitles={SUBTITLES_FILE}:fontsdir=.:force_style='FontName=Inter Display,Bold=1,"
+            f"FontSize={font_size},Outline=2,Shadow=1,MarginV=25'[vsub]"
         )
-    text_filters, text_files = _text_filters(p, out_w, out_h) if p.text else ([], {})
-    post += text_filters
-    last = "vfit"
-    if post:
-        graph.append(f"[vfit]{','.join(post)}[vpost]")
-        last = "vpost"
-
+        last = "vsub"
+    if text_index is not None:
+        graph.append(f"[{last}][{text_index}:v]overlay=0:0:shortest=1:format=auto[vtext]")
+        last = "vtext"
     if logo_index is not None:
         logo_w = _even(out_w * p.logo_scale / 100)
         margin = max(8, int(min(out_w, out_h) * 0.03))
@@ -242,7 +193,14 @@ def plan_render(p: EditParams, info: MediaInfo, inputs: RenderInputs) -> RenderP
         )
         graph.append(f"[{last}][logo]overlay=x={x}:y={y}:shortest=1:format=auto[vlogo]")
         last = "vlogo"
-    graph.append(f"[{last}]format=yuv420p[vout]")
+    # Переходы — в самом конце, чтобы текст и логотип появлялись и исчезали вместе с видео
+    final: list[str] = []
+    if fade_in > 0:
+        final.append(f"fade=t=in:st=0:d={fade_in:.3f}")
+    if fade_out > 0:
+        final.append(f"fade=t=out:st={out_duration - fade_out:.3f}:d={fade_out:.3f}")
+    final.append("format=yuv420p")
+    graph.append(f"[{last}]{','.join(final)}[vout]")
 
     # --- звук ---
     audio_parts: list[str] = []
@@ -289,6 +247,5 @@ def plan_render(p: EditParams, info: MediaInfo, inputs: RenderInputs) -> RenderP
         output_duration=out_duration,
         width=out_w,
         height=out_h,
-        text_files=text_files,
-        needs_font=bool(text_files) or inputs.subtitles,
+        needs_font=inputs.subtitles,
     )

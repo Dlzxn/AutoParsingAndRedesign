@@ -130,15 +130,19 @@ def test_friendly_download_errors(message, expected):
 # ---------- yt-dlp (подменённый) ----------
 
 class FakeYDL:
-    """Минимальная подмена yt_dlp.YoutubeDL."""
+    """Минимальная подмена yt_dlp.YoutubeDL (двухфазное извлечение: метаданные, затем скачивание)."""
 
-    last_params: dict = {}
-    info: dict = {"duration": 10}
+    instances: list[dict] = []
+    info: dict = {"duration": 10, "title": "Котики"}
     error: Exception | None = None
     write_file = True
 
     def __init__(self, params):
-        FakeYDL.last_params = params
+        FakeYDL.instances.append(params)
+
+    @property
+    def last_params(self):
+        return FakeYDL.instances[-1]
 
     def __enter__(self):
         return self
@@ -146,23 +150,28 @@ class FakeYDL:
     def __exit__(self, *exc):
         return False
 
-    def extract_info(self, url, download=True):
+    def extract_info(self, url, download=True, process=True):
+        assert download is False and process is False  # сначала только метаданные
         if FakeYDL.error:
             raise FakeYDL.error
-        rejection = self.last_params["match_filter"](FakeYDL.info)
-        if rejection:
-            return None
-        path = Path(self.last_params["outtmpl"].replace("%(ext)s", "mp4"))
+        return dict(FakeYDL.info)
+
+    def process_ie_result(self, info, download=True):
+        params = FakeYDL.instances[-1]
+        path = Path(params["outtmpl"].replace("%(ext)s", "mp4"))
+        for hook in params["progress_hooks"]:
+            hook({"status": "downloading", "filename": str(path), "downloaded_bytes": 50, "total_bytes": 100})
         if FakeYDL.write_file:
             path.write_bytes(b"video-bytes")
-        return {**FakeYDL.info, "requested_downloads": [{"filepath": str(path)}]}
+        return {**info, "requested_downloads": [{"filepath": str(path)}]}
 
 
 @pytest.fixture
 def fake_ydl(monkeypatch):
     import yt_dlp
 
-    FakeYDL.info, FakeYDL.error, FakeYDL.write_file = {"duration": 10}, None, True
+    FakeYDL.info, FakeYDL.error, FakeYDL.write_file = {"duration": 10, "title": "Котики"}, None, True
+    FakeYDL.instances = []
     monkeypatch.setattr(yt_dlp, "YoutubeDL", FakeYDL)
     return FakeYDL
 
@@ -172,21 +181,37 @@ OPTIONS = fetch.FetchOptions(max_duration=60, max_bytes=1000, timeout=30, proxy=
 
 
 def test_download_success_and_options(fake_ydl, tmp_path):
-    path = fetch.download("https://www.youtube.com/watch?v=abc", tmp_path / "dl", OPTIONS)
-    assert path.read_bytes() == b"video-bytes"
-    params = fake_ydl.last_params
+    progress: list[float] = []
+    result = fetch.download("https://www.youtube.com/watch?v=abc", tmp_path / "dl", OPTIONS, progress.append)
+    assert result.path.read_bytes() == b"video-bytes"
+    assert result.title == "Котики"
+    assert progress[0] == 0.02 and 0.4 < progress[1] < 0.6 and progress[-1] == 1.0
+    params = fake_ydl.instances[-1]
     assert params["noplaylist"] is True
     assert params["max_filesize"] == 1000
     assert params["proxy"] == "http://proxy:3128"
     assert params["js_runtimes"] == {"node": {}}
     assert params["merge_output_format"] == "mp4"
-    assert "avc1" in params["format"]
+    assert params["format"] == fetch.format_for(10)
 
 
-def test_download_rejects_long_video(fake_ydl, tmp_path):
+def test_format_depends_on_duration():
+    assert "[height<=?1920][width<=?1920]" in fetch.format_for(30)  # вертикальный 1080x1920 тоже проходит
+    assert "[height<=?1280][width<=?1280]" in fetch.format_for(600)  # длинные — 720p, быстрее
+    assert fetch.format_for(None).endswith("/b")
+
+
+def test_playlist_rejected(fake_ydl, tmp_path):
+    fake_ydl.info = {"_type": "playlist", "entries": []}
+    with pytest.raises(MediaError, match="плейлист"):
+        fetch.download("https://www.youtube.com/playlist?list=x", tmp_path / "dl", OPTIONS)
+
+
+def test_download_rejects_long_video_before_downloading(fake_ydl, tmp_path):
     fake_ydl.info = {"duration": 3600}
     with pytest.raises(MediaError, match="длинное"):
         fetch.download("https://www.youtube.com/watch?v=abc", tmp_path / "dl", OPTIONS)
+    assert len(fake_ydl.instances) == 1  # до второй фазы (скачивания) не дошло
 
 
 def test_download_error_is_translated(fake_ydl, tmp_path):
@@ -212,4 +237,4 @@ def test_download_without_file(fake_ydl, tmp_path):
 def test_download_refuses_foreign_url(fake_ydl, tmp_path):
     with pytest.raises(MediaError):
         fetch.download("http://192.168.0.1/router", tmp_path / "dl", OPTIONS)
-    assert fake_ydl.last_params == {} or "192.168" not in str(fake_ydl.last_params)
+    assert fake_ydl.instances == []

@@ -18,8 +18,9 @@ from sqlalchemy import select, update
 from app.config import Settings
 from app.db.base import session_factory
 from app.db.models import MediaSource, RenderJob
-from app.editor.pipeline import FONT_FILE, RenderInputs, plan_render
+from app.editor.pipeline import FONT_FILE, TEXT_IMAGE, RenderInputs, plan_render
 from app.editor.schemas import EditParams
+from app.editor.textrender import find_emoji_font, render_text_image
 from app.media.ffmpeg import MediaError, probe, run_ffmpeg
 from app.media.storage import Storage
 
@@ -109,10 +110,11 @@ class RenderQueue:
                 logo=params_data.get("_logo"),
                 music=params_data.get("_music"),
                 subtitles=bool(params_data.get("_subtitles")),
+                text_image=bool(params.text),
             )
             plan = plan_render(params, info, inputs)
-            for name, content in plan.text_files.items():
-                (job_dir / name).write_text(content, encoding="utf-8")
+            if params.text:
+                await asyncio.to_thread(self._render_text, params, plan.width, plan.height, job_dir / TEXT_IMAGE)
             if plan.needs_font and not (job_dir / FONT_FILE).exists():
                 shutil.copyfile(self.settings.font_path, job_dir / FONT_FILE)
 
@@ -156,8 +158,16 @@ class RenderQueue:
             await self._set(job_id, status="failed", error="Внутренняя ошибка обработки видео", finished_at=_now())
         finally:
             self.progress.pop(job_id, None)
-            for leftover in job_dir.glob("text_*.txt"):
-                leftover.unlink(missing_ok=True)
+            (job_dir / TEXT_IMAGE).unlink(missing_ok=True)
+
+    def _render_text(self, params: EditParams, width: int, height: int, dest) -> None:
+        image = render_text_image(
+            params.text, width, height,
+            position=params.text_position, size=params.text_size, color=params.text_color,
+            background=params.text_background, font_path=str(self.settings.font_path),
+            emoji_font_path=find_emoji_font(self.settings.emoji_font_path),
+        )
+        image.save(dest, optimize=False, compress_level=1)
 
 
 def _now() -> datetime:

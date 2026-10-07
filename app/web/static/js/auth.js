@@ -12,10 +12,10 @@
   const PHONE_RE = /^\d{10,15}$/;
 
   function show(box, message) {
-    errorBox.style.display = 'none';
-    successBox.style.display = 'none';
+    errorBox.hidden = true;
+    successBox.hidden = true;
     box.textContent = message;
-    box.style.display = 'block';
+    box.hidden = false;
   }
 
   function validate(identity, password) {

@@ -6,8 +6,9 @@ from pathlib import Path
 import pytest
 
 from app.config import get_settings
-from app.editor.pipeline import FONT_FILE, SUBTITLES_FILE, RenderInputs, plan_render
+from app.editor.pipeline import FONT_FILE, SUBTITLES_FILE, TEXT_IMAGE, RenderInputs, plan_render
 from app.editor.schemas import EditParams
+from app.editor.textrender import find_emoji_font, render_text_image
 from app.media.ffmpeg import MediaError, probe, run_ffmpeg
 from tests.conftest import requires_ffmpeg
 
@@ -29,10 +30,15 @@ def render(media_dir: Path, workdir: Path, source: str, params: dict, *, logo=Fa
         logo="logo.png" if logo else None,
         music="music.mp3" if music else None,
         subtitles=subtitles,
+        text_image=bool(params.get("text")),
     )
-    plan = plan_render(EditParams(**params), info, inputs)
-    for name, content in plan.text_files.items():
-        (workdir / name).write_text(content, encoding="utf-8")
+    edit = EditParams(**params)
+    plan = plan_render(edit, info, inputs)
+    if edit.text:
+        render_text_image(edit.text, plan.width, plan.height, position=edit.text_position, size=edit.text_size,
+                          color=edit.text_color, background=edit.text_background,
+                          font_path=str(get_settings().font_path),
+                          emoji_font_path=find_emoji_font()).save(workdir / TEXT_IMAGE)
     if plan.needs_font:
         shutil.copy(get_settings().font_path, workdir / FONT_FILE)
     progress: list[float] = []
@@ -65,6 +71,7 @@ SCENARIOS = {
     "переходы": ({"fade_in": 1, "fade_out": 1}, {}),
     "текст сверху с подложкой": ({"text": "Привет, мир! 100% «кавычки» 'одинарные' : \\ ;", "text_position": "top"}, {}),
     "длинный текст без подложки": ({"text": "Очень длинный текст " * 10, "text_background": False, "text_size": "large"}, {}),
+    "текст с эмодзи": ({"text": "Огонь 🔥🚀 и смех 😂", "text_position": "center"}, {}),
     "логотип": ({"logo_position": "bottom-left", "logo_scale": 30, "logo_opacity": 0.5}, {"logo": True}),
     "музыка поверх": ({"music_volume": 150, "volume": 50}, {"music": True}),
     "музыка вместо звука": ({"music_replace": True}, {"music": True}),
