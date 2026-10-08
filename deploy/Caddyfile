@@ -1,4 +1,5 @@
-# Reverse proxy с автоматическим HTTPS (Let's Encrypt). Домен задаётся переменной SITE_DOMAIN в .env.
+# Reverse proxy с автоматическим HTTPS (Let's Encrypt).
+# SITE_DOMAIN — основной домен; REDIRECT_DOMAINS — дополнительные адреса (через запятую), ведущие на основной.
 
 {$SITE_DOMAIN} {
 	encode zstd gzip
@@ -20,4 +21,8 @@
 			write_timeout 6m
 		}
 	}
+}
+
+{$REDIRECT_DOMAINS} {
+	redir https://{$SITE_DOMAIN}{uri} permanent
 }

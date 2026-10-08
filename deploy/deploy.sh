@@ -2,7 +2,9 @@
 # Деплой на сервер с Ubuntu по SSH (повторный запуск безопасен — обновляет приложение).
 #
 #   ./deploy/deploy.sh root@1.2.3.4                    # домен по умолчанию: 1-2-3-4.sslip.io
-#   ./deploy/deploy.sh root@1.2.3.4 clips.example.com  # свой домен (A-запись должна указывать на сервер)
+#   ./deploy/deploy.sh root@1.2.3.4 clips.example.com  # свой домен (A-записи @ и www должны указывать на сервер);
+#                                                      # можно указать и на работающем сервере — домен сменится,
+#                                                      # старый адрес и www будут перенаправлять на новый
 #
 # Переменные окружения:
 #   SSH_KEY      путь к ключу (по умолчанию ~/.ssh/autoparsing_deploy, если существует)
@@ -12,7 +14,8 @@ set -euo pipefail
 
 TARGET="${1:?Использование: deploy.sh user@host [домен]}"
 HOST="${TARGET#*@}"
-DOMAIN="${2:-${HOST//./-}.sslip.io}"
+DOMAIN_ARG="${2:-}"
+DOMAIN="${DOMAIN_ARG:-${HOST//./-}.sslip.io}"
 APP_DIR=/opt/autoparsing
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 ENV_FILE="${ENV_FILE:-$ROOT/deploy/.env.production}"
@@ -62,6 +65,23 @@ if ! remote "test -f $APP_DIR/.env"; then
     grep -q '^POSTGRES_PASSWORD=.\+' .env || echo \"POSTGRES_PASSWORD=\$(openssl rand -hex 24)\" >> .env
     grep -q '^SITE_DOMAIN=' .env || echo 'SITE_DOMAIN=$DOMAIN' >> .env"
 fi
+
+# Домен: при первом деплое или при явной смене. Старый домен и www.<домен> перенаправляют на основной.
+remote "bash -s -- '$DOMAIN_ARG'" <<'DOMAIN_SCRIPT'
+set -eu
+cd /opt/autoparsing
+old=$(grep '^SITE_DOMAIN=' .env | cut -d= -f2)
+new=${1:-$old}
+list="www.$new"
+if [ "$old" != "$new" ]; then list="$list $old"; fi
+for d in $(grep '^REDIRECT_DOMAINS=' .env | cut -d= -f2- | tr ',' ' '); do
+  if [ "$d" != "$new" ] && ! echo " $list " | grep -qF " $d "; then list="$list $d"; fi
+done
+redirects=$(echo "$list" | sed 's/ /, /g')
+sed -i '/^SITE_DOMAIN=/d;/^REDIRECT_DOMAINS=/d' .env
+printf 'SITE_DOMAIN=%s\nREDIRECT_DOMAINS=%s\n' "$new" "$redirects" >> .env
+echo "Домен: $new (перенаправления: $redirects)"
+DOMAIN_SCRIPT
 
 step "Сборка и запуск контейнеров"
 remote "cd $APP_DIR && docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml up -d --build --remove-orphans && docker image prune -f >/dev/null"
