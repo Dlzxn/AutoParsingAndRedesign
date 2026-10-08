@@ -85,10 +85,6 @@ class Settings(BaseSettings):
         self.var_dir.mkdir(parents=True, exist_ok=True)
         return f"sqlite+aiosqlite:///{(self.var_dir / 'app.db').as_posix()}"
 
-    @property
-    def is_production(self) -> bool:
-        return self.environment == "production"
-
 
 @lru_cache
 def get_settings() -> Settings:

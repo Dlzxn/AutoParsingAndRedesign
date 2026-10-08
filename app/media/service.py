@@ -2,7 +2,6 @@
 import asyncio
 import logging
 import re
-import shutil
 from collections.abc import Callable
 from pathlib import Path
 
@@ -82,10 +81,6 @@ class MediaService:
         async with self._downloads:
             result = await asyncio.to_thread(fetch.download, url, dest_dir, self.fetch_options(), on_progress)
         return result.path, await self.inspect_video(result.path), result.title
-
-    @staticmethod
-    def discard(path: Path) -> None:
-        shutil.rmtree(path, ignore_errors=True)
 
 
 def safe_filename(title: str | None, fallback: str = "clip", max_length: int = 60) -> str:

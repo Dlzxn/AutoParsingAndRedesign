@@ -38,12 +38,8 @@ async def legacy_editor_redirect():
 
 @router.post("/api/editor/sources/upload", response_model=SourceOut, status_code=status.HTTP_201_CREATED)
 async def upload_source(request: Request, db: DbSession, user: CurrentUser, file: UploadFile = File(...)):
-    editor = get_editor(request)
-    length = request.headers.get("content-length")
-    if length and length.isdigit() and int(length) > editor.media.max_upload_bytes + 1024 * 1024:
-        raise HTTPException(status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-                            f"Файл слишком большой (максимум {editor.media.settings.max_upload_mb} МБ)")
-    return source_out(await editor.create_source_from_upload(db, user, file))
+    # Слишком большие запросы отсекаются ещё до чтения тела — см. limit_upload_size в app.main
+    return source_out(await get_editor(request).create_source_from_upload(db, user, file))
 
 
 @router.post("/api/editor/sources/url", response_model=SourceOut, status_code=status.HTTP_201_CREATED)

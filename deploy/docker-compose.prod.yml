@@ -1,0 +1,40 @@
+# Продакшен-надстройка: docker compose -f docker-compose.yml -f deploy/docker-compose.prod.yml up -d
+services:
+  app:
+    build:
+      args:
+        # Chromium нужен только для поиска VK без токена; на сервере с 2 ГБ RAM экономим память
+        INSTALL_CHROMIUM: ${INSTALL_CHROMIUM:-false}
+    ports: !reset []
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-autoparsing}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-autoparsing}
+    logging:
+      driver: json-file
+      options: { max-size: "20m", max-file: "5" }
+
+  db:
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on: [app]
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?Задайте SITE_DOMAIN в .env}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+volumes:
+  caddy_data:
+  caddy_config:

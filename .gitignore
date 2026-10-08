@@ -25,3 +25,6 @@ dist/
 *.mov
 *.mkv
 !tests/fixtures/**
+deploy/.env.production
+.coverage
+htmlcov/

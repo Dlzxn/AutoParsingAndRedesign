@@ -894,5 +894,7 @@
   }
 
   window.ClipEditor = ClipEditor;
+  // Чистые функции — для тестов (tests/js) и сверки с серверной реализацией
+  window.ClipEditorCore = { outputSize, tokenize, wrapLines, textWidth, parseSrt };
   window.ClipEditorModal = { init: initModal };
 })();

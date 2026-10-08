@@ -97,10 +97,24 @@ docker compose exec app python -m app.cli create-admin admin@example.com 'сло
 ## Тесты
 
 ```bash
-pytest                    # все тесты (~3 минуты, включая реальный рендер через ffmpeg)
-pytest -m "not ffmpeg and not live"   # быстрые тесты без рендера (~40 с)
-pytest -m live            # проверка реальных API платформ (нужен .env с ключами)
+pytest                                   # всё: бэкенд, реальный рендер, JS, браузерные сценарии (~5 минут)
+pytest -m "not ffmpeg and not e2e"       # быстрые тесты без рендера и браузера (~40 с)
+pytest -m e2e                            # сквозные сценарии в настоящем Chrome
+pytest -m live                           # проверка реальных API площадок (нужен .env с ключами)
+pytest --cov                             # с отчётом о покрытии кода
 TEST_DATABASE_URL=postgresql+asyncpg://user:pass@localhost:5432/test_db pytest   # на PostgreSQL
 ```
 
+Что покрыто:
+
+| Слой | Где | Что проверяется |
+|---|---|---|
+| Площадки | `tests/search/` | разбор реальных ответов API, пагинация, ключи, лимиты, ошибки, VK через браузер |
+| Поиск | `tests/search/test_service.py`, `test_search_api.py` | кэш, таймауты, объединение запросов, история, права |
+| Редактор | `tests/editor/` | команда ffmpeg, реальный рендер всех функций, текст с эмодзи, очередь, отмена, ошибки |
+| Приложение | `tests/test_*.py` | авторизация, админка, страницы, миграции старой БД, CLI, healthcheck |
+| Фронтенд | `tests/js/`, `tests/test_frontend_js.py` | JS-функции (node:test), совпадение превью с рендером на 480 комбинациях |
+| Браузер | `tests/e2e/` | регистрация, поиск, монтаж от начала до скачивания, тема, админка, мобильная вёрстка |
+
+Тесты, которым нужны ffmpeg, Node.js или Chrome, автоматически пропускаются, если их нет.
 `TEST_DATABASE_URL` — отдельная пустая база: она очищается перед каждым тестом.

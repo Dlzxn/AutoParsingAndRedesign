@@ -132,6 +132,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.settings = settings
 
     @app.middleware("http")
+    async def limit_upload_size(request: Request, call_next):
+        """Отклоняет слишком большие загрузки по Content-Length до чтения тела запроса."""
+        if request.method == "POST" and request.url.path.startswith("/api/editor/"):
+            length = request.headers.get("content-length", "")
+            limit = settings.max_upload_mb * 1024 * 1024 + 10 * 1024 * 1024  # + запас на логотип/музыку и поля формы
+            if length.isdigit() and int(length) > limit:
+                return JSONResponse({"detail": f"Файл слишком большой (максимум {settings.max_upload_mb} МБ)"},
+                                    status.HTTP_413_REQUEST_ENTITY_TOO_LARGE)
+        return await call_next(request)
+
+    @app.middleware("http")
     async def timing_and_headers(request: Request, call_next):
         started = time.perf_counter()
         response = await call_next(request)

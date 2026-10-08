@@ -1,0 +1,23 @@
+# Reverse proxy с автоматическим HTTPS (Let's Encrypt). Домен задаётся переменной SITE_DOMAIN в .env.
+
+{$SITE_DOMAIN} {
+	encode zstd gzip
+
+	# Загрузка видео до MAX_UPLOAD_MB + запас на логотип, музыку и поля формы
+	request_body {
+		max_size 600MB
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	reverse_proxy app:8000 {
+		# Скачивание длинных роликов по ссылке может занимать до нескольких минут
+		transport http {
+			read_timeout 6m
+			write_timeout 6m
+		}
+	}
+}

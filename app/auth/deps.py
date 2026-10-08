@@ -19,8 +19,6 @@ class LoginRequired(Exception):
 
 
 async def get_optional_user(request: Request, db: DbSession) -> User | None:
-    if hasattr(request.state, "user"):  # кэш на время запроса
-        return request.state.user
     token = request.cookies.get(get_settings().session_cookie_name)
     user = await service.get_user_by_token(db, token)
     request.state.user = user

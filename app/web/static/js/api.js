@@ -93,7 +93,9 @@
     const value = String(text || '').trim().replace(',', '.');
     if (!value) return NaN;
     if (value.includes(':')) {
-      const [m, s] = value.split(':');
+      const parts = value.split(':');
+      if (parts.length !== 2) return NaN;
+      const [m, s] = parts;
       if (!/^\d+$/.test(m) || !/^\d+(\.\d+)?$/.test(s)) return NaN;
       return Number(m) * 60 + Number(s);
     }

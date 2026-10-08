@@ -1,6 +1,6 @@
 import logging
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, status
+from fastapi import APIRouter, BackgroundTasks, Request, status
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 
@@ -44,6 +44,4 @@ async def download_clip(url: str, request: Request, background: BackgroundTasks,
     if user is not None:
         await mark_seen(db, user.id, url, platform)
     background.add_task(storage.remove_dir, tmp_dir)
-    if not path.exists():
-        raise HTTPException(status.HTTP_404_NOT_FOUND, "Видео недоступно")
     return FileResponse(path, media_type="video/mp4", filename=f"{safe_filename(title, f'{platform}_clip')}{path.suffix}")

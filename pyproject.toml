@@ -12,4 +12,15 @@ addopts = "-ra -m 'not live'"
 markers = [
     "live: тесты с реальными запросами к внешним API (запуск: pytest -m live)",
     "ffmpeg: тесты с реальным рендером через ffmpeg",
+    "e2e: сквозные тесты в браузере (нужен Chrome)",
 ]
+
+[tool.coverage.run]
+source = ["app"]
+concurrency = ["thread", "greenlet"]
+omit = ["app/asgi.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_also = ["if __name__ == .__main__.:", "raise NotImplementedError"]
