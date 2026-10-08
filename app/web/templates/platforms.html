@@ -1,0 +1,26 @@
+{% extends "_admin_layout.html" %}
+
+{% block title %}Платформы — админ-панель{% endblock %}
+
+{% block admin_content %}
+<div class="admin-head">
+  <div>
+    <h1 class="h1">Платформы</h1>
+    <p>Отключённая площадка показывает пользователям страницу «Технические работы».</p>
+  </div>
+</div>
+<div class="platform-admin-grid" id="platformsGrid"></div>
+
+<div class="modal" id="confirmationModal" hidden>
+  <div class="modal-dialog">
+    <div class="modal-head"><h3>Подтвердите действие</h3></div>
+    <div class="modal-body"><p id="modalMessage" class="muted"></p></div>
+    <div class="modal-foot">
+      <button type="button" class="btn modal-cancel">Отмена</button>
+      <button type="button" class="btn btn-primary modal-confirm">Подтвердить</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}<script src="{{ static('js/platforms_open.js') }}"></script>{% endblock %}

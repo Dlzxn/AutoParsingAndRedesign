@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f6f9">
+  <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')})()</script>
+  <title>{% block title %}Parser Platform — клипы для ваших площадок за минуты{% endblock %}</title>
+  <meta name="description" content="{% block description %}Находите короткие ролики на VK, YouTube, Coub, Reddit и Imgur и превращайте их в готовые клипы в онлайн-редакторе.{% endblock %}">
+  <link rel="icon" type="image/svg+xml" href="{{ static('img/logo.svg') }}">
+  <link rel="preload" href="{{ static('fonts/InterVariable.woff2') }}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="{{ static('css/app.css') }}">
+  {% block styles %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  {% set path = request.url.path %}
+  <header class="header {% block header_class %}{% endblock %}" data-header>
+    <div class="container container-wide header-inner">
+      <a href="/" class="brand" aria-label="Parser Platform — на главную">
+        <img src="{{ static('img/logo.svg') }}" alt="" width="30" height="30">
+        <span>Parser Platform</span>
+      </a>
+
+      <nav class="nav" data-nav aria-label="Основное меню">
+        <a href="/video" class="{{ 'active' if path in ['/video', '/vk', '/youtube', '/coub', '/reddit', '/imgur'] }}">Поиск клипов</a>
+        <a href="/editor" class="{{ 'active' if path == '/editor' }}">Редактор</a>
+        <a href="/text" class="{{ 'active' if path in ['/text', '/tumblr', '/text-editor'] }}">Тексты</a>
+        <a href="/tariffs" class="{{ 'active' if path == '/tariffs' }}">Тарифы</a>
+        <a href="/features" class="{{ 'active' if path == '/features' }}">Возможности</a>
+      </nav>
+
+      <div class="header-actions">
+        <button type="button" class="btn btn-ghost btn-icon theme-toggle" data-theme-toggle aria-label="Сменить тему" title="Сменить тему">{{ icon('moon', 'theme-icon-moon') }}{{ icon('sun', 'theme-icon-sun') }}</button>
+        {% if current_user %}
+          {% set plan = 'Администратор' if current_user.is_admin else current_user.subscribe_status %}
+          <div class="account" data-account>
+            <button type="button" class="account-button" data-account-button aria-haspopup="menu" aria-expanded="false">
+              <span class="avatar">{{ current_user.email[:1]|upper }}</span>
+              <span class="account-meta">
+                <span class="account-name">{{ current_user.email }}</span>
+                <span class="account-plan">{{ plan }}</span>
+              </span>
+              {{ icon('chevron-down', 'icon-sm faint') }}
+            </button>
+            <div class="menu" role="menu" data-account-menu>
+              <a href="/profile" role="menuitem">{{ icon('user') }} Профиль</a>
+              <a href="/editor" role="menuitem">{{ icon('film') }} Мои ролики</a>
+              {% if current_user.is_admin %}<a href="/admin" role="menuitem">{{ icon('shield') }} Админ-панель</a>{% endif %}
+              <a href="/tariffs" role="menuitem">{{ icon('card') }} Тарифы</a>
+              <hr>
+              <a href="/logout" role="menuitem" class="menu-danger">{{ icon('logout') }} Выйти</a>
+            </div>
+          </div>
+        {% else %}
+          <a href="/login" class="btn btn-ghost btn-hide-sm">Войти</a>
+          <a href="/registration" class="btn btn-primary">Начать бесплатно</a>
+        {% endif %}
+        <button type="button" class="btn btn-ghost btn-icon nav-toggle" data-nav-toggle aria-label="Меню">{{ icon('menu') }}</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% block footer %}
+  <footer class="footer">
+    <div class="container container-wide">
+      <div class="footer-grid">
+        <div>
+          <a href="/" class="brand">
+            <img src="{{ static('img/logo.svg') }}" alt="" width="30" height="30">
+            <span>Parser Platform</span>
+          </a>
+          <p class="muted small" style="margin-top:14px;max-width:320px">Поиск коротких роликов на популярных площадках и онлайн-монтаж вертикальных клипов в одном окне.</p>
+        </div>
+        <div>
+          <h4>Продукт</h4>
+          <ul>
+            <li><a href="/video">Поиск клипов</a></li>
+            <li><a href="/editor">Редактор</a></li>
+            <li><a href="/text">Тексты</a></li>
+            <li><a href="/tariffs">Тарифы</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Сообщество</h4>
+          <ul>
+            <li><a href="https://vk.com/parser_platform" target="_blank" rel="noopener">ВКонтакте</a></li>
+            <li><a href="https://t.me/parser_news" target="_blank" rel="noopener">Telegram-канал</a></li>
+            <li><a href="https://youtube.com/parser_tube" target="_blank" rel="noopener">YouTube</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Контакты</h4>
+          <ul>
+            <li><a href="mailto:support@parser.ru">support@parser.ru</a></li>
+            <li>ИП Иванов Алексей Петрович</li>
+            <li>ОГРНИП 321774635200154 · ИНН 773456789012</li>
+            <li>Москва, ул. Тверская, д. 15, офис 305</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2020–{{ now_year }} Parser Platform</span>
+        <span>Сделано для авторов коротких видео</span>
+      </div>
+    </div>
+  </footer>
+  {% endblock %}
+
+  <script>window.__ICONS__ = {{ icons_json() }};</script>
+  <script src="{{ static('js/api.js') }}"></script>
+  <script src="{{ static('js/theme.js') }}"></script>
+  <script src="{{ static('js/base.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

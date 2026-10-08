@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Возможности — Parser Platform{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ static('css/pages.css') }}">{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="container">
+    <div class="page-head page-head-center">
+      <span class="badge">{{ icon('sparkles', 'icon-sm') }} Возможности</span>
+      <h1 class="h1">Всё для коротких видео</h1>
+      <p class="lead">Поиск, скачивание и монтаж вертикальных клипов — в одном сервисе.</p>
+    </div>
+    <div class="features-list">
+      {% for ic, title, text, link in [
+        ('search', 'Поиск клипов', 'Короткие ролики по тегу из VK, YouTube Shorts, Coub, Reddit и Imgur в одном окне.', '/video'),
+        ('eye-off', 'Без повторов', 'Просмотренные и скачанные ролики больше не попадают в выдачу — только свежий контент.', '/video'),
+        ('download', 'Скачивание в MP4', 'Ролик со звуком в один клик — готов к публикации на ваших площадках.', '/video'),
+        ('crop', 'Вертикальный формат', '9:16, 1:1, 4:5 и 16:9: обрезка, размытый фон или поля, поворот и отражение.', '/editor'),
+        ('type', 'Текст и эмодзи', 'Крупные подписи с подложкой или обводкой, кириллица и цветные эмодзи.', '/editor'),
+        ('image', 'Логотип и субтитры', 'Водяной знак с прозрачностью и субтитры из .srt-файла.', '/editor'),
+        ('music', 'Музыка и звук', 'Фоновая музыка, громкость, плавное появление и затухание.', '/editor'),
+        ('sun', 'Цветокоррекция', 'Яркость, контраст, насыщенность и чёрно-белый режим.', '/editor'),
+        ('file-text', 'Тексты Tumblr', 'Поиск текстовых постов по тегу и встроенный текстовый редактор.', '/tumblr'),
+      ] %}
+      <a class="card reveal" href="{{ link }}" style="transition-delay: {{ (loop.index0 % 3) * 60 }}ms">
+        <span class="feature-icon">{{ icon(ic, 'icon-lg') }}</span>
+        <h3 class="h3">{{ title }}</h3>
+        <p class="muted">{{ text }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

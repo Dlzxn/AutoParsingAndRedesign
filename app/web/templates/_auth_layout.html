@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#f6f6f9">
+  <script>(function(){var t;try{t=localStorage.getItem('theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light')})()</script>
+  <title>{% block title %}{% endblock %} — Parser Platform</title>
+  <link rel="icon" type="image/svg+xml" href="{{ static('img/logo.svg') }}">
+  <link rel="stylesheet" href="{{ static('css/app.css') }}">
+  <link rel="stylesheet" href="{{ static('css/auth.css') }}">
+</head>
+<body class="auth-body">
+  <div class="auth">
+    <div class="auth-form-side">
+      <div class="auth-top">
+      <a href="/" class="brand"><img src="{{ static('img/logo.svg') }}" alt="" width="30" height="30"><span>Parser Platform</span></a>
+      <button type="button" class="btn btn-ghost btn-icon theme-toggle" data-theme-toggle aria-label="Сменить тему" title="Сменить тему">{{ icon('moon', 'theme-icon-moon') }}{{ icon('sun', 'theme-icon-sun') }}</button>
+      </div>
+      <div class="auth-card">
+        {% block form %}{% endblock %}
+      </div>
+      <p class="faint small">© {{ now_year }} Parser Platform · <a href="mailto:support@parser.ru">support@parser.ru</a></p>
+    </div>
+    <aside class="auth-showcase force-dark" aria-hidden="true">
+      <div class="auth-showcase-inner">
+        <span class="eyebrow"><span class="dot"></span>Поиск и монтаж клипов</span>
+        <h2 class="h1">Клипы для ваших площадок — <span class="gradient-text">за минуты</span></h2>
+        <ul class="auth-points">
+          <li>{{ icon('search') }} Ролики с VK, YouTube, Coub, Reddit и Imgur</li>
+          <li>{{ icon('crop') }} Формат 9:16 с размытым фоном в один клик</li>
+          <li>{{ icon('type') }} Подписи с эмодзи, логотип и музыка</li>
+          <li>{{ icon('download') }} Готовый MP4 за секунды</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+  <script src="{{ static('js/theme.js') }}"></script>
+  <script src="{{ static('js/auth.js') }}"></script>
+</body>
+</html>

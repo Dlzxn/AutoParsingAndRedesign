@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Тарифы — Parser Platform{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{{ static('css/pages.css') }}">
+<link rel="stylesheet" href="{{ static('css/landing.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="container">
+    <div class="page-head page-head-center">
+      <span class="badge">{{ icon('card', 'icon-sm') }} Тарифы</span>
+      <h1 class="h1">Выберите свой темп</h1>
+      <p class="lead">Для подключения напишите нам — ответим в течение рабочего дня.</p>
+    </div>
+    <div class="pricing-grid" id="pricingContainer"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}<script src="{{ static('js/pricing.js') }}"></script>{% endblock %}

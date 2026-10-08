@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Редактор клипов — Parser Platform{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ static('css/editor.css') }}">
+<link rel="stylesheet" href="{{ static('css/pages.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="page editor-page" data-editor-page data-initial-url="{{ initial_url }}">
+  <div class="container container-wide">
+    <div class="page-head">
+      <div>
+        <span class="badge">{{ icon('scissors', 'icon-sm') }} Редактор</span>
+        <h1 class="h1">Редактор клипов</h1>
+        <p class="lead">Обрежьте ролик, переведите в вертикальный формат, добавьте текст, логотип и музыку.</p>
+      </div>
+      <button type="button" class="btn" data-new-video hidden>{{ icon('plus') }} Другое видео</button>
+    </div>
+
+    {% include "_clip_editor.html" %}
+
+    <section class="my-clips" data-my-clips hidden>
+      <div class="my-clips-head">
+        <h2 class="h3">Мои ролики</h2>
+        <span class="faint small">{{ icon('clock', 'icon-sm') }} хранятся 24 часа</span>
+      </div>
+      <div class="my-clips-list" data-my-clips-list></div>
+    </section>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ static('js/clip-editor.js') }}"></script>
+<script src="{{ static('js/editor-page.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Тексты — Parser Platform{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ static('css/pages.css') }}">{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="container">
+    <div class="page-head">
+      <div>
+        <span class="badge">{{ icon('file-text', 'icon-sm') }} Тексты</span>
+        <h1 class="h1">Идеи для постов</h1>
+        <p class="lead">Ищите текстовые посты по тегу и дорабатывайте их во встроенном редакторе.</p>
+      </div>
+    </div>
+    <div class="platform-grid">
+      <a class="platform-tile reveal" href="/tumblr" style="--tile-color: #4c6fff">
+        <img src="{{ static('img/platforms/tumblr.svg') }}" alt="">
+        <h3>Tumblr</h3>
+        <p>Текстовые посты по тегу: копирование в один клик и редактирование.</p>
+        <span class="go">Искать {{ icon('arrow-right', 'icon-sm') }}</span>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

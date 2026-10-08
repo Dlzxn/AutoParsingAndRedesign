@@ -1,0 +1,62 @@
+{% extends "_admin_layout.html" %}
+
+{% block title %}Промокоды — админ-панель{% endblock %}
+{% block admin_styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+{% endblock %}
+
+{% block admin_content %}
+<div class="admin-head">
+  <div>
+    <h1 class="h1">Промокоды</h1>
+    <p>Промо-предложения и их лимиты.</p>
+  </div>
+  <button type="button" class="btn btn-primary" onclick="openModal()">{{ icon('plus') }} Промокод</button>
+</div>
+
+<div class="table-wrap">
+  <table class="table" id="promoTable">
+    <thead>
+      <tr><th>Название</th><th>Тип</th><th>Статус</th><th>Активаций</th><th>Бонус</th><th>Действует до</th><th></th></tr>
+    </thead>
+    <tbody id="promoBody"></tbody>
+  </table>
+</div>
+
+<div id="promoModal" class="modal" hidden>
+  <div class="modal-dialog">
+    <div class="modal-head">
+      <h3 id="modalTitle">Новый промокод</h3>
+      <button type="button" class="btn btn-ghost btn-icon close" aria-label="Закрыть">{{ icon('x') }}</button>
+    </div>
+    <form id="promoForm">
+      <input type="hidden" id="promoId">
+      <div class="modal-body form-grid">
+        <label class="field full"><span class="label">Название</span><input class="input" type="text" id="name" maxlength="100" required></label>
+        <label class="field"><span class="label">Тип</span>
+          <select class="select" id="type" required>
+            <option value="sale">Скидка</option>
+            <option value="standart">Подписка Standart</option>
+            <option value="pro">Подписка Pro</option>
+            <option value="premium">Подписка Premium</option>
+          </select>
+        </label>
+        <label class="field"><span class="label">Действует до</span><input class="input datepicker" type="text" id="date_ended" placeholder="Без срока"></label>
+        <label class="field"><span class="label">Лимит активаций</span><input class="input" type="number" id="count_activated" min="0" value="0" required></label>
+        <label class="field"><span class="label">Бонус</span><input class="input" type="number" id="bonus_count" min="0" value="0" required></label>
+        <label class="field full"><span class="label">Описание</span><textarea class="textarea" id="description"></textarea></label>
+        <label class="check full"><input type="checkbox" id="status"><span class="switch"></span>Активен</label>
+      </div>
+      <div class="modal-foot">
+        <button type="submit" class="btn btn-primary">{{ icon('save', 'icon-sm') }} Сохранить</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="{{ static('js/adm_promo.js') }}"></script>
+{% endblock %}

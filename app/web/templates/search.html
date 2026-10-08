@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} — поиск клипов{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ static('css/search.css') }}">
+{% if page.kind == 'video' %}<link rel="stylesheet" href="{{ static('css/editor.css') }}">{% endif %}
+{% endblock %}
+
+{% set switcher = [('vk', '/vk', 'VK'), ('yt', '/youtube', 'YouTube'), ('coub', '/coub', 'Coub'), ('reddit', '/reddit', 'Reddit'), ('imgur', '/imgur', 'Imgur')] %}
+
+{% block content %}
+<section class="page search-page" data-search-page data-platform="{{ page.key }}" data-kind="{{ page.kind }}">
+  <div class="container container-wide">
+    <div class="search-hero">
+      <img class="search-logo" src="{{ static('img/platforms/' ~ page.key ~ '.svg') }}" alt="" width="56" height="56">
+      <h1 class="h1">{{ page.title }}</h1>
+      <p class="lead">{{ page.description }}</p>
+
+      <form class="search-bar" data-search-form role="search">
+        {{ icon('search', 'search-bar-icon') }}
+        <input type="search" name="q" class="search-input" placeholder="Тег или тема, например: котики"
+               autocomplete="off" minlength="2" maxlength="100" required data-search-input aria-label="Поисковый запрос">
+        <button type="submit" class="btn btn-primary" data-search-button>
+          <span class="button-text">{% if page.kind == 'text' %}Найти посты{% else %}Найти{% endif %}</span>
+        </button>
+      </form>
+
+      {% if page.kind == 'video' %}
+      <nav class="platform-switch" aria-label="Другие площадки">
+        {% for key, url, name in switcher %}
+        <a href="{{ url }}" class="{{ 'active' if key == page.key }}"><img src="{{ static('img/platforms/' ~ key ~ '.svg') }}" alt="" width="18" height="18">{{ name }}</a>
+        {% endfor %}
+      </nav>
+      {% endif %}
+      <p class="search-hint">{{ icon('eye-off', 'icon-sm') }} Просмотренные и скачанные материалы больше не появятся в выдаче</p>
+    </div>
+
+    <div class="results-meta" data-results-meta hidden></div>
+    <div class="results {{ 'results-text' if page.kind == 'text' }}" data-results>
+      <div class="empty">
+        <div class="empty-icon">{{ icon('sparkles', 'icon-lg') }}</div>
+        <strong>Введите тег, чтобы начать</strong>
+        <span>{{ page.loading|replace('...', '') }} — результаты появятся здесь.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if page.kind == 'video' %}
+<div class="modal ce-modal" data-ce-modal hidden>
+  <div class="modal-dialog ce-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ceModalTitle">
+    <div class="modal-head">
+      <h2 id="ceModalTitle" data-ce-modal-title>Редактор клипа</h2>
+      <button type="button" class="btn btn-ghost btn-icon" data-ce-close aria-label="Закрыть">{{ icon('x') }}</button>
+    </div>
+    <div class="ce-modal-body">
+      {% include "_clip_editor.html" %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+{% if page.kind == 'video' %}<script src="{{ static('js/clip-editor.js') }}"></script>{% endif %}
+<script src="{{ static('js/search.js') }}"></script>
+{% endblock %}

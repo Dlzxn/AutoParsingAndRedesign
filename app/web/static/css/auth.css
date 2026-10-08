@@ -1,0 +1,50 @@
+/* Вход и регистрация */
+.auth { min-height: 100vh; display: grid; grid-template-columns: minmax(420px, 1fr) 1.1fr; }
+
+.auth-form-side { display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: 32px 48px; }
+.auth-card { width: 100%; max-width: 400px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+.auth-card .stack { margin-top: 14px; }
+.auth-switch { text-align: center; margin-top: 6px; }
+.auth-switch a { color: var(--accent-text); font-weight: 600; }
+.auth-switch a:hover { text-decoration: underline; }
+
+.auth-message { padding: 12px 14px; border-radius: 12px; font-size: 0.9rem; }
+.auth-error { background: rgba(251, 113, 133, 0.1); border: 1px solid rgba(251, 113, 133, 0.3); color: var(--danger); }
+.auth-success { background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); color: var(--success); }
+
+.auth-showcase {
+  position: relative;
+  margin: 12px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 56px;
+  background:
+    radial-gradient(600px 400px at 80% 10%, rgba(236, 72, 153, 0.45), transparent 60%),
+    radial-gradient(700px 500px at 10% 90%, rgba(139, 92, 246, 0.55), transparent 60%),
+    linear-gradient(160deg, #1a1033, #0b0d14);
+  border: 1px solid var(--border);
+}
+
+.auth-showcase::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(var(--tint-3) 1px, transparent 1px), linear-gradient(90deg, var(--tint-3) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(circle at 60% 30%, #000, transparent 70%);
+}
+
+.auth-showcase-inner { position: relative; display: flex; flex-direction: column; gap: 22px; max-width: 520px; }
+.auth-points { list-style: none; display: flex; flex-direction: column; gap: 12px; color: rgba(255, 255, 255, 0.82); }
+.auth-points li { display: flex; align-items: center; gap: 12px; }
+.auth-points .icon { color: #f0abfc; }
+
+@media (max-width: 960px) {
+  .auth { grid-template-columns: 1fr; }
+  .auth-showcase { display: none; }
+  .auth-form-side { padding: 24px 20px; }
+}
+.auth-showcase .eyebrow { align-self: flex-start; }
+.auth-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }

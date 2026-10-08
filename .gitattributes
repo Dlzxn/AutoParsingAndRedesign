@@ -1,0 +1,5 @@
+# Единые окончания строк: скрипты и конфиги должны работать на Linux-сервере
+* text=auto eol=lf
+*.png binary
+*.ttf binary
+*.woff2 binary

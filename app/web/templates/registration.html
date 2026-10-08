@@ -1,0 +1,26 @@
+{% extends "_auth_layout.html" %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block form %}
+<h1 class="h2">Создайте аккаунт</h1>
+<p class="muted">Бесплатно и за полминуты.</p>
+<form id="authForm" class="stack" data-endpoint="/api/registration" data-next="{{ next_url }}" novalidate>
+  <label class="field">
+    <span class="label">Email или телефон</span>
+    <input class="input" type="text" id="identity" name="identity" autocomplete="username" placeholder="you@example.com" required autofocus>
+  </label>
+  <label class="field">
+    <span class="label">Пароль <span class="faint">минимум 6 символов</span></span>
+    <input class="input" type="password" id="password" name="password" autocomplete="new-password" placeholder="••••••••" required>
+  </label>
+  <label class="field">
+    <span class="label">Повторите пароль</span>
+    <input class="input" type="password" id="passwordConfirm" name="passwordConfirm" autocomplete="new-password" placeholder="••••••••" required>
+  </label>
+  <div class="auth-message auth-error" id="authError" role="alert" hidden></div>
+  <div class="auth-message auth-success" id="authSuccess" hidden></div>
+  <button type="submit" class="btn btn-primary btn-lg btn-block">Зарегистрироваться</button>
+</form>
+<p class="muted small auth-switch">Уже есть аккаунт? <a href="/login{% if next_url != '/' %}?next={{ next_url|urlencode }}{% endif %}">Войти</a></p>
+{% endblock %}

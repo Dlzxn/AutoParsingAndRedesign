@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Технические работы — Parser Platform{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ static('css/pages.css') }}">{% endblock %}
+
+{% block content %}
+<section class="state-page">
+  <div class="container">
+    <div class="inner" style="margin:0 auto">
+      <div class="state-icon">{{ icon('sliders') }}</div>
+      <h1 class="h2">Технические работы</h1>
+      <p class="lead">Мы улучшаем эту площадку — скоро всё снова заработает. Пока можно искать клипы на других платформах.</p>
+      <div class="state-actions">
+        <a href="/video" class="btn btn-primary">{{ icon('grid') }} Другие площадки</a>
+        <a href="/editor" class="btn">{{ icon('scissors') }} Редактор</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Текстовый редактор — Parser Platform{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ static('css/pages.css') }}">{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="container">
+    <div class="text-editor">
+      <div class="page-head">
+        <div>
+          <span class="badge">{{ icon('file-text', 'icon-sm') }} Тексты</span>
+          <h1 class="h1">Текстовый редактор</h1>
+        </div>
+        <a class="btn" data-source-link target="_blank" rel="noopener noreferrer" hidden>{{ icon('external') }} Оригинал</a>
+      </div>
+      <div class="card">
+        <div class="text-toolbar">
+          <button type="button" class="btn btn-primary btn-sm" data-command="copy">{{ icon('copy', 'icon-sm') }} Копировать</button>
+          <button type="button" class="btn btn-sm" data-command="selectAll" title="Выделить всё">Выделить всё</button>
+          <button type="button" class="btn btn-sm" data-command="bold" title="Жирный"><b>B</b></button>
+          <button type="button" class="btn btn-sm" data-command="italic" title="Курсив"><i>I</i></button>
+          <button type="button" class="btn btn-sm" data-command="underline" title="Подчёркивание"><u>U</u></button>
+          <button type="button" class="btn btn-sm" data-command="insertUnorderedList" title="Список">• Список</button>
+        </div>
+        <div id="editor" class="text-area" contenteditable="true" spellcheck="true"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}<script src="{{ static('js/text-editor.js') }}"></script>{% endblock %}

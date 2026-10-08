@@ -1,0 +1,28 @@
+{% extends "_admin_layout.html" %}
+
+{% block title %}Админ-панель — Parser Platform{% endblock %}
+
+{% block admin_content %}
+<div class="admin-head">
+  <div>
+    <h1 class="h1">Обзор</h1>
+    <p>Управление пользователями, тарифами и площадками.</p>
+  </div>
+</div>
+<div class="admin-cards">
+  {% for url, ic, title, text in [
+    ('/admin/users', 'users', 'Пользователи', 'Тарифы, сроки подписки, права администратора'),
+    ('/admin/promocode', 'tag', 'Промокоды', 'Создание и редактирование промо-предложений'),
+    ('/admin/pricing', 'card', 'Тарифы', 'Цены, скидки и лимиты скачиваний'),
+    ('/admin/platforms', 'power', 'Платформы', 'Включение и отключение площадок'),
+    ('/admin/stats', 'chart', 'Статистика', 'Пользователи, рендеры, площадки'),
+    ('/admin/export', 'download', 'Экспорт', 'Выгрузка пользователей в CSV для Excel'),
+  ] %}
+  <a class="admin-card" href="{{ url }}">
+    <span class="feature-icon">{{ icon(ic) }}</span>
+    <h3 class="h3">{{ title }}</h3>
+    <p>{{ text }}</p>
+  </a>
+  {% endfor %}
+</div>
+{% endblock %}

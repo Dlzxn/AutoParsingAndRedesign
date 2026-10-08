@@ -1,0 +1,30 @@
+{% extends "_admin_layout.html" %}
+
+{% block title %}Тарифы — админ-панель{% endblock %}
+
+{% block admin_content %}
+<div class="admin-head">
+  <div>
+    <h1 class="h1">Тарифы</h1>
+    <p>Цены и скидки сразу отображаются на сайте.</p>
+  </div>
+  <div class="admin-toolbar">
+    <button type="button" class="btn" onclick="loadTariffs()">{{ icon('rotate-cw', 'icon-sm') }} Отменить изменения</button>
+    <button type="button" class="btn btn-primary" onclick="saveAllTariffs()">{{ icon('save', 'icon-sm') }} Сохранить</button>
+  </div>
+</div>
+
+<div class="tariffs-grid" id="tariffsContainer"></div>
+
+<template id="tariffTemplate">
+  <div class="tariff-card">
+    <div class="tariff-name"></div>
+    <label class="field"><span class="label">Цена, ₽</span><input type="number" class="input price-input" min="0"></label>
+    <label class="field"><span class="label">Скачиваний в день</span><input type="number" class="input tokens-input" min="0"></label>
+    <label class="check"><input type="checkbox" class="sale-toggle"><span class="switch"></span>Акция</label>
+    <label class="field"><span class="label">Цена по акции, ₽</span><input type="number" class="input new-price-input" min="0"></label>
+  </div>
+</template>
+{% endblock %}
+
+{% block extra_scripts %}<script src="{{ static('js/tarif_adm.js') }}"></script>{% endblock %}

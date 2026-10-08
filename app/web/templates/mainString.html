@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block styles %}<link rel="stylesheet" href="{{ static('css/landing.css') }}">{% endblock %}
+
+{% set platforms = [
+  ('vk', 'VK Клипы', '/vk'), ('yt', 'YouTube Shorts', '/youtube'), ('coub', 'Coub', '/coub'),
+  ('reddit', 'Reddit', '/reddit'), ('imgur', 'Imgur', '/imgur'), ('tumblr', 'Tumblr', '/tumblr'),
+] %}
+
+{% block content %}
+<section class="hero">
+  <div class="container container-wide hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow reveal"><span class="dot"></span>Поиск и монтаж коротких видео в одном окне</span>
+      <h1 class="display reveal">Находите клипы.<br>Монтируйте <span class="gradient-text">за минуты.</span></h1>
+      <p class="lead reveal">Ищите ролики на VK, YouTube, Coub, Reddit и Imgur, обрезайте, переводите в 9:16,
+        добавляйте текст, логотип и музыку — прямо в браузере, без установки программ.</p>
+      <div class="hero-cta reveal">
+        {% if current_user %}
+          <a href="/editor" class="btn btn-primary btn-lg">{{ icon('scissors') }} Открыть редактор</a>
+          <a href="/video" class="btn btn-lg">{{ icon('search') }} Найти клипы</a>
+        {% else %}
+          <a href="/registration" class="btn btn-primary btn-lg">Начать бесплатно {{ icon('arrow-right') }}</a>
+          <a href="#features" class="btn btn-lg">Возможности</a>
+        {% endif %}
+      </div>
+      <ul class="hero-points reveal">
+        <li>{{ icon('check', 'icon-sm') }} Без установки</li>
+        <li>{{ icon('check', 'icon-sm') }} Готовый MP4 со звуком</li>
+        <li>{{ icon('check', 'icon-sm') }} Повторы скрываются</li>
+      </ul>
+    </div>
+
+    <div class="hero-visual force-dark reveal" aria-hidden="true">
+      <div class="mock-editor">
+        <div class="mock-panel">
+          <div class="mock-tabs"><span class="on">Кадр</span><span>Текст</span><span>Звук</span></div>
+          <div class="mock-label">Формат кадра</div>
+          <div class="mock-seg"><span>Исходный</span><span class="on">9:16</span><span>1:1</span><span>4:5</span></div>
+          <div class="mock-label">Заполнение</div>
+          <div class="mock-seg"><span>Обрезать</span><span class="on">Размытый фон</span></div>
+          <div class="mock-label">Яркость</div>
+          <div class="mock-range"><i style="width:62%"></i></div>
+          <div class="mock-label">Насыщенность</div>
+          <div class="mock-range"><i style="width:48%"></i></div>
+          <div class="mock-btn">Создать клип</div>
+        </div>
+        <div class="mock-phone">
+          <div class="mock-screen">
+            <div class="mock-blur"></div>
+            <div class="mock-video"><div class="mock-sun"></div><div class="mock-hills"></div></div>
+            <div class="mock-caption"><span>Лучшие моменты 🔥</span></div>
+            <div class="mock-logo">LOGO</div>
+          </div>
+        </div>
+        <div class="mock-chip chip-a">{{ icon('crop', 'icon-sm') }} 9:16 · размытый фон</div>
+        <div class="mock-chip chip-b">{{ icon('type', 'icon-sm') }} Текст + эмодзи</div>
+        <div class="mock-chip chip-c">{{ icon('zap', 'icon-sm') }} Рендер за секунды</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="platforms-strip">
+  <div class="container container-wide">
+    <p class="strip-title">Ищем ролики на площадках</p>
+    <div class="strip-logos">
+      {% for key, name, url in platforms %}
+      <a class="strip-item" href="{{ url }}"><img src="{{ static('img/platforms/' ~ key ~ '.svg') }}" alt="" width="28" height="28">{{ name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="badge">Возможности</span>
+      <h2 class="h2">Всё, чтобы выпускать клипы каждый день</h2>
+      <p class="lead">От поиска идеи до готового ролика для ваших площадок — без переключения между сервисами.</p>
+    </div>
+    <div class="feature-grid">
+      {% for ic, title, text in [
+        ('search', 'Поиск по тегу', 'Короткие ролики с пяти площадок по одному запросу. Длинные видео отфильтрованы.'),
+        ('eye-off', 'Только новое', 'Просмотренные и скачанные клипы больше не попадаются — каждый поиск даёт свежий контент.'),
+        ('download', 'MP4 со звуком', 'Скачивание в один клик в совместимом формате H.264 — готово к публикации.'),
+        ('crop', 'Вертикальный формат', '9:16, 1:1, 4:5 и 16:9 с обрезкой, размытым фоном или полями.'),
+        ('type', 'Текст и эмодзи', 'Крупные подписи с подложкой или обводкой, кириллица и цветные эмодзи.'),
+        ('music', 'Музыка и звук', 'Фоновая музыка, громкость, плавное появление и затухание.'),
+      ] %}
+      <article class="feature card reveal" style="transition-delay: {{ loop.index0 * 60 }}ms">
+        <div class="feature-icon">{{ icon(ic, 'icon-lg') }}</div>
+        <h3 class="h3">{{ title }}</h3>
+        <p class="muted">{{ text }}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="badge">Как это работает</span>
+      <h2 class="h2">Три шага до готового клипа</h2>
+    </div>
+    <div class="steps">
+      {% for title, text in [
+        ('Найдите ролик', 'Введите тег — получите подборку коротких видео с выбранной площадки.'),
+        ('Настройте монтаж', 'Обрежьте фрагмент, выберите формат, добавьте текст, логотип и музыку. Превью — мгновенно.'),
+        ('Скачайте результат', 'Сервер соберёт ролик за секунды. Готовый MP4 хранится в «Моих роликах» 24 часа.'),
+      ] %}
+      <div class="step reveal" style="transition-delay: {{ loop.index0 * 80 }}ms">
+        <div class="step-num">{{ loop.index }}</div>
+        <h3 class="h3">{{ title }}</h3>
+        <p class="muted">{{ text }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="badge">Тарифы</span>
+      <h2 class="h2">Выберите свой темп</h2>
+      <p class="lead">Подключение — через поддержку, ответим в течение рабочего дня.</p>
+    </div>
+    <div class="pricing-grid" id="pricingContainer"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="cta-band force-dark reveal">
+      <h2 class="h2">Первый клип — через пару минут</h2>
+      <p class="lead">Зарегистрируйтесь и попробуйте поиск и редактор на своих задачах.</p>
+      <div class="hero-cta">
+        {% if current_user %}
+          <a href="/editor" class="btn btn-light btn-lg">Открыть редактор {{ icon('arrow-right') }}</a>
+        {% else %}
+          <a href="/registration" class="btn btn-light btn-lg">Создать аккаунт {{ icon('arrow-right') }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}<script src="{{ static('js/pricing.js') }}"></script>{% endblock %}

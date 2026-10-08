@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Ошибка — Parser Platform{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ static('css/pages.css') }}">{% endblock %}
+
+{% block content %}
+<section class="state-page">
+  <div class="container">
+    <div class="inner" style="margin:0 auto">
+      <div class="state-icon">{{ icon('alert') }}</div>
+      <h1 class="h2">Что-то пошло не так</h1>
+      <p class="lead">{{ error if error and error is string and error != 'Internal Server Error' else 'Попробуйте обновить страницу через несколько секунд.' }}</p>
+      <div class="state-actions">
+        <button type="button" class="btn btn-primary" onclick="location.reload()">{{ icon('rotate-cw') }} Обновить</button>
+        <a href="/" class="btn">На главную</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

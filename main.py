@@ -1,5 +1,2 @@
-from WebApp.app import app
-from WebApp.logger.log_cfg import logger
-
-logger.info("Server is starting...")
-
+"""Совместимость со старым способом запуска (uvicorn main:app). Предпочтительно: uvicorn app.asgi:app"""
+from app.asgi import app  # noqa: F401

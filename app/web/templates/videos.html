@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Поиск клипов — Parser Platform{% endblock %}
+{% block styles %}<link rel="stylesheet" href="{{ static('css/pages.css') }}">{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="container">
+    <div class="page-head">
+      <div>
+        <span class="badge">{{ icon('search', 'icon-sm') }} Поиск клипов</span>
+        <h1 class="h1">Выберите площадку</h1>
+        <p class="lead">Найдём короткие ролики по вашему тегу. Просмотренные и скачанные клипы больше не появятся в выдаче.</p>
+      </div>
+      <a href="/editor" class="btn">{{ icon('upload') }} Загрузить своё видео</a>
+    </div>
+
+    <div class="platform-grid">
+      {% for key, url, title, text, color in [
+        ('vk', '/vk', 'VK Клипы', 'Короткие ролики ВКонтакте для групп и пабликов.', '#0077FF'),
+        ('yt', '/youtube', 'YouTube Shorts', 'Короткие видео YouTube длиной до трёх минут.', '#FF0033'),
+        ('coub', '/coub', 'Coub', 'Зацикленные ролики со звуком — готовые к публикации.', '#3B5BFF'),
+        ('reddit', '/reddit', 'Reddit', 'Видео из сообществ Reddit со звуком.', '#FF4500'),
+        ('imgur', '/imgur', 'Imgur', 'Вертикальные ролики с Imgur.', '#1BB76E'),
+      ] %}
+      <a class="platform-tile reveal" href="{{ url }}" style="--tile-color: {{ color }}; transition-delay: {{ loop.index0 * 50 }}ms">
+        <img src="{{ static('img/platforms/' ~ key ~ '.svg') }}" alt="">
+        <h3>{{ title }}</h3>
+        <p>{{ text }}</p>
+        <span class="go">Искать {{ icon('arrow-right', 'icon-sm') }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
